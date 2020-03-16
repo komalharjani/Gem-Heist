@@ -1,10 +1,10 @@
 class Game {
-  constructor(no, playerId) {
-    let numberOfPlayers = no;
+  constructor() {
+    let numberOfPlayers = 2;
     this.getNumberOfPlayers = function() {
       return numberOfPlayers;
     }
-    let id = generateID();
+    let id = uid();
     this.getId = function() {
       return id;
     }
