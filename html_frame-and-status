@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>StacsYak message board</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>
+      Gem Heist
+    </h1>
+  </header>
+
+  <nav id="status-and-control">
+    <span id="userName">User's name</span>
+    <span id="score">0 wins, 0 loses, 0 draws</span>
+    <button id="btnLogout" class="material-icons">edit</button>
+  </nav>
+
+  <main>
+    <section>
+      <h2>Start a new Game:</h2>
+      <ul>
+        <li><span>Some Game ID aspoidhas890ahds</span><button id="btnJoin">Join Game</button></li>
+      </ul>
+
+    </section>
+    <section>
+      <h2>Join a Game</h2>
+
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Gem Heist (Copyright) 2020</p>
+  </footer>
+
+</body>
+
+<script src="main.js"></script>
+
+</html>
