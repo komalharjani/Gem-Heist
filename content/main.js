@@ -1,9 +1,13 @@
+// api object with endpoints and methods for various request types.
+
 const api = {
   endpoints: [
     "/getPlayer/",
     "/getGame/",
     "/getOpenGames/",
-    "/addPlayer"
+    "/addPlayer",
+    "/getTurn",
+    "/makeMove"
   ],
   get: async function(endpoint, params) {
     if (typeof(params) == "object") {
@@ -35,47 +39,80 @@ const api = {
       console.error("There was a problem communicating with the Gem Heist API. Error: " + error);
     }
   }
-
 }
 
-
+// controller object is in charge of the Gem Heist client-side and controls all the model and view updates (except the model's initial updates)
 
 const controller = {
+
+  //initialiyes everything that's required for the game's start display
   init: async function() {
     await model.init();
     view_frame.init();
     view_userStatus.init();
     view_startGame.init();
+    if (controller.getOpenGames().length >= 1) {
+      view_startGame.listOpenGames();
+    }
   },
+  //called, when a user starts a new game
   startGame: async function() {
     model.game = await api.get(1, model.player);
     view_frame.clear();
     view_game.init();
+    controller.getTurn();
   },
+  //called, when a user joins an existing game
   joinGame: async function(gameId) {
-    model.gameReady = await api.get(3,["gameid="+gameId,"playerid="+model.player]);
     model.game=gameId;
     view_frame.clear();
     view_game.init();
+    if(await api.get(3,["gameid="+gameId,"playerid="+model.player])){
+      view_game.activate();
+    }
+    else{
+      view_game.deactivate();
+    }
   },
+  //returns the games that are currently open to be joined
   getOpenGames: function() {
     return model.openGames;
   },
+  //returns the user's id that is permanently stored in the model
   getUser: function() {
     return model.player;
+  },
+  //in order to know when it's one's turn the client has to constantly send requests to the api in order to check 
+  getTurn: function(){
+    let turnPolling = setInterval(async function(){
+      let myTurn=await api.get(4,["gameid="+model.game,"playerid="+model.player]);
+      if (myTurn){
+        clearInterval(turnPolling);
+        view_game.activate();
+      }
+    }, 5000);
+  },
+  /* this is a preliminary method that should be called when a player makes a move.
+  Any board's state could be passed through this api call*/
+  makeMove: async function(){
+    await api.get(5,["gameid="+model.game,"playerid="+model.player]);
+    view_game.deactivate();
+    controller.getTurn();
   }
 
 }
 
 
 
-
+// the client's model stores all the data that the client needs. This does not include information about other players ids, etc.
 
 const model = {
-  gameReady:false,
+
   player: 0,
   game: 0,
   openGames: [],
+  /* When a new client is started, it "registers" itself through the api and gets a unique id
+  it will also poll all the currently open games, so that the user can join any of them*/
   init: async function() {
     this.player = await api.get(0, "");
     this.openGames = await api.get(2, "");
@@ -84,7 +121,7 @@ const model = {
 }
 
 
-
+//This view is in charge of displaying the game's top user status bar
 const view_userStatus = {
   init: function() {
     this.userElem = document.getElementById('userName');
@@ -96,6 +133,7 @@ const view_userStatus = {
   }
 }
 
+//View_frame is just a container that can hold different views according to the game's stage
 const view_frame = {
   init: function() {
     this.mainElem = document.getElementsByTagName('main')[0];
@@ -109,6 +147,7 @@ const view_frame = {
   }
 }
 
+///view_startGame displays the information and controls about starting or joining a game
 const view_startGame = {
   init: function() {
     this.mainElem = document.getElementsByTagName('main')[0];
@@ -122,12 +161,8 @@ const view_startGame = {
       <ul id="games">
       </ul>
     </section>`
-    //document.getElementById("btnStart").addEventListener('click', controller.startGame)
-    this.render();
-
   },
-  render: function() {
-    if (controller.getOpenGames().length >= 1) {
+  listOpenGames: function() {
       this.mainElem.innerHTML = this.html1 + this.html2;
       this.gamesElem = document.getElementById('games');
       for (gameId of controller.getOpenGames()) {
@@ -145,26 +180,39 @@ const view_startGame = {
         listElem.append(btnElem);
         this.gamesElem.append(listElem);
       }
-    }
+    
   }
 }
 
+// This view should contain the game's board and information about the current score and turn
 const view_game = {
   init: function() {
     this.mainElem = document.getElementsByTagName('main')[0];
     this.html = `<section id="board">
     <div><br>The game board will be here.<br><br></div>
+    <button id="makeMove" disabled>Make move</button>
                 </section>
                 <section>
                 <span>Your Score: </span><span id="score">0</span>
-                <div id="notice">Please wait for the necessary number of other players to join the game.</div>
+                <div id="notice"></div>
                 </section>`
     this.mainElem.innerHTML = this.html;
-    this.render();
+    document.getElementById("makeMove").addEventListener('click',controller.makeMove);
+    this.deactivate();
   },
-  render: function() {
-
+  //If it's another player's turn the view needs to be deactivted
+  deactivate: function() {
+    document.getElementById("notice").innerHTML="Not your turn or not enough players yet.";
+    //the makeMove button is preliminary only, eventually moves should be made straight through the board
+    document.getElementById("makeMove").removeEventListener('click',controller.makeMove);
+    document.getElementById("makeMove").disabled=true;
+  },
+  //...and activated again once the turn starts
+  activate: function(){
+    document.getElementById("notice").innerHTML="It's your turn now";
+    document.getElementById("makeMove").addEventListener('click',controller.makeMove);
+    document.getElementById("makeMove").disabled=false;
   }
-
 }
+
 controller.init();

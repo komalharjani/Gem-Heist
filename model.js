@@ -1,70 +1,103 @@
 const uuidv4 = require('uuid/v4');
-let exports = module.exports={};
-exports.model={
-  players:[],
-  games:[],
-  getGames: function(){
-    return this.games;
-  },
-  getGame: function(id){
-    return this.games.find(game=>game.getId()==id)
-  },
-  updateGames:function(game){
-    this.games.push(game);
-  },
-  openGames:[],
-  getOpenGames: function(){
-    return this.openGames;
-  },
-  updateOpenGames:function(gameId){
-    this.openGames.push(gameId);
-  },
-  Game:class {
-    constructor() {
-      let numberOfPlayers = 2;
-      this.getNumberOfPlayers = function() {
-        return numberOfPlayers;
-      }
-      this.enoughPlayers = function(){
-        if (this.getActivePlayers.length==this.getNumberOfPlayers){
-          let index = model.openGames.findIndex(id=>id==this.getId());
-          model.openGames.splice(index,1);
-        }
-      }
-      let id = uuidv4();
-      this.getId = function() {
-        return id;
-      }
-      let activePlayers = [];
-      this.getActivePlayers = function() {
-        return activePlayers;
-      }
-      this.addActivePlayer = function(playerId,openGames) {
-        activePlayers.push(playerId);
-        console.log("I am" + this.getId())
-        if (activePlayers.length==numberOfPlayers){
-          let index = openGames.findIndex((openGame)=>openGame==id);
-          //model.model.getOpenGames().splice(index,1);
-          //console.log("no of players"+activePlayers.length + "/"+numberOfPlayers + model.openGames);
-          return index;
-        }
-        else{
-          return -1;
-        }
-      }
-      let playerTurn;
-      this.getPlayerTurn = function() {
-        return playerTurn;
-      }
-    }
 
-  },
-  Player:class {
-    constructor(){
-      let id = uuidv4();
-      this.getId = function() {
-        return id;
-      }
+// The Session class gets instantiated only once by the server. A session object holds collections of all the games and all the players of the current server's session
+class Session {
+  constructor() {
+    let players = [];
+    let games = [];
+    let openGames = [];
+    this.addPlayer = function(playerId) {
+      players.push(playerId);
+    }
+    this.getGames = function() {
+      return games;
+    }
+    this.getGame = function(gameId) {
+      return games.find(game => game.getId() == gameId);
+    }
+    this.updateGames = function(game) {
+      games.push(game);
+    }
+    this.getOpenGames = function() {
+      return openGames;
+    }
+    this.updateOpenGames = function(gameId) {
+      openGames.push(gameId);
     }
   }
-}
+};
+// The Game class is used to create games that store all necessary information about one game and provide all the relevant methods
+class Game {
+  // Closure is used over the constructor so that an object's properties are only accessible by the object's methods
+  constructor() {
+    //numberOfPlayers sets the number of players that can take part in a game, currently hard-coded to 2, could be set by the game's initiator
+    let numberOfPlayers = 2;
+    this.getNumberOfPlayers = function() {
+      return numberOfPlayers;
+    }
+    //every game gets a unique id
+    let id = uuidv4();
+    this.getId = function() {
+      return id;
+    }
+    //stores a game's players
+    let players = [];
+    this.getPlayers = function() {
+      return players;
+    }
+    //adds a player to a game
+    this.addPlayer = function(playerId, openGames) {
+      players.push(playerId);
+      //Every time a player gets added, check if the necessary number of players has been reached so that the game can start
+      //In this case the first turn is set to the player that was just added
+      if (players.length == numberOfPlayers) {
+        let index = openGames.findIndex((openGame) => openGame == id);
+        this.setPlayerTurn(playerId);
+        return index;
+      } else {
+        return -1;
+      }
+    }
+    //playerTurn is used to store whose turn it is. This is achieved by simply storing the player's turn.
+    let playerTurn;
+    this.getPlayerTurn = function(playerId) {
+      if (playerId == playerTurn) {
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+    this.setPlayerTurn = function(playerId) {
+      playerTurn = playerId
+    }
+    //makeMove is only setup in a preliminary way. Right now it only passes  the turn to the next player in line. It could however also be used to update the board
+    this.makeMove = function(playerId){
+      let index = players.findIndex(player => player == playerId);
+      if (index==players.length-1){
+        index=0;
+      }
+      else{
+        index++;
+      }
+      this.setPlayerTurn(players[index]);
+    }
+  }
+};
+
+//class Player at the moment only provides a player object with a player id
+class Player {
+  constructor() {
+    let id = uuidv4();
+    this.getId = function() {
+      return id;
+    }
+  }
+};
+
+//needed to make the classes available to other node modules.
+module.exports = {
+  Session: Session,
+  Game: Game,
+  Player: Player
+};
