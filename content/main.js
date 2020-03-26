@@ -186,12 +186,14 @@ const view_startGame = {
           <h2>Start a new Game</h2>
           <div class="card">
             <h4>Options</h4>
-            <div id="slidecontainer">
+            <div class="box">
             <label for="myRange">Number of Gems</label>
+            <br>
             <input type="range" min="3" max="20" value="3" oninput="document.getElementById('demo').innerHTML=this.value;model.gems=this.value;" class="slider" id="myRange"></input>
             <p>Value: <span id="demo">3</span></p>
             </div>
-            <div class="yaks">
+            <br>
+            <div class="box">
                 <label for="noPlayers">Number of Players:</label>
                 <select id="noPlayers">
                     <option value="2">2</option>
