@@ -1,9 +1,13 @@
+// api object
+
 const api = {
   endpoints: [
     "/getPlayer/",
     "/getGame/",
     "/getOpenGames/",
-    "/addPlayer"
+    "/addPlayer",
+    "/getTurn",
+    "/makeMove"
   ],
   get: async function(endpoint, params) {
     if (typeof(params) == "object") {
@@ -35,7 +39,6 @@ const api = {
       console.error("There was a problem communicating with the Gem Heist API. Error: " + error);
     }
   }
-
 }
 
 
@@ -51,18 +54,38 @@ const controller = {
     model.game = await api.get(1, model.player);
     view_frame.clear();
     view_game.init();
+    controller.getTurn();
   },
   joinGame: async function(gameId) {
-    model.gameReady = await api.get(3,["gameid="+gameId,"playerid="+model.player]);
     model.game=gameId;
     view_frame.clear();
     view_game.init();
+    if(await api.get(3,["gameid="+gameId,"playerid="+model.player])){
+      view_game.activate();
+    }
+    else{
+      view_game.deactivate();
+    }
   },
   getOpenGames: function() {
     return model.openGames;
   },
   getUser: function() {
     return model.player;
+  },
+  getTurn: function(){
+    let turnPolling = setInterval(async function(){
+      let myTurn=await api.get(4,["gameid="+model.game,"playerid="+model.player]);
+      if (myTurn){
+        clearInterval(turnPolling);
+        view_game.activate();
+      }
+    }, 5000);
+  },
+  makeMove: async function(){
+    await api.get(5,["gameid="+model.game,"playerid="+model.player]);
+    view_game.deactivate();
+    controller.getTurn();
   }
 
 }
@@ -72,7 +95,7 @@ const controller = {
 
 
 const model = {
-  gameReady:false,
+
   player: 0,
   game: 0,
   openGames: [],
@@ -124,7 +147,6 @@ const view_startGame = {
     </section>`
     //document.getElementById("btnStart").addEventListener('click', controller.startGame)
     this.render();
-
   },
   render: function() {
     if (controller.getOpenGames().length >= 1) {
@@ -154,17 +176,25 @@ const view_game = {
     this.mainElem = document.getElementsByTagName('main')[0];
     this.html = `<section id="board">
     <div><br>The game board will be here.<br><br></div>
+    <button id="makeMove" disabled>Make move</button>
                 </section>
                 <section>
                 <span>Your Score: </span><span id="score">0</span>
-                <div id="notice">Please wait for the necessary number of other players to join the game.</div>
+                <div id="notice"></div>
                 </section>`
     this.mainElem.innerHTML = this.html;
-    this.render();
+    document.getElementById("makeMove").addEventListener('click',controller.makeMove);
+    this.deactivate();
   },
-  render: function() {
-
+  deactivate: function() {
+    document.getElementById("notice").innerHTML="Not your turn or not enough players yet.";
+    document.getElementById("makeMove").removeEventListener('click',controller.makeMove);
+    document.getElementById("makeMove").disabled=true;
+  },
+  activate: function(){
+    document.getElementById("notice").innerHTML="It's your turn now";
+    document.getElementById("makeMove").addEventListener('click',controller.makeMove);
+    document.getElementById("makeMove").disabled=false;
   }
-
 }
 controller.init();
