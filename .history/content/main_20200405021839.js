@@ -104,6 +104,7 @@ const controller = {
           arr.push(cell);
           cell.addEventListener('click', function (event) {
             this.className = "grey";
+            //replay.enqueue(this);
           })
         }
 

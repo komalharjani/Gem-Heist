@@ -104,6 +104,7 @@ const controller = {
           arr.push(cell);
           cell.addEventListener('click', function (event) {
             this.className = "grey";
+            //replay.enqueue(this);
           })
         }
 
@@ -116,7 +117,7 @@ const controller = {
     console.log(currentState);
 
     //display in this div
-    let divContainer = document.getElementById("game");
+    let divContainer = document.getElementById("board");
     divContainer.innerHTML = "";
     divContainer.appendChild(table);
   },

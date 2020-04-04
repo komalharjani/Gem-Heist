@@ -65,60 +65,33 @@ const controller = {
   },
 
   createBoard: function () {
-
+    const height = (2 / 3 * model.gems) + 1;
     const width = 7;
-    var gemChar = '&#128142';
-    var noGems = 9;
-    //var noGems = document.getElementById("myRange").value;
-    height = (2 / 3 * noGems) + 1;
-
-    /**
-     * Declare Arrays for Drawing Board...
-     */
-    let arr = new Array(height);
-    for (let k = 0; k < arr.length; k++) {
-      arr[k] = new Array(width);
+    const gemChar = '&#128142';
+    model.board = new Array(height);
+    for (let k = 0; k < model.board.length; k++) {
+      model.board[k] = new Array(width);
     }
-    let currentState = new Array(height);
-    for (let k = 0; k < currentState.length; k++) {
-      currentState[k] = new Array(width);
-    }
-    var table = document.createElement("table");
-    for (var i = 0; i < arr.length; i++) {
-      var row = document.createElement('tr');
-      for (var j = 0; j < arr[i].length; j++) {
-        var cell = document.createElement('td');
+    let table = document.createElement("table");
+    for (let i = 0; i < model.board.length; i++) {
+      let row = document.createElement('tr');
+      for (let j = 0; j < model.board[i].length; j++) {
+        let col = document.createElement('td');
         if (j % 2 && i % 2) { //identify gem cells
-          //currentState[0].push(cell);
-          cell.innerHTML = gemChar;
-          cell.className = "gem";
-          //move event listener to turn handler function
-          cell.addEventListener('click', function (event) {
-            this.innerHTML = "name";
-            //replay.enqueue(this);
-          })
-          arr[0].push(cell);
+          model.board[0].push(col); //HELP --> need to push into array while retaining table structure
+          col.innerHTML = gemChar;
+          col.className = "gem";
         }
         else if (j % 2 || i % 2) { //identify alarm cells
-          cell.className = "alarm";
-          arr.push(cell);
-          cell.addEventListener('click', function (event) {
-            this.className = "grey";
-          })
+          col.className = "alarm";
+          model.board.push(col);
         }
-
-        row.appendChild(cell);
+        row.appendChild(col);
       }
       table.appendChild(row);
     }
-    document.body.appendChild(table);
-    //console.log(arr);
-    console.log(currentState);
+    document.getElementById("board").append(table);
 
-    //display in this div
-    let divContainer = document.getElementById("game");
-    divContainer.innerHTML = "";
-    divContainer.appendChild(table);
   },
   //called, when a user joins an existing game
   joinGame: async function (gameId) {
@@ -211,7 +184,7 @@ const view_startGame = {
     this.mainElem = document.getElementsByTagName('main')[0];
     this.html1 = `<section>
     <div class="centercolumn">
-      <div class="card" id="board">
+      <div class="card">
         <h2>Start a new Game</h2>
           <h4>Options</h4>
             <div class="box"><br>
@@ -272,22 +245,23 @@ const view_game = {
   init: function () {
     this.mainElem = document.getElementsByTagName('main')[0];
     this.html = `
-    <section id="gamePlayed">   
+    <section id="board">   
     <div class="centercolumn">
-        <div class="card" style="height:500px">
+        <div class="card" style="height:1000px">
             <h4 >Current Game</h4>
-            <div class="yaks" id="game">
+            <div class="yaks">
             <button id="makeMove">Make move</button>
             </div>
         </div>
     </div>       
     <div class="centercolumn">
-      <div class="card" style="height:500px">
+      <div class="card" style="height:1000px">
         <h4 >Score</h4>
          <span>Your Score: </span>
          <span id="score">0</span>
          <div id="notice"></div>
-      </div>
+         </div>
+        </div>
     </div> 
     </section>`
     this.mainElem.innerHTML = this.html;
@@ -323,4 +297,4 @@ controller.init();
 */
 
 //3. LOGIC OF GAME --> WHAT HAPPENS WHEN ALARM IS CLICKED + REDRAW BOARD DISABLE ALARM
-//SWITCH TURNS = activate / deactivate
+//SWITCH TURNS = activate / deactivate view

@@ -104,6 +104,7 @@ const controller = {
           arr.push(cell);
           cell.addEventListener('click', function (event) {
             this.className = "grey";
+            //replay.enqueue(this);
           })
         }
 
@@ -272,11 +273,11 @@ const view_game = {
   init: function () {
     this.mainElem = document.getElementsByTagName('main')[0];
     this.html = `
-    <section id="gamePlayed">   
+    <section id="board">   
     <div class="centercolumn">
         <div class="card" style="height:500px">
             <h4 >Current Game</h4>
-            <div class="yaks" id="game">
+            <div class="yaks">
             <button id="makeMove">Make move</button>
             </div>
         </div>

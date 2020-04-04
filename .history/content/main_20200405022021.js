@@ -99,11 +99,20 @@ const controller = {
           })
           arr[0].push(cell);
         }
-        else if (j % 2 || i % 2) { //identify alarm cells
+        else if (j % 2) { //identify alarm cells
           cell.className = "alarm";
           arr.push(cell);
           cell.addEventListener('click', function (event) {
             this.className = "grey";
+            //replay.enqueue(this);
+          })
+        }
+        else if(i % 2) {
+          cell.className = "alarm";
+          arr.push(cell);
+          cell.addEventListener('click', function (event) {
+            this.className = "grey";
+            //replay.enqueue(this);
           })
         }
 
