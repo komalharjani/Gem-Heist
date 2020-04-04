@@ -134,53 +134,11 @@ const controller = {
     }
   },
 
-  disableAlarm: function() {
+  playerMove: function() {
     
-    var table = document.createElement("table");
-    for (var i = 0; i < arr.length; i++) {
-      var row = document.createElement('tr');
-      for (var j = 0; j < arr[i].length; j++) {
-        var cell = document.createElement('td');
-        if (j % 2 && i % 2) { //identify gem cells
-          //currentState[0].push(cell);
-          cell.innerHTML = gemChar;
-          cell.className = "gem";
-          //move event listener to turn handler function
-          cell.addEventListener('click', function (event) {
-            this.innerHTML = "name";
-            //replay.enqueue(this);
-          })
-          arr[0].push(cell);
-        }
-        else if (j % 2 || i % 2) { //identify alarm cells
-          cell.className = "alarm";
-          arr.push(cell);
-          cell.addEventListener('click', function (event) {
-            this.className = "grey";
-          })
-        }
-
-        row.appendChild(cell);
-      }
-      table.appendChild(row);
-    }
-    document.body.appendChild(table);
-    //console.log(arr);
-    console.log(currentState);
-
-    //display in this div
-    let divContainer = document.getElementById("game");
-    divContainer.innerHTML = "";
-    divContainer.appendChild(table);
-
     //3. LOGIC OF GAME --> WHAT HAPPENS WHEN ALARM IS CLICKED + REDRAW BOARD DISABLE ALARM
     //SWITCH TURNS = activate / deactivate
 
-  },
-
-  replay: function() {
-    //queue
-    
   },
 
   declareWinner: function() {
