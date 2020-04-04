@@ -100,10 +100,10 @@ const controller = {
         else if (j % 2 || i % 2) { //identify alarm cells
           cell.className = "alarm";
           arr.push(cell);
-          cell.addEventListener('click', function(event){
-            this.className = "white";
-            //replay.enqueue(this);
-        })
+          cell.addEventListener('click', function (event) {
+            disableAlarm(cell);
+            this.className = "grey";
+            })
         }
 
         row.appendChild(cell);

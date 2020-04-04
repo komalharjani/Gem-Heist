@@ -92,18 +92,18 @@ const controller = {
           cell.innerHTML = gemChar;
           cell.className = "gem";
           arr[0].push(cell);
-          cell.addEventListener('click', function(event){
-            this.innerHTML = "name";
-            //replay.enqueue(this);
-        })
+          cell.addEventListener('click', function (event) {
+            disableAlarm(cell);
+            cell.className = "grey";
+            })
         }
         else if (j % 2 || i % 2) { //identify alarm cells
           cell.className = "alarm";
           arr.push(cell);
-          cell.addEventListener('click', function(event){
-            this.className = "white";
-            //replay.enqueue(this);
-        })
+          cell.addEventListener('click', function (event) {
+            disableAlarm(cell);
+            cell.innerHTML = "name";
+            })
         }
 
         row.appendChild(cell);

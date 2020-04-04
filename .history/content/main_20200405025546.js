@@ -101,7 +101,7 @@ const controller = {
           cell.className = "alarm";
           arr.push(cell);
           cell.addEventListener('click', function(event){
-            this.className = "white";
+            this.innerHTML = "name";
             //replay.enqueue(this);
         })
         }
