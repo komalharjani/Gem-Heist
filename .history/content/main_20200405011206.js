@@ -270,14 +270,3 @@ const view_game = {
 }
 
 controller.init();
-
-
-/**
- function declareWinner() {
-  let gemsToWin = noPlayers / noGems;
-  if (player.score = gemsToWin) {
-    //kill game
-    //update leagueBoard
-  }
-}
-*/
