@@ -135,10 +135,9 @@ const controller = {
             this.className = "grey";
           })
     //2. Turns Grey
-    //PUSH MOVE TO QUEUE FOR REPLAY
-    //IF (Gem has no surrounding alarms - then capture gem) //PUSH MOVE TO QUEUE FOR REPLAY
+    //IF (Gem has no surrounding alarms - then capture gem)
       //3.2. Store Gem in Score[]; call declareWinner?
-      //3.3. Give Player another turn 
+      //3.3. Give Player another turn
     //ELSE 
       //SWITCH TURNS
   },
