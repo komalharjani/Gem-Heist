@@ -45,11 +45,13 @@
                     <p>Value: <span id="demo"></span></p>
                 </div>
             </div>
+
                 <script>
                     var slider = document.getElementById("myRange");
                     var output = document.getElementById("demo");
                     output.innerHTML = slider.value;
                     document.getElementById("myRange").step = "3";
+                    //can change if want
                     slider.oninput = function () {
                         output.innerHTML = this.value;
                     }

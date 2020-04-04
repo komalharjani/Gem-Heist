@@ -3,8 +3,20 @@
  */
 const width = 7;
 var gemChar = '&#128142';
-var noGems = document.getElementById("myRange").value; 
+
+/**
+ * Function to Change Table according to slider -- is this even needed?
+ */
+var slider = document.getElementById("myRange");
+slider.oninput = function () {
+    output.innerHTML = this.value;
+    noGems = this.value;
+    drawBoard();
+    return noGems;
+}
+slider.oninput();
 height = (2 / 3 * noGems) + 1;
+
 
 /**
  * Declare Arrays for Drawing Board...

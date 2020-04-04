@@ -44,53 +44,52 @@
                     <input type="range" min="3" max="20" value="3" class="slider" id="myRange">
                     <p>Value: <span id="demo"></span></p>
                 </div>
-            </div>
                 <script>
                     var slider = document.getElementById("myRange");
                     var output = document.getElementById("demo");
                     output.innerHTML = slider.value;
                     document.getElementById("myRange").step = "3";
+                    //can change if want
                     slider.oninput = function () {
                         output.innerHTML = this.value;
                     }
                 </script>
             </div></br>
-            <div class="card">
-                <div class="yaks">
-                    <label for="noPlayers">Number of Players:</label>
-                    <select id="noPlayers">
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
+            <div class="yaks">
+                <label for="noPlayers">Number of Players:</label>
+                <select id="noPlayers">
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
             </div>
+        </div>
     </div><br>
     </div>
 
-    <!--Scoreboard - change to dynamic -->
+    <!--Scoreboard - change to dynamic --> 
     <div class="rightcolumn">
         <div class="card">
             <h4>Scoreboard</h4>
             <div class="yaks" id="scoreboard">
                 <table>
                     <tr>
-                        <th>Name</th>
-                        <th>Wins</th>
-                        <th>Losses</th>
+                      <th>Name</th>
+                      <th>Wins</th>
+                      <th>Losses</th>
                     </tr>
                     <tr>
-                        <td> </td>
-                        <td> </td>
-                        <td> </td>
+                      <td>   </td>
+                      <td> </td>
+                      <td> </td>
                     </tr>
                     <tr>
+                        <td>   </td>
                         <td> </td>
                         <td> </td>
-                        <td> </td>
-                    </tr>
-                </table>
+                      </tr>
+                    </table>
 
             </div>
         </div>
