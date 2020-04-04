@@ -62,9 +62,3 @@ app.use('/makeMove', function(req,res,next) {
 
 	res.status(200).json(true);
 });
-
-//endpoint that creates new board -- KOMAL - is this needed?
-app.use('/createBoard', function(req,res,next){
-	let game=session.getGame(req.query.gameid);	
-	res.status(200).json(true);
-}) 
