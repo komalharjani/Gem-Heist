@@ -119,8 +119,6 @@ const controller = {
     divContainer.innerHTML = "";
     divContainer.appendChild(table);
   },
-
-
   //called, when a user joins an existing game
   joinGame: async function (gameId) {
     model.game = gameId;
@@ -133,34 +131,14 @@ const controller = {
       view_game.deactivate();
     }
   },
-
-  playerMove: function() {
-    
-    //3. LOGIC OF GAME --> WHAT HAPPENS WHEN ALARM IS CLICKED + REDRAW BOARD DISABLE ALARM
-    //SWITCH TURNS = activate / deactivate
-
-  },
-
-  declareWinner: function() {
-    let gemsToWin = player.length / noGems;
-    if (player.score = gemsToWin) {
-      //kill game - how?
-      //update leagueboard
-    }
-},
-
   //returns the games that are currently open to be joined
   getOpenGames: function () {
     return model.openGames;
   },
-
-
   //returns the user's id that is permanently stored in the model
   getUser: function () {
     return model.player;
   },
-
-
   //in order to know when it's one's turn the client has to constantly send requests to the api in order to check 
   getTurn: function () {
     let turnPolling = setInterval(async function () {
@@ -171,8 +149,6 @@ const controller = {
       }
     }, 5000);
   },
-
-
   /* this is a preliminary method that should be called when a player makes a move.
   Any board's state could be passed through this api call*/
   makeMove: async function () {
@@ -233,15 +209,25 @@ const view_startGame = {
   init: function () {
     this.mainElem = document.getElementsByTagName('main')[0];
     this.html1 = `<section>
-    <div class="centercolumn">
-      <div class="card" id="board">
-        <h2>Start a new Game</h2>
-          <h4>Options</h4>
-            <div class="box"><br>
-                <label for="myRange">Number of Gems</label>
-                <input type="range" min="3" max="20" value="3" oninput="document.getElementById('demo').innerHTML=this.value;model.gems=this.value;" class="slider" id="myRange"></input>
-                <p>Value: <span id="demo">3</span></p>
-            </div><br>
+    <div class="card">
+            <h4>Options</h4>
+            <div class="yaks">
+                <div class="slidecontainer">
+                    <label for="myRange">Number of Gems</label></br>
+                    <input type="range" min="3" max="20" value="3" class="slider" id="myRange">
+                    <p>Value: <span id="demo"></span></p>
+                </div>
+            </div>
+                <script>
+                    var slider = document.getElementById("myRange");
+                    var output = document.getElementById("demo");
+                    output.innerHTML = slider.value;
+                    document.getElementById("myRange").step = "3";
+                    slider.oninput = function () {
+                        output.innerHTML = this.value;
+                    }
+                </script>
+            </div></br>
             
             <div class="box">
                 <label for="noPlayers">Number of Players:</label>
@@ -332,3 +318,18 @@ const view_game = {
   }
 }
 controller.init();
+
+
+//2. DECLARE WINNER FUNCTION
+/**
+ function declareWinner() {
+  let gemsToWin = noPlayers / noGems;
+  if (player.score = gemsToWin) {
+    //kill game
+    //update leagueBoard
+  }
+}
+*/
+
+//3. LOGIC OF GAME --> WHAT HAPPENS WHEN ALARM IS CLICKED + REDRAW BOARD DISABLE ALARM
+//SWITCH TURNS = activate / deactivate

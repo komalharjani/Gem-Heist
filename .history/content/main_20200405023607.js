@@ -139,6 +139,7 @@ const controller = {
     //3. LOGIC OF GAME --> WHAT HAPPENS WHEN ALARM IS CLICKED + REDRAW BOARD DISABLE ALARM
     //SWITCH TURNS = activate / deactivate
 
+
   },
 
   declareWinner: function() {

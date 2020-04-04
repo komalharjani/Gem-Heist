@@ -67,8 +67,8 @@ const controller = {
   createBoard: function () {
     const width = 7;
     var gemChar = '&#128142';
-    var noGems = 9; //Hardcoded to 9 - but change to responsive
-    //var noGems = document.getElementById("myRange").value;
+    //var noGems = 9; 
+    var noGems = document.getElementById("myRange").value;
     height = (2 / 3 * noGems) + 1;
 
     /**
@@ -119,8 +119,6 @@ const controller = {
     divContainer.innerHTML = "";
     divContainer.appendChild(table);
   },
-
-
   //called, when a user joins an existing game
   joinGame: async function (gameId) {
     model.game = gameId;
@@ -133,34 +131,14 @@ const controller = {
       view_game.deactivate();
     }
   },
-
-  playerMove: function() {
-    
-    //3. LOGIC OF GAME --> WHAT HAPPENS WHEN ALARM IS CLICKED + REDRAW BOARD DISABLE ALARM
-    //SWITCH TURNS = activate / deactivate
-
-  },
-
-  declareWinner: function() {
-    let gemsToWin = player.length / noGems;
-    if (player.score = gemsToWin) {
-      //kill game - how?
-      //update leagueboard
-    }
-},
-
   //returns the games that are currently open to be joined
   getOpenGames: function () {
     return model.openGames;
   },
-
-
   //returns the user's id that is permanently stored in the model
   getUser: function () {
     return model.player;
   },
-
-
   //in order to know when it's one's turn the client has to constantly send requests to the api in order to check 
   getTurn: function () {
     let turnPolling = setInterval(async function () {
@@ -171,8 +149,6 @@ const controller = {
       }
     }, 5000);
   },
-
-
   /* this is a preliminary method that should be called when a player makes a move.
   Any board's state could be passed through this api call*/
   makeMove: async function () {
@@ -332,3 +308,18 @@ const view_game = {
   }
 }
 controller.init();
+
+
+//2. DECLARE WINNER FUNCTION
+/**
+ function declareWinner() {
+  let gemsToWin = noPlayers / noGems;
+  if (player.score = gemsToWin) {
+    //kill game
+    //update leagueBoard
+  }
+}
+*/
+
+//3. LOGIC OF GAME --> WHAT HAPPENS WHEN ALARM IS CLICKED + REDRAW BOARD DISABLE ALARM
+//SWITCH TURNS = activate / deactivate
