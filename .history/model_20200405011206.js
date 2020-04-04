@@ -89,7 +89,6 @@ class Game {
 class Player {
   constructor() {
     let id = uuidv4();
-    let score = [];
     this.getId = function() {
       return id;
     }
