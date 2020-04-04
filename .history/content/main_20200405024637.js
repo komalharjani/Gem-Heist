@@ -128,7 +128,6 @@ const controller = {
     }
   },
 
-  //Disable Alarm Function
   disableAlarm: function(cell) {
           cell.addEventListener('click', function (event) {
             this.className = "grey";
