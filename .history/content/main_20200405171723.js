@@ -102,23 +102,20 @@ const controller = {
             if (j % 2 && i % 2) { //identify gem cells
                 cell.innerHTML = gemChar;
                 cell.className = "gem";
-                cell.onclick = function() {
-                  //alert("You cannot select this.");
-                  this.innerHTML = "name";
+
+                cell.onclick = function() {                 //move outside this function - how?
+                  this.innerHTML  = "name";
+                  //enqueue this
                 }
             }
             else if (j % 2 || i % 2) { //identify alarm cells
                 cell.className = "alarm";
                 cell.onclick = function() {
-                  this.className = "white";
-                  //enquue this
+                  alert("You cannot select this.");
                 }
             }
             else { //empty cells
                 cell.className = "empty";
-                cell.onclick = function() {
-                  alert("You cannot select this.");
-                }
             }
             
             row.appendChild(cell);
@@ -137,6 +134,8 @@ const controller = {
   //Disable Alarm Function
   disableAlarm: function() {
   
+    
+
     console.log(currentState[0][1]);
     //1. Detect Which Alarm is Clicked -- use array and position
           cell.addEventListener('click', function (event) {

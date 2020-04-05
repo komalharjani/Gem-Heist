@@ -137,6 +137,8 @@ const controller = {
   //Disable Alarm Function
   disableAlarm: function() {
   
+    
+
     console.log(currentState[0][1]);
     //1. Detect Which Alarm is Clicked -- use array and position
           cell.addEventListener('click', function (event) {

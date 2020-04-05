@@ -65,19 +65,6 @@ const controller = {
     controller.getTurn();
   },
 
-  //called, when a user joins an existing game
-  joinGame: async function (gameId) {
-    model.game = gameId;
-    view_frame.clear();
-    view_game.init();
-    if (await api.get(3, ["gameid=" + gameId, "playerid=" + model.player])) {
-      view_game.activate();
-    }
-    else {
-      view_game.deactivate();
-    }
-  },
-
   createBoard: function () {
     const width = 7;
     var gemChar = '&#128142';
@@ -102,23 +89,20 @@ const controller = {
             if (j % 2 && i % 2) { //identify gem cells
                 cell.innerHTML = gemChar;
                 cell.className = "gem";
-                cell.onclick = function() {
-                  //alert("You cannot select this.");
-                  this.innerHTML = "name";
-                }
+                cell.addEventListener('click', function(event){
+                    this.innerHTML  = "name";
+                    //replay.enqueue(this);
+                })
             }
             else if (j % 2 || i % 2) { //identify alarm cells
                 cell.className = "alarm";
-                cell.onclick = function() {
-                  this.className = "white";
-                  //enquue this
-                }
+                cell.addEventListener('click', function(event){
+                    this.className = "white";
+                    //replay.enqueue(this);
+                })
             }
             else { //empty cells
                 cell.className = "empty";
-                cell.onclick = function() {
-                  alert("You cannot select this.");
-                }
             }
             
             row.appendChild(cell);
@@ -134,9 +118,21 @@ const controller = {
     divContainer.appendChild(table);
   },
 
+  //called, when a user joins an existing game
+  joinGame: async function (gameId) {
+    model.game = gameId;
+    view_frame.clear();
+    view_game.init();
+    if (await api.get(3, ["gameid=" + gameId, "playerid=" + model.player])) {
+      view_game.activate();
+    }
+    else {
+      view_game.deactivate();
+    }
+  },
+
   //Disable Alarm Function
-  disableAlarm: function() {
-  
+  disableAlarm: function(cell) {
     console.log(currentState[0][1]);
     //1. Detect Which Alarm is Clicked -- use array and position
           cell.addEventListener('click', function (event) {

@@ -104,7 +104,7 @@ const controller = {
                 cell.className = "gem";
                 cell.onclick = function() {
                   //alert("You cannot select this.");
-                  this.innerHTML = "name";
+                  cell.innerHTML = "name";
                 }
             }
             else if (j % 2 || i % 2) { //identify alarm cells
@@ -137,6 +137,8 @@ const controller = {
   //Disable Alarm Function
   disableAlarm: function() {
   
+    
+
     console.log(currentState[0][1]);
     //1. Detect Which Alarm is Clicked -- use array and position
           cell.addEventListener('click', function (event) {

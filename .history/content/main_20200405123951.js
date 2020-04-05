@@ -65,23 +65,10 @@ const controller = {
     controller.getTurn();
   },
 
-  //called, when a user joins an existing game
-  joinGame: async function (gameId) {
-    model.game = gameId;
-    view_frame.clear();
-    view_game.init();
-    if (await api.get(3, ["gameid=" + gameId, "playerid=" + model.player])) {
-      view_game.activate();
-    }
-    else {
-      view_game.deactivate();
-    }
-  },
-
   createBoard: function () {
     const width = 7;
     var gemChar = '&#128142';
-    var noGems = 12; //Hardcoded to 9 - but change to responsive
+    var noGems = 9; //Hardcoded to 9 - but change to responsive
     //var noGems = document.getElementById("myRange").value;
     height = (2 / 3 * noGems) + 1;
 
@@ -98,27 +85,24 @@ const controller = {
         var row = document.createElement('tr');
         for (var j = 0; j < width; j++) {
             var cell = document.createElement('td');
-            pieces[i].push(cell); //push pieces into array
+            pieces[i].push(cell);
             if (j % 2 && i % 2) { //identify gem cells
                 cell.innerHTML = gemChar;
                 cell.className = "gem";
-                cell.onclick = function() {
-                  //alert("You cannot select this.");
-                  this.innerHTML = "name";
-                }
+                cell.addEventListener('click', function(event){
+                    this.innerHTML  = "name";
+                    //replay.enqueue(this);
+                })
             }
             else if (j % 2 || i % 2) { //identify alarm cells
                 cell.className = "alarm";
-                cell.onclick = function() {
-                  this.className = "white";
-                  //enquue this
-                }
+                cell.addEventListener('click', function(event){
+                    this.className = "white";
+                    //replay.enqueue(this);
+                })
             }
-            else { //empty cells
+            else {
                 cell.className = "empty";
-                cell.onclick = function() {
-                  alert("You cannot select this.");
-                }
             }
             
             row.appendChild(cell);
@@ -134,9 +118,21 @@ const controller = {
     divContainer.appendChild(table);
   },
 
+  //called, when a user joins an existing game
+  joinGame: async function (gameId) {
+    model.game = gameId;
+    view_frame.clear();
+    view_game.init();
+    if (await api.get(3, ["gameid=" + gameId, "playerid=" + model.player])) {
+      view_game.activate();
+    }
+    else {
+      view_game.deactivate();
+    }
+  },
+
   //Disable Alarm Function
-  disableAlarm: function() {
-  
+  disableAlarm: function(cell) {
     console.log(currentState[0][1]);
     //1. Detect Which Alarm is Clicked -- use array and position
           cell.addEventListener('click', function (event) {
@@ -243,17 +239,7 @@ const view_startGame = {
   init: function () {
     this.mainElem = document.getElementsByTagName('main')[0];
     this.html1 = `<section>
-    <div class="centercolumn" id="scoreboard">
-      <div class="card">
-        <h4>Login</h4>
-        <div class="yaks">
-            <label for="fname">Username:</label>
-            <input type="text" id="fname" name="fname">
-            <label for="lname">Password:</label>
-            <input type="text" id="lname" name="lname">
-            <input type="submit" value="Login">
-        </div>
-    </div><br>
+    <div class="centercolumn">
       <div class="card" id="board">
         <h2>Start a new Game</h2>
           <h4>Options</h4>
@@ -275,7 +261,6 @@ const view_startGame = {
             <button id="btnStart" onclick="controller.startGame()">Start Game</button>
             </div>
             </div>
-        </div>
         </div>
         </section>`;
     this.mainElem.innerHTML = this.html1;

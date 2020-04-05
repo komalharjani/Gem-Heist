@@ -43,10 +43,10 @@ function drawBoard() {
             }
             else if (j % 2 || i % 2) { //identify alarm cells
                 cell.className = "alarm";
-                // cell.addEventListener('click', function(event){
-                //     this.className = "white";
-                //     //replay.enqueue(this);
-                // })
+                cell.addEventListener('click', function(event){
+                    this.className = "white";
+                    //replay.enqueue(this);
+                })
             }
             else {
                 cell.className = "empty";
@@ -66,13 +66,8 @@ function drawBoard() {
 }
 drawBoard();
 
-function captureAlarm() {
-    if (currentState.className == "alarm") {
-        cell.addEventListener('click', function(event){
-            this.className = "white";
-            //replay.enqueue(this);
-    })
-}
+function captureAlarm(cell) {
+    
 }
 
 function determineWinner() {
