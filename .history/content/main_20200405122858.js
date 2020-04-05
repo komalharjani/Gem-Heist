@@ -97,7 +97,7 @@ const controller = {
             else if (j % 2 || i % 2) { //identify alarm cells
                 cell.className = "alarm";
                 cell.addEventListener('click', function(event){
-                    this.className = "white";
+                    this.className = "grey";
                     //replay.enqueue(this);
                 })
             }

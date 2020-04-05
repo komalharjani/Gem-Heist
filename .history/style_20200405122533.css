@@ -63,12 +63,12 @@
     background-color: white;
   }
 
-  .alarm:hover {
-    background-color: rgb(136, 0, 0);
+  .empty {
+    background-color: black;
   }
 
-  .empty {
-    background-color: white;
+  .alarm:hover {
+    background-color: rgb(136, 0, 0);
   }
 
   /* Split Screen into Columns */

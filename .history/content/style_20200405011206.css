@@ -67,10 +67,6 @@
     background-color: rgb(136, 0, 0);
   }
 
-  .empty {
-    background-color: white;
-  }
-
   /* Split Screen into Columns */
 
   .rightcolumn {

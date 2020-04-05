@@ -82,32 +82,32 @@ const controller = {
 
     var table = document.createElement("table");
     for (var i = 0; i < height; i++) {
-        var row = document.createElement('tr');
-        for (var j = 0; j < width; j++) {
-            var cell = document.createElement('td');
-            currentState[i].push(cell);
-            if (j % 2 && i % 2) { //identify gem cells
-                cell.innerHTML = gemChar;
-                cell.className = "gem";
-                cell.addEventListener('click', function(event){
-                    this.innerHTML  = "name";
-                    //replay.enqueue(this);
-                })
-            }
-            else if (j % 2 || i % 2) { //identify alarm cells
-                cell.className = "alarm";
-                cell.addEventListener('click', function(event){
-                    this.className = "white";
-                    //replay.enqueue(this);
-                })
-            }
-            else {
-                cell.className = "empty";
-            }
-            
-            row.appendChild(cell);
+      var row = document.createElement('tr');
+      for (var j = 0; j < width; j++) {
+        var cell = document.createElement('td');
+        currentState[i].push(cell);
+        if (j % 2 && i % 2) { //identify gem cells
+          cell.innerHTML = gemChar;
+          cell.className = "gem";
+          cell.addEventListener('click', function(event){
+            this.innerHTML = "name";
+            //replay.enqueue(this);
+        })
         }
-        table.appendChild(row);
+        else if (j % 2 || i % 2) { //identify alarm cells
+          cell.className = "alarm";
+          cell.addEventListener('click', function(event){
+            this.className = "white";
+            //replay.enqueue(this);
+        })
+        }
+        else {
+          cell = null;
+        }
+
+        row.appendChild(cell);
+      }
+      table.appendChild(row);
     }
     document.body.appendChild(table);
     console.log(currentState);

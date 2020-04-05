@@ -75,42 +75,50 @@ const controller = {
     /**
      * Declare 2D array
      */
+    let arr = new Array(height);
+    for (let k = 0; k < arr.length; k++) {
+      arr[k] = new Array(width);
+    }
+
     let currentState = new Array(height);
     for (let k = 0; k < currentState.length; k++) {
       currentState[k] = new Array(width);
     }
-
     var table = document.createElement("table");
-    for (var i = 0; i < height; i++) {
-        var row = document.createElement('tr');
-        for (var j = 0; j < width; j++) {
-            var cell = document.createElement('td');
-            currentState[i].push(cell);
-            if (j % 2 && i % 2) { //identify gem cells
-                cell.innerHTML = gemChar;
-                cell.className = "gem";
-                cell.addEventListener('click', function(event){
-                    this.innerHTML  = "name";
-                    //replay.enqueue(this);
-                })
-            }
-            else if (j % 2 || i % 2) { //identify alarm cells
-                cell.className = "alarm";
-                cell.addEventListener('click', function(event){
-                    this.className = "white";
-                    //replay.enqueue(this);
-                })
-            }
-            else {
-                cell.className = "empty";
-            }
-            
-            row.appendChild(cell);
+    for (var i = 0; i < arr.length; i++) {
+      var row = document.createElement('tr');
+      arr[i].push(row);
+      for (var j = 0; j < arr[i].length; j++) {
+        var cell = document.createElement('td');
+        arr[j].push(cell);
+        if (j % 2 && i % 2) { //identify gem cells
+          cell.innerHTML = gemChar;
+          cell.className = "gem";
+          currentState[0].push(cell);
+          cell.addEventListener('click', function(event){
+            this.innerHTML = "name";
+            //replay.enqueue(this);
+        })
         }
-        table.appendChild(row);
+        else if (j % 2 || i % 2) { //identify alarm cells
+          cell.className = "alarm";
+          //arr.push(cell);
+          currentState.push(cell);
+          cell.addEventListener('click', function(event){
+            this.className = "white";
+            //replay.enqueue(this);
+        })
+        }
+
+        row.appendChild(cell);
+      }
+      table.appendChild(row);
     }
     document.body.appendChild(table);
-    console.log(currentState);
+    //var final = arr.slice(7,arr.length);
+    console.log(arr);
+    console.log(final[0][0]);
+    console.log(currentState[1][7]);
 
     //display in this div
     let divContainer = document.getElementById("game");
