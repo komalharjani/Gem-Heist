@@ -29,17 +29,17 @@ function drawBoard() {
         for (var j = 0; j < width; j++) { //loop through width
             var cell = document.createElement('td'); //create columns for each width
             pieces[i].push(cell);
-            //pieces[i][j].addEventListener(MouseEvent.CLICK, captureAlarm());
+            pieces[i][j].addEventListener(MouseEvent.CLICK, captureAlarm());
             if (j % 2 && i % 2) { //identify gem cells
                 cell.innerHTML = gemChar;
                 cell.className = "gem";
             }
             else if (j % 2 || i % 2) { //identify alarm cells
                 cell.className = "alarm";
-                cell.addEventListener('click',function(event){ //disable after clicked
-                    captureAlarm(event);
-                    event.preventDefault();
-                })
+                // cell.addEventListener('click',function(event){ //disable after clicked
+                //     captureAlarm(event);
+                //     event.preventDefault();
+                // })
             }
             row.appendChild(cell);
         }
@@ -56,7 +56,7 @@ drawBoard();
 function captureAlarm() {
     let currPiece = event;
     //currPiece.className = "white";
-    //console.log(currPiece); //pulls out the event
+    console.log(currPiece); //pulls out the event
     //replay.enqueue(this);
 }
 

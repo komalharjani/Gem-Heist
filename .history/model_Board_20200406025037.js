@@ -29,7 +29,7 @@ function drawBoard() {
         for (var j = 0; j < width; j++) { //loop through width
             var cell = document.createElement('td'); //create columns for each width
             pieces[i].push(cell);
-            //pieces[i][j].addEventListener(MouseEvent.CLICK, captureAlarm());
+            eventListenerArray[i].push(cell);
             if (j % 2 && i % 2) { //identify gem cells
                 cell.innerHTML = gemChar;
                 cell.className = "gem";
@@ -60,4 +60,11 @@ function captureAlarm() {
     //replay.enqueue(this);
 }
 
-
+for (var i = 0; i < eventListenerArray.length; i++ ){
+    for(var j = 0; j < eventListenerArray[i].length; j++){
+        eventListenerArray[i][j].addEventListener(MouseEvent.CLICK, captureAlarm());
+        console.log("hello");
+        //console.log(eventListenerArray[i][j]);
+    }
+}
+console.log(pieces);

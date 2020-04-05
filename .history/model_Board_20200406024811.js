@@ -13,11 +13,7 @@ var pieces = [];
 for (var i = 0; i < height; i++) {
     pieces[i] = [];
 }
-
-var eventListenerArray = [];
-for (var i = 0; i < height; i++) {
-    eventListenerArray[i] = [];
-}
+console.log(pieces);
 
 /**
  * Function to Draw Board
@@ -29,7 +25,6 @@ function drawBoard() {
         for (var j = 0; j < width; j++) { //loop through width
             var cell = document.createElement('td'); //create columns for each width
             pieces[i].push(cell);
-            //pieces[i][j].addEventListener(MouseEvent.CLICK, captureAlarm());
             if (j % 2 && i % 2) { //identify gem cells
                 cell.innerHTML = gemChar;
                 cell.className = "gem";
@@ -56,8 +51,13 @@ drawBoard();
 function captureAlarm() {
     let currPiece = event;
     //currPiece.className = "white";
-    //console.log(currPiece); //pulls out the event
+    console.log(currPiece); //pulls out the event
     //replay.enqueue(this);
 }
 
-
+for (var i = 0; i < pieces.length; i++ ){
+    for(var j = 0; j < pieces[i].length; j++){
+        pieces[i][j].addEventListener(MouseEvent.CLICK, captureAlarm());
+    }
+}
+console.log(pieces);
