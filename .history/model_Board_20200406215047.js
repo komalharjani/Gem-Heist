@@ -87,14 +87,12 @@ function captureAlarm() {
         let gemRow = gemsFound[i].getAttribute("row");
         let gemCol = gemsFound[i].getAttribute("col");
         console.log(pieces[gemRow][gemCol]);
-        
         let alarmUp = (pieces[gemRow-1][gemCol]);
         let alarmLeft = (pieces[gemRow][gemCol-1]);
         //let alarmRight = (pieces[gemRow+1][gemCol]);
-        //let alarmDown = (pieces[gemRow+1][gemCol]);
-
         console.log(alarmUp);
         console.log(alarmLeft);
+        console.log(alarmRight);
     }
 
 }

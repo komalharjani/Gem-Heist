@@ -73,30 +73,27 @@ function captureAlarm() {
     //let down = pieces[currRow+1][currCol];  //doesn't work (+1)
     let left = pieces[currRow][currCol - 1];
     //let right = pieces[currRow][currCol+1]; //doesn't work (+1)
-    let alarmCheck = [up, left];
-    let gemsFound = [];
+    let combos = [up, left];
+    let gemsCount = 0;
+    let temp = [];
 
-    //loop 1 find gems around alarms
-    for (let i = 0; i < alarmCheck.length; i++) {
-        if (alarmCheck[i].className == "gem") {
-            gemsFound.push(alarmCheck[i]);
+    for (let i = 0; i < combos.length; i++) {
+        if (combos[i].className == "gem") {
+            temp.push(combos[i]);
+            console.log(temp.className);
         }
     }
-    //loop 2 - check for alarms around each gem
-    for(let i=0; i <gemsFound.length; i++) {
-        let gemRow = gemsFound[i].getAttribute("row");
-        let gemCol = gemsFound[i].getAttribute("col");
-        console.log(pieces[gemRow][gemCol]);
-        
-        let alarmUp = (pieces[gemRow-1][gemCol]);
-        let alarmLeft = (pieces[gemRow][gemCol-1]);
-        //let alarmRight = (pieces[gemRow+1][gemCol]);
-        //let alarmDown = (pieces[gemRow+1][gemCol]);
 
-        console.log(alarmUp);
-        console.log(alarmLeft);
-    }
-
+    // for (let i=0; i <temp.length; i++) {
+    //     console.log(temp);
+    //     console.log(up); //represents original up - how to check around new temp up down left right?
+    //     //if all empty
+    //     //allow player to capture gem -- update gemCount for player
+    //     //player.score++;
+    //     //call declareWinner
+    //     //give another turn
+    //     //call capture alarm again
+    // }
 }
 
 
