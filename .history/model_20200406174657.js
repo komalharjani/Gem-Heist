@@ -90,11 +90,9 @@ class Player {
   constructor() {
     let id = uuidv4();
     let score = [];
-    let countWon;
     this.getId = function() {
       return id;
       return score;
-      return countWon;
     }
   }
 };

@@ -68,27 +68,21 @@ function captureAlarm() {
     let currRow = event.target.getAttribute("row"); //curr row
     let currCol = event.target.getAttribute("col"); //curr col
     //combinations
-    let up = pieces[currRow - 1][currCol];
-    let down = pieces[currRow+1][currCol];  //doesn't work (+1)
-    let left = pieces[currRow][currCol - 1];
-    let right = pieces[currRow][currCol+1]; //doesn't work (+1)
-    let combos = [up, left, right, down];
+    let up = pieces[currRow-1][currCol];
+    let down = pieces[currRow+1][currCol];  //doesn't work
+    console.log(pieces[currRow+1]);
+    let left = pieces[currRow][currCol-1];
+    let right = pieces[currRow][currCol+1]; //doesn't work
+
+    let combos = [up, left, down];
     let gemsCount = 0;
-    let temp = [];
 
-    for (let i = 0; i < combos.length; i++) {
-        if (combos[i].className == "gem") {
-            temp.push(combos[i]);
-        }
+    for (let i=0; i < combos.length; i++) {
+        console.log(combos[i]);
     }
-    for (let i=0; i <temp.length; i++) {
-        console.log(temp);
-        console.log(up); //represents original up - how to check around new temp up down left right?
 
-    }
 }
-
-
+   
 
 
 //Things to do now:

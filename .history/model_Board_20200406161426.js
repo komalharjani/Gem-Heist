@@ -13,10 +13,6 @@ var pieces = [];
 for (var i = 0; i < height; i++) {
     pieces[i] = [];
 }
-console.log(pieces);
-
-//array of state of board
-
 
 /**
  * Function to Draw Board
@@ -27,7 +23,6 @@ function drawBoard() {
         var row = document.createElement('tr'); //create rows for each height
         for (var j = 0; j < width; j++) { //loop through width
             var cell = document.createElement('td'); //create columns for each width
-            //bind ids to cells [i][j]
             pieces[i].push(cell);
             cell.setAttribute("row", i);
             cell.setAttribute("col", j);
@@ -67,29 +62,12 @@ drawBoard();
 function captureAlarm() {
     let currRow = event.target.getAttribute("row"); //curr row
     let currCol = event.target.getAttribute("col"); //curr col
-    //combinations
-    let up = pieces[currRow - 1][currCol];
-    let down = pieces[currRow+1][currCol];  //doesn't work (+1)
-    let left = pieces[currRow][currCol - 1];
-    let right = pieces[currRow][currCol+1]; //doesn't work (+1)
-    let combos = [up, left, right, down];
-    let gemsCount = 0;
-    let temp = [];
-
-    for (let i = 0; i < combos.length; i++) {
-        if (combos[i].className == "gem") {
-            temp.push(combos[i]);
-        }
+    console.log(currRow,currCol);
+    if (currRow-1 == gemChar) {
+        console.log("true");
     }
-    for (let i=0; i <temp.length; i++) {
-        console.log(temp);
-        console.log(up); //represents original up - how to check around new temp up down left right?
-
-    }
+    console.log(event.target);
 }
-
-
-
 
 //Things to do now:
 //1. Game Handler - only let one user select a cell at any given time and then disable for other player

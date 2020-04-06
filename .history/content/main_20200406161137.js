@@ -92,7 +92,6 @@ const controller = {
     for (var i = 0; i < height; i++) {
         pieces[i] = [];
     }
-    console.log(pieces);
 
     var table = document.createElement("table");
     for (var i = 0; i < height; i++) { //loop through height
@@ -152,7 +151,6 @@ const controller = {
   declareWinner: function() {
     let gemsToWin = player.length / noGems;
     if (player.score = gemsToWin) {
-      //alert
       //kill game - how?
       //update leagueboard
     }

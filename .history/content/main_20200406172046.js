@@ -152,7 +152,6 @@ const controller = {
   declareWinner: function() {
     let gemsToWin = player.length / noGems;
     if (player.score = gemsToWin) {
-      //alert
       //kill game - how?
       //update leagueboard
     }

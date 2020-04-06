@@ -69,10 +69,11 @@ function captureAlarm() {
     let currCol = event.target.getAttribute("col"); //curr col
     //combinations
     let up = pieces[currRow - 1][currCol];
-    let down = pieces[currRow+1][currCol];  //doesn't work (+1)
+    //let down = pieces[currRow+1][currCol];  //doesn't work (+1)
     let left = pieces[currRow][currCol - 1];
-    let right = pieces[currRow][currCol+1]; //doesn't work (+1)
-    let combos = [up, left, right, down];
+    //let right = pieces[currRow][currCol+1]; //doesn't work (+1)
+
+    let combos = [up, left];
     let gemsCount = 0;
     let temp = [];
 
@@ -87,7 +88,6 @@ function captureAlarm() {
 
     }
 }
-
 
 
 

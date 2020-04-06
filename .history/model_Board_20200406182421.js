@@ -67,29 +67,28 @@ drawBoard();
 function captureAlarm() {
     let currRow = event.target.getAttribute("row"); //curr row
     let currCol = event.target.getAttribute("col"); //curr col
-    //combinations
-    let up = pieces[currRow - 1][currCol];
-    let down = pieces[currRow+1][currCol];  //doesn't work (+1)
-    let left = pieces[currRow][currCol - 1];
-    let right = pieces[currRow][currCol+1]; //doesn't work (+1)
-    let combos = [up, left, right, down];
+    let currPosition = pieces[currRow][currCol]; //current positon
+    console.log(currPosition);
+
+    let up = pieces[currRow-1][currCol];
+    let upLeft = pieces[currRow-1][currCol-1];
+    let upRight = pieces[currRow-1][currCol+1];
+    //let down = pieces[currRow+1][currCol];
+    //let downRight = pieces[currRow+1][currCol-1];
+    //let downLeft = pieces[currRow+1][currCol+1];
+    let left = pieces[currRow][currCol-1];
+    let right = pieces[currRow][currCol+1];
     let gemsCount = 0;
-    let temp = [];
+    console.log(up.className);
+    console.log(upLeft.className);
 
-    for (let i = 0; i < combos.length; i++) {
-        if (combos[i].className == "gem") {
-            temp.push(combos[i]);
-        }
-    }
-    for (let i=0; i <temp.length; i++) {
-        console.log(temp);
-        console.log(up); //represents original up - how to check around new temp up down left right?
-
-    }
+    if ((up.className || right.className || left.className || upRight.className || upLeft.className) == "gem") {
+        console.log(this);
+        //console gems (up/right/left etc)
+       // console.log(currPosition);
+ }
+   
 }
-
-
-
 
 //Things to do now:
 //1. Game Handler - only let one user select a cell at any given time and then disable for other player

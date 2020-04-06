@@ -67,28 +67,36 @@ drawBoard();
 function captureAlarm() {
     let currRow = event.target.getAttribute("row"); //curr row
     let currCol = event.target.getAttribute("col"); //curr col
+    let currPosition = pieces[currRow][currCol]; //current positon
+    console.log(currPosition);
+
     //combinations
-    let up = pieces[currRow - 1][currCol];
-    let down = pieces[currRow+1][currCol];  //doesn't work (+1)
-    let left = pieces[currRow][currCol - 1];
-    let right = pieces[currRow][currCol+1]; //doesn't work (+1)
-    let combos = [up, left, right, down];
+    let up = pieces[currRow-1][currCol];
+    //let down = pieces[currRow+1][currCol];
+    let left = pieces[currRow][currCol-1];
+    let right = pieces[currRow][currCol+1];
+
     let gemsCount = 0;
-    let temp = [];
+    console.log(up.className);
+    console.log(upLeft.className);
 
-    for (let i = 0; i < combos.length; i++) {
-        if (combos[i].className == "gem") {
-            temp.push(combos[i]);
-        }
+    if (left.className == "gem") {
+        gemsCount++;
+        console.log(gemsCount);
     }
-    for (let i=0; i <temp.length; i++) {
-        console.log(temp);
-        console.log(up); //represents original up - how to check around new temp up down left right?
-
+    else if(right.className == "gem") {
+        gemsCount++
+        console.log(gemsCount);
     }
-}
+   
 
-
+    // if ((up.className || left.className || upRight.className || upLeft.className) == "gem") {
+        
+    //     }
+        //console gems (up/right/left etc)
+       // console.log(currPosition);
+ }
+   
 
 
 //Things to do now:
