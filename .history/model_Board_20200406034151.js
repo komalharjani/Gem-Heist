@@ -40,10 +40,10 @@ function drawBoard() {
                         for(let i=0; i < pieces.length; i++) {
                             currIndex = pieces[i].indexOf(event);
                             console.log(currIndex);
-                            // if (currIndex > -1) {
-                            //     arrayContainer = pieces[i][currIndex];
-                            //     break;
-                            // }
+                            if (currIndex > -1) {
+                                arrayContainer = pieces[i][currIndex];
+                                break;
+                            }
                         }
                     });
                 }

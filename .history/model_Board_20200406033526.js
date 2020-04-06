@@ -32,19 +32,10 @@ function drawBoard() {
 
             //Add Event Listeners to Each Element in Array
             //https://stackoverflow.com/questions/51200879/adding-event-listener-to-a-multidimensional-array
-            for (let k  = 0; k < pieces.length; k++ ){
-                for(let l= 0; l < pieces[k].length; l++){
+            for (var k  = 0; k < pieces.length; k++ ){
+                for(var l= 0; l < pieces[k].length; l++){
                     pieces[k][l].addEventListener('click', function(event) {
-                        let arrayContainer = [];
-                        let currIndex;
-                        for(let i=0; i < pieces.length; i++) {
-                            currIndex = pieces[i].indexOf(event);
-                            console.log(currIndex);
-                            // if (currIndex > -1) {
-                            //     arrayContainer = pieces[i][currIndex];
-                            //     break;
-                            // }
-                        }
+                        captureAlarm(event);
                     });
                 }
             }
@@ -79,6 +70,7 @@ function drawBoard() {
 drawBoard();
 
 function captureAlarm() {
+    //console.log(event.target);
     console.log(pieces[5][2]);
     // console.log(event.target);
     // console.log(event);

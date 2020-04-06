@@ -28,26 +28,12 @@ function drawBoard() {
         var row = document.createElement('tr'); //create rows for each height
         for (var j = 0; j < width; j++) { //loop through width
             var cell = document.createElement('td'); //create columns for each width
+            cell.addEventListener('click',function() {
+                console.log(pieces[i][j]);
+                captureAlarm();
+            });
             pieces[i].push(cell);
-
-            //Add Event Listeners to Each Element in Array
-            //https://stackoverflow.com/questions/51200879/adding-event-listener-to-a-multidimensional-array
-            for (let k  = 0; k < pieces.length; k++ ){
-                for(let l= 0; l < pieces[k].length; l++){
-                    pieces[k][l].addEventListener('click', function(event) {
-                        let arrayContainer = [];
-                        let currIndex;
-                        for(let i=0; i < pieces.length; i++) {
-                            currIndex = pieces[i].indexOf(event);
-                            console.log(currIndex);
-                            // if (currIndex > -1) {
-                            //     arrayContainer = pieces[i][currIndex];
-                            //     break;
-                            // }
-                        }
-                    });
-                }
-            }
+            pieces[i][j].addEventListener
 
             //Identify Gem Cells
             if (j % 2 && i % 2) {
@@ -79,7 +65,6 @@ function drawBoard() {
 drawBoard();
 
 function captureAlarm() {
-    console.log(pieces[5][2]);
     // console.log(event.target);
     // console.log(event);
     // console.log(this);

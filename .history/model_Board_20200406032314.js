@@ -29,42 +29,19 @@ function drawBoard() {
         for (var j = 0; j < width; j++) { //loop through width
             var cell = document.createElement('td'); //create columns for each width
             pieces[i].push(cell);
-
-            //Add Event Listeners to Each Element in Array
-            //https://stackoverflow.com/questions/51200879/adding-event-listener-to-a-multidimensional-array
-            for (let k  = 0; k < pieces.length; k++ ){
-                for(let l= 0; l < pieces[k].length; l++){
-                    pieces[k][l].addEventListener('click', function(event) {
-                        let arrayContainer = [];
-                        let currIndex;
-                        for(let i=0; i < pieces.length; i++) {
-                            currIndex = pieces[i].indexOf(event);
-                            console.log(currIndex);
-                            // if (currIndex > -1) {
-                            //     arrayContainer = pieces[i][currIndex];
-                            //     break;
-                            // }
-                        }
-                    });
-                }
-            }
-
-            //Identify Gem Cells
-            if (j % 2 && i % 2) {
+            //pieces[i][j].addEventListener(MouseEvent.CLICK, captureAlarm([i][j]));
+            if (j % 2 && i % 2) { //identify gem cells
                 cell.innerHTML = gemChar;
                 cell.className = "gem";
-                //console.log(i,j);
-                let currRow = i;
-                let currCol = j;
+                console.log(cell[i]);
             }
-            //Identify Alarms
-            else if (j % 2 || i % 2) { 
+            else if (j % 2 || i % 2) { //identify alarm cells
                 cell.className = "alarm";
-                // cell.addEventListener('click',function(event){ //disable after clicked + how to pass row and col
-                //     console.log(i,j);
-                //     captureAlarm();
-                //     event.preventDefault();
-                // })
+                cell.addEventListener('click',function(event){ //disable after clicked + how to pass row and col
+                    //get array position here
+                    captureAlarm(this);
+                    event.preventDefault();
+                })
             }
             row.appendChild(cell);
         }
@@ -79,7 +56,6 @@ function drawBoard() {
 drawBoard();
 
 function captureAlarm() {
-    console.log(pieces[5][2]);
     // console.log(event.target);
     // console.log(event);
     // console.log(this);
