@@ -14,6 +14,11 @@ for (var i = 0; i < height; i++) {
     pieces[i] = [];
 }
 
+var eventListenerArray = [];
+for (var i = 0; i < height; i++) {
+    eventListenerArray[i] = [];
+}
+
 /**
  * Function to Draw Board
  */

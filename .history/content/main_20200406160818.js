@@ -116,7 +116,7 @@ const controller = {
                 cell.className = "alarm";
                 cell.addEventListener('click', function (event) { //disable after clicked + how to pass row and col
                     this.className = "white";
-                    disableAlarm();
+                    captureAlarm();
                     event.preventDefault();
                 })
             }
@@ -134,13 +134,19 @@ const controller = {
 
   //Disable Alarm Function
   disableAlarm: function() {
-      let currRow = event.target.getAttribute("row"); //curr row
-      let currCol = event.target.getAttribute("col"); //curr col
-      console.log(currRow,currCol);
-      if (currRow-1 == gemChar) {
-          console.log("true");
-      }
-      console.log(event.target);
+    console.log(currentState[0][1]);
+    //1. Detect Which Alarm is Clicked -- use array and position
+          cell.addEventListener('click', function (event) {
+            this.className = "grey";
+            //add to queue 
+          })
+    //2. Turns Grey
+    //PUSH MOVE TO QUEUE FOR REPLAY
+    //IF (Gem has no surrounding alarms - then capture gem) //PUSH MOVE TO QUEUE FOR REPLAY
+      //3.2. Store Gem in Score[]; call declareWinner?
+      //3.3. Give Player another turn 
+    //ELSE 
+      //SWITCH TURNS
   },
 
   replay: function() {

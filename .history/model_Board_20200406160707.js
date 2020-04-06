@@ -14,6 +14,11 @@ for (var i = 0; i < height; i++) {
     pieces[i] = [];
 }
 
+var eventListenerArray = [];
+for (var i = 0; i < height; i++) {
+    eventListenerArray[i] = [];
+}
+
 /**
  * Function to Draw Board
  */
@@ -74,6 +79,3 @@ function captureAlarm() {
 // --- is this getTurn?
 //2. Identify what objects are around currently selected alarm and implement logic for game with turn handler
 //3. 
-
-//Questions
-//1. How to start server and get game started?

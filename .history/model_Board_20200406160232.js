@@ -14,6 +14,11 @@ for (var i = 0; i < height; i++) {
     pieces[i] = [];
 }
 
+var eventListenerArray = [];
+for (var i = 0; i < height; i++) {
+    eventListenerArray[i] = [];
+}
+
 /**
  * Function to Draw Board
  */
@@ -26,15 +31,10 @@ function drawBoard() {
             pieces[i].push(cell);
             cell.setAttribute("row", i);
             cell.setAttribute("col", j);
-
             //Identify Gem Cells
             if (j % 2 && i % 2) {
                 cell.innerHTML = gemChar;
                 cell.className = "gem";
-                //example - move out later to follow after alarm captured
-                cell.addEventListener('click', function (event) { //disable after clicked + how to pass row and col
-                    this.innerHTML = "name";
-                })
             }
             //Identify Alarms
             else if (j % 2 || i % 2) {
@@ -56,7 +56,6 @@ function drawBoard() {
     divContainer.innerHTML = "";
     divContainer.appendChild(table);
 }
-
 drawBoard();
 
 function captureAlarm() {
@@ -68,12 +67,3 @@ function captureAlarm() {
     }
     console.log(event.target);
 }
-
-//Things to do now:
-//1. Game Handler - only let one user select a cell at any given time and then disable for other player
-// --- is this getTurn?
-//2. Identify what objects are around currently selected alarm and implement logic for game with turn handler
-//3. 
-
-//Questions
-//1. How to start server and get game started?
