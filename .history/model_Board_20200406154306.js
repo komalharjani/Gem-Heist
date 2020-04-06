@@ -31,6 +31,9 @@ function drawBoard() {
             pieces[i].push(cell);
             cell.setAttribute("row", i);
             cell.setAttribute("col", j);
+            let currRow = cell.getAttribute("row");
+            let currCol = cell.getAttribute("col");
+
             //Identify Gem Cells
             if (j % 2 && i % 2) {
                 cell.innerHTML = gemChar;
@@ -41,7 +44,8 @@ function drawBoard() {
                 cell.className = "alarm";
                 cell.addEventListener('click', function (event) { //disable after clicked + how to pass row and col
                     this.className = "white";
-                    captureAlarm();
+                    console.log(currRow, currCol);
+                    captureAlarm(this.currRow, this.currCol);
                     event.preventDefault();
                 })
             }
@@ -59,10 +63,26 @@ function drawBoard() {
 drawBoard();
 
 function captureAlarm() {
-    let currRow = event.target.getAttribute("row"); //curr row
-    let currCol = event.target.getAttribute("col"); //curr col
-    console.log(currRow,currCol);
-    if (currRow-1 == gemChar) {
-        console.log("true");
-    }
 }
+
+
+            //Add Event Listeners to Each Element in Array
+            //https://stackoverflow.com/questions/51200879/adding-event-listener-to-a-multidimensional-array
+            // for (let k  = 0; k < pieces.length; k++ ){
+            //     for(let l= 0; l < pieces[k].length; l++){
+            //         pieces[k][l].addEventListener('click', function(event) {
+
+            //             console.log(pieces[k][l]);
+            //             let arrayContainer = [];
+            //             let currIndex;
+            //             for(let i=0; i < pieces.length; i++) {
+            //                 currIndex = pieces[i].indexOf(event);
+            //                 console.log(currIndex);
+            //                 if (currIndex > -1) {
+            //                     arrayContainer = pieces[i][currIndex];
+            //                     break;
+            //                 }
+            //             }
+            //         });
+            //     }
+            // }
