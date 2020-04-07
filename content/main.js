@@ -65,7 +65,8 @@ const controller = {
   },
   createBoard: function () {
     
-    const height = Math.floor((2 / 3 * model.gems)) + 1;
+    const height = Math.floor(2 / 3 * model.gems) + 1;
+    console.log("create board" + height);
     const width = 7;
     const gemChar = '&#128142';
     model.board = new Array(height);
@@ -138,7 +139,7 @@ const controller = {
 // the client's model stores all the data that the client needs. This does not include information about other players ids, etc.
 
 const model = {
-
+  gems:3,
   player: 0,
   game: 0,
   openGames: [],
