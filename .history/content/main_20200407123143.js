@@ -42,6 +42,78 @@ const api = {
   }
 }
 
+///view_startGame displays the information and controls about starting or joining a game
+const view_startGame = {
+  init: function () {
+    this.mainElem = document.getElementsByTagName('main')[0];
+    this.html1 = `<section>
+    <div class="centercolumn" id="scoreboard">
+      <div class="card">
+        <h4>Login</h4>
+        <div class="yaks">
+            <label for="fname">Username:</label>
+            <input type="text" id="fname" name="fname">
+            <label for="lname">Password:</label>
+            <input type="text" id="lname" name="lname">
+            <input type="submit" value="Login">
+        </div>
+    </div><br>
+      <div class="card" id="board">
+        <h2>Start a new Game</h2>
+          <h4>Options</h4>
+            <div class="box"><br>
+                <label for="myRange">Number of Gems</label>
+                <input type="range" id="slider" min="3" max="20" value="3" step="3" oninput="document.getElementById('demo').innerHTML=this.value;model.gems=this.value;" class="slider"></input>
+                <p>Value: <span id="demo">3</span></p>
+            </div><br>
+            
+            <div class="box">
+                <label for="noPlayers">Number of Players:</label>
+                <select id="noPlayers">
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+            </div><br>
+            <button id="btnStart" onclick="controller.startGame()">Start Game</button>
+            </div>
+            </div>
+        </div>
+        </div>
+        </section>`;
+    this.mainElem.innerHTML = this.html1;
+
+    this.html2 = `<section>
+      <h2>Join a Game</h2>
+      <ul id="games">
+      </ul>
+    </section>`
+
+  },
+
+  listOpenGames: function () {
+    this.mainElem.innerHTML = this.html1 + this.html2;
+    this.gamesElem = document.getElementById('games');
+    for (gameId of controller.getOpenGames()) {
+      let listElem = document.createElement('li');
+      let spanElem = document.createElement('span');
+      let btnElem = document.createElement('button');
+      spanElem.innerHTML = gameId + " ";
+      btnElem.addEventListener('click', (function (gameId) {
+        return function () {
+          controller.joinGame(gameId);
+        };
+      })(gameId));
+      btnElem.innerHTML = "Join game";
+      listElem.append(spanElem);
+      listElem.append(btnElem);
+      this.gamesElem.append(listElem);
+    }
+
+  }
+}
+
 // controller object is in charge of the Gem Heist client-side and controls all the model and view updates (except the model's initial updates)
 
 const controller = {
@@ -81,8 +153,8 @@ const controller = {
   createBoard: function () {
     const width = 7;
     var gemChar = '&#128142';
-    var noGems = 12; //Hardcoded to 9 - but change to responsive
-    //var noGems = document.getElementById("slider").value;
+    //var noGems = 12; //Hardcoded to 9 - but change to responsive
+    var noGems = document.getElementById("slider").value;
     height = (2 / 3 * noGems) + 1;
 
     /**
@@ -227,78 +299,6 @@ const view_frame = {
       this.mainElem.removeChild(this.mainElem.lastChild);
     }
 
-
-  }
-}
-
-///view_startGame displays the information and controls about starting or joining a game
-const view_startGame = {
-  init: function () {
-    this.mainElem = document.getElementsByTagName('main')[0];
-    this.html1 = `<section>
-    <div class="centercolumn" id="scoreboard">
-      <div class="card">
-        <h4>Login</h4>
-        <div class="yaks">
-            <label for="fname">Username:</label>
-            <input type="text" id="fname" name="fname">
-            <label for="lname">Password:</label>
-            <input type="text" id="lname" name="lname">
-            <input type="submit" value="Login">
-        </div>
-    </div><br>
-      <div class="card" id="board">
-        <h2>Start a new Game</h2>
-          <h4>Options</h4>
-            <div class="box"><br>
-                <label for="myRange">Number of Gems</label>
-                <input type="range" id="slider" min="3" max="20" value="3" step="3" oninput="document.getElementById('demo').innerHTML=this.value;model.gems=this.value;" class="slider"></input>
-                <p>Value: <span id="demo">3</span></p>
-            </div><br>
-            
-            <div class="box">
-                <label for="noPlayers">Number of Players:</label>
-                <select id="noPlayers">
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-            </div><br>
-            <button id="btnStart" onclick="controller.startGame()">Start Game</button>
-            </div>
-            </div>
-        </div>
-        </div>
-        </section>`;
-    this.mainElem.innerHTML = this.html1;
-
-    this.html2 = `<section>
-      <h2>Join a Game</h2>
-      <ul id="games">
-      </ul>
-    </section>`
-
-  },
-
-  listOpenGames: function () {
-    this.mainElem.innerHTML = this.html1 + this.html2;
-    this.gamesElem = document.getElementById('games');
-    for (gameId of controller.getOpenGames()) {
-      let listElem = document.createElement('li');
-      let spanElem = document.createElement('span');
-      let btnElem = document.createElement('button');
-      spanElem.innerHTML = gameId + " ";
-      btnElem.addEventListener('click', (function (gameId) {
-        return function () {
-          controller.joinGame(gameId);
-        };
-      })(gameId));
-      btnElem.innerHTML = "Join game";
-      listElem.append(spanElem);
-      listElem.append(btnElem);
-      this.gamesElem.append(listElem);
-    }
 
   }
 }

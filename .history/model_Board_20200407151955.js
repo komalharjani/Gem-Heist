@@ -74,9 +74,6 @@ function captureAlarm() {
 
     console.log(currRow, currCol);
 
-    console.log(pieces);
-    console.log(pieces[currRow]);
-
     currState[currRow][currCol] = (false); //bind false to cell.className = "white";
     //add move to replay
 
@@ -85,11 +82,11 @@ function captureAlarm() {
     let left = pieces[currRow][currCol - 1];
     //let right = pieces[currRow][currCol+1];
     //let down = pieces[currRow+1][currCol]; 
-    
+
     console.log(up);
-   console.log(right);
-    // console.log(left);
-    // console.log(down);
+   //console.log(right);
+    console.log(left);
+    //console.log(down);
 
     }
     let alarmCheck = [up, left];
@@ -105,37 +102,37 @@ function captureAlarm() {
     let alarmsAroundGems = [];
 
     //loop 2 - check for alarms around each gem to see if gem should be captured
-    for (let i = 0; i < gemsFound.length; i++) {
-        let gemRow = gemsFound[i].getAttribute("row");
-        let gemCol = gemsFound[i].getAttribute("col");
+//     for (let i = 0; i < gemsFound.length; i++) {
+//         let gemRow = gemsFound[i].getAttribute("row");
+//         let gemCol = gemsFound[i].getAttribute("col");
 
-        let alarmUp = (pieces[gemRow - 1][gemCol]);
-        let alarmLeft = (pieces[gemRow][gemCol - 1]);
-        let alarmRight = (pieces[gemRow+1][gemCol]);
-        let alarmDown = (pieces[gemRow+1][gemCol]);
+//         let alarmUp = (pieces[gemRow - 1][gemCol]);
+//         let alarmLeft = (pieces[gemRow][gemCol - 1]);
+//         let alarmRight = (pieces[gemRow+1][gemCol]);
+//         let alarmDown = (pieces[gemRow+1][gemCol]);
 
-        alarmsAroundGems.push(alarmUp, alarmDown, alarmRight, alarmLeft);
+//         alarmsAroundGems.push(alarmUp, alarmDown, alarmRight, alarmLeft);
         
-        for (let j = 0; j < alarmsAroundGems.length; j++) {
-            if (alarmsAroundGems[i].className == "white") {
-                alarmsAroundGems.pop[i];
-            }
-        }
-        if (alarmsAroundGems.length == 0) {
-            gemsFound.className = "white"; 
-            gemsFound.innerHTML = "name";
-            //add move to replay
-            //currState[gemRow][gemCol] = (false);
-            //model.Player.score++;
-            declareWinner();
-        }
-        else {
-            //Next Turn
-        }
+//         for (let j = 0; j < alarmsAroundGems.length; j++) {
+//             if (alarmsAroundGems[i].className == "white") {
+//                 alarmsAroundGems.pop[i];
+//             }
+//         }
+//         if (alarmsAroundGems.length == 0) {
+//             gemsFound.className = "white"; 
+//             gemsFound.innerHTML = "name";
+//             //add move to replay
+//             //currState[gemRow][gemCol] = (false);
+//             //model.Player.score++;
+//             declareWinner();
+//         }
+//         else {
+//             //Next Turn
+//         }
 
-    }
+//     }
 
-}
+// }
 
 function declareWinner() {
     let gemsToWin = player.length / noGems;

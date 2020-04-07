@@ -81,8 +81,8 @@ const controller = {
   createBoard: function () {
     const width = 7;
     var gemChar = '&#128142';
-    var noGems = 12; //Hardcoded to 9 - but change to responsive
-    //var noGems = document.getElementById("slider").value;
+    //var noGems = 12; //Hardcoded to 9 - but change to responsive
+    var noGems = document.getElementById("slider").value;
     height = (2 / 3 * noGems) + 1;
 
     /**

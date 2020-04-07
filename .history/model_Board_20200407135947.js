@@ -71,29 +71,23 @@ drawBoard();
 function captureAlarm() {
     let currRow = event.target.getAttribute("row"); //curr row
     let currCol = event.target.getAttribute("col"); //curr col
-
-    console.log(currRow, currCol);
-
-    console.log(pieces);
-    console.log(pieces[currRow]);
-
     currState[currRow][currCol] = (false); //bind false to cell.className = "white";
-    //add move to replay
 
     while ((currRow < height) && (currCol < width)) { //edge cases
     let up = pieces[currRow - 1][currCol];
     let left = pieces[currRow][currCol - 1];
-    //let right = pieces[currRow][currCol+1];
-    //let down = pieces[currRow+1][currCol]; 
-    
+    let right = pieces[currRow][currCol+1];
+    let down = pieces[currRow+1][currCol]; 
+
     console.log(up);
    console.log(right);
-    // console.log(left);
-    // console.log(down);
+    console.log(left);
+    //console.log(down);
 
     }
     let alarmCheck = [up, left];
     let gemsFound = [];
+    let alarmsAroundGems = [];
 
     //loop 1 find gems around alarms
     for (let i = 0; i < alarmCheck.length; i++) {
@@ -101,8 +95,6 @@ function captureAlarm() {
             gemsFound.push(alarmCheck[i]);
         }
     }
-
-    let alarmsAroundGems = [];
 
     //loop 2 - check for alarms around each gem to see if gem should be captured
     for (let i = 0; i < gemsFound.length; i++) {
@@ -114,37 +106,6 @@ function captureAlarm() {
         let alarmRight = (pieces[gemRow+1][gemCol]);
         let alarmDown = (pieces[gemRow+1][gemCol]);
 
-        alarmsAroundGems.push(alarmUp, alarmDown, alarmRight, alarmLeft);
-        
-        for (let j = 0; j < alarmsAroundGems.length; j++) {
-            if (alarmsAroundGems[i].className == "white") {
-                alarmsAroundGems.pop[i];
-            }
-        }
-        if (alarmsAroundGems.length == 0) {
-            gemsFound.className = "white"; 
-            gemsFound.innerHTML = "name";
-            //add move to replay
-            //currState[gemRow][gemCol] = (false);
-            //model.Player.score++;
-            declareWinner();
-        }
-        else {
-            //Next Turn
-        }
-
     }
 
-}
-
-function declareWinner() {
-    let gemsToWin = player.length / noGems;
-    if (player.score = gemsToWin) {
-      //alert
-      //kill game
-      //update leagueboard
-    }
-    else {
-        //next turn
-    }
 }

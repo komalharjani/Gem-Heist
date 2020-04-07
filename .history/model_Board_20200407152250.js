@@ -75,7 +75,6 @@ function captureAlarm() {
     console.log(currRow, currCol);
 
     console.log(pieces);
-    console.log(pieces[currRow]);
 
     currState[currRow][currCol] = (false); //bind false to cell.className = "white";
     //add move to replay

@@ -72,10 +72,6 @@ function captureAlarm() {
     let currRow = event.target.getAttribute("row"); //curr row
     let currCol = event.target.getAttribute("col"); //curr col
 
-    console.log(currRow, currCol);
-
-    console.log(pieces);
-    console.log(pieces[currRow]);
 
     currState[currRow][currCol] = (false); //bind false to cell.className = "white";
     //add move to replay
@@ -83,13 +79,13 @@ function captureAlarm() {
     while ((currRow < height) && (currCol < width)) { //edge cases
     let up = pieces[currRow - 1][currCol];
     let left = pieces[currRow][currCol - 1];
-    //let right = pieces[currRow][currCol+1];
-    //let down = pieces[currRow+1][currCol]; 
-    
+    let right = pieces[currRow][currCol+1];
+    let down = pieces[currRow+1][currCol]; 
+
     console.log(up);
    console.log(right);
-    // console.log(left);
-    // console.log(down);
+    console.log(left);
+    //console.log(down);
 
     }
     let alarmCheck = [up, left];

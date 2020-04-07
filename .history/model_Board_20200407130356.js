@@ -36,6 +36,7 @@ function drawBoard() {
             currState[i].push(true);
             cell.setAttribute("row", i);
             cell.setAttribute("col", j);
+
             //Identify Gem Cells
             if (j % 2 && i % 2) {
                 cell.innerHTML = gemChar;
@@ -71,80 +72,56 @@ drawBoard();
 function captureAlarm() {
     let currRow = event.target.getAttribute("row"); //curr row
     let currCol = event.target.getAttribute("col"); //curr col
+    currState[currRow][currCol] = (false);
 
-    console.log(currRow, currCol);
+    //while ((currRow < height) && (currCol < width)) { //Edge Cases
+    let right = pieces[currRow][currCol+1]; //doesn't work (+1)
+        let up = pieces[currRow - 1][currCol];
+        let left = pieces[currRow][currCol - 1];
+        //let down = pieces[currRow][currCol];  //doesn't work (+1)
+        console.log(up);
+        console.log(right);
+        //console.log(down);
+        console.log(left);
+   // }
+    // let up = pieces[currRow - 1][currCol];
+    // //let down = pieces[currRow+1][currCol];  //doesn't work (+1)
+    // let left = pieces[currRow][currCol - 1];
+    // //let right = pieces[currRow][currCol+1]; //doesn't work (+1)
+    // let alarmCheck = [up, left];
+    // let gemsFound = [];
 
-    console.log(pieces);
-    console.log(pieces[currRow]);
+    // //loop 1 find gems around alarms
+    // for (let i = 0; i < alarmCheck.length; i++) {
+    //     if (alarmCheck[i].className == "gem") {
+    //         gemsFound.push(alarmCheck[i]);
+    //     }
+    // }
 
-    currState[currRow][currCol] = (false); //bind false to cell.className = "white";
-    //add move to replay
+    // //loop 2 - check for alarms around each gem
+    // for (let i = 0; i < gemsFound.length; i++) {
+    //     let gemRow = gemsFound[i].getAttribute("row");
+    //     let gemCol = gemsFound[i].getAttribute("col");
 
-    while ((currRow < height) && (currCol < width)) { //edge cases
-    let up = pieces[currRow - 1][currCol];
-    let left = pieces[currRow][currCol - 1];
-    //let right = pieces[currRow][currCol+1];
-    //let down = pieces[currRow+1][currCol]; 
-    
-    console.log(up);
-   console.log(right);
-    // console.log(left);
-    // console.log(down);
+    //     let alarmUp = (pieces[gemRow - 1][gemCol]);
+    //     let alarmLeft = (pieces[gemRow][gemCol - 1]);
+    //     //let alarmRight = (pieces[gemRow+1][gemCol]);
+    //     //let alarmDown = (pieces[gemRow+1][gemCol]);
 
-    }
-    let alarmCheck = [up, left];
-    let gemsFound = [];
-
-    //loop 1 find gems around alarms
-    for (let i = 0; i < alarmCheck.length; i++) {
-        if (alarmCheck[i].className == "gem") {
-            gemsFound.push(alarmCheck[i]);
-        }
-    }
-
-    let alarmsAroundGems = [];
-
-    //loop 2 - check for alarms around each gem to see if gem should be captured
-    for (let i = 0; i < gemsFound.length; i++) {
-        let gemRow = gemsFound[i].getAttribute("row");
-        let gemCol = gemsFound[i].getAttribute("col");
-
-        let alarmUp = (pieces[gemRow - 1][gemCol]);
-        let alarmLeft = (pieces[gemRow][gemCol - 1]);
-        let alarmRight = (pieces[gemRow+1][gemCol]);
-        let alarmDown = (pieces[gemRow+1][gemCol]);
-
-        alarmsAroundGems.push(alarmUp, alarmDown, alarmRight, alarmLeft);
-        
-        for (let j = 0; j < alarmsAroundGems.length; j++) {
-            if (alarmsAroundGems[i].className == "white") {
-                alarmsAroundGems.pop[i];
-            }
-        }
-        if (alarmsAroundGems.length == 0) {
-            gemsFound.className = "white"; 
-            gemsFound.innerHTML = "name";
-            //add move to replay
-            //currState[gemRow][gemCol] = (false);
-            //model.Player.score++;
-            declareWinner();
-        }
-        else {
-            //Next Turn
-        }
-
-    }
+    //     console.log(alarmUp);
+    //     console.log(alarmLeft);
+    // }
 
 }
 
-function declareWinner() {
-    let gemsToWin = player.length / noGems;
-    if (player.score = gemsToWin) {
-      //alert
-      //kill game
-      //update leagueboard
-    }
-    else {
-        //next turn
-    }
-}
+
+
+
+//Things to do now:
+//1. Game Handler - only let one user select a cell at any given time and then disable for other player
+// --- is this getTurn?
+//2. Identify what objects are around currently selected alarm and implement logic for game with turn handler
+//3. 
+
+//Questions
+//1. How to start server and get game started?

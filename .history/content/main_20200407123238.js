@@ -81,8 +81,8 @@ const controller = {
   createBoard: function () {
     const width = 7;
     var gemChar = '&#128142';
-    var noGems = 12; //Hardcoded to 9 - but change to responsive
-    //var noGems = document.getElementById("slider").value;
+    //var noGems = 12; //Hardcoded to 9 - but change to responsive
+    var noGems = document.getElementById("slider").value;
     height = (2 / 3 * noGems) + 1;
 
     /**
@@ -252,7 +252,7 @@ const view_startGame = {
           <h4>Options</h4>
             <div class="box"><br>
                 <label for="myRange">Number of Gems</label>
-                <input type="range" id="slider" min="3" max="20" value="3" step="3" oninput="document.getElementById('demo').innerHTML=this.value;model.gems=this.value;" class="slider"></input>
+                <input type="range" id="slider" min="3" max="20" value="3" step="3"model.gems=this.value;" class="slider"></input>
                 <p>Value: <span id="demo">3</span></p>
             </div><br>
             

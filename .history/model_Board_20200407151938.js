@@ -74,9 +74,6 @@ function captureAlarm() {
 
     console.log(currRow, currCol);
 
-    console.log(pieces);
-    console.log(pieces[currRow]);
-
     currState[currRow][currCol] = (false); //bind false to cell.className = "white";
     //add move to replay
 
@@ -85,11 +82,11 @@ function captureAlarm() {
     let left = pieces[currRow][currCol - 1];
     //let right = pieces[currRow][currCol+1];
     //let down = pieces[currRow+1][currCol]; 
-    
+
     console.log(up);
-   console.log(right);
-    // console.log(left);
-    // console.log(down);
+   //console.log(right);
+    console.log(left);
+    //console.log(down);
 
     }
     let alarmCheck = [up, left];
