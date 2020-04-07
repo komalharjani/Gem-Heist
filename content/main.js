@@ -65,7 +65,7 @@ const controller = {
   },
   createBoard: function () {
     
-    const height = (2 / 3 * model.gems) + 1;
+    const height = Math.floor((2 / 3 * model.gems)) + 1;
     const width = 7;
     const gemChar = '&#128142';
     model.board = new Array(height);
