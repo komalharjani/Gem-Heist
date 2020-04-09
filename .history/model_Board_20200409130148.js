@@ -14,9 +14,6 @@ for (var i = 0; i < height; i++) {
     pieces[i] = [];
 }
 
-/**
- * Array With Current State
- */
 var currState = [];
 for (var i = 0; i < height; i++) {
     currState[i] = [];
@@ -45,41 +42,42 @@ function drawBoard() {
             cell.setAttribute("row", i);
             cell.setAttribute("col", j);
 
-            if(currState[i][j] == true) {
-            if (j % 2 && i % 2) { //identify gem cells
-                //currentState[0].push(cell);
-                cell.innerHTML = gemChar;
-                cell.className = "gem";
-                //move event listener to turn handler function
-                cell.addEventListener('click', function(event){
-                    this.innerHTML  = "name";
-                    //replay.enqueue(this);
-                })
+            //Identify Gem Cells
+            if (currState[i][j] == true) {
+                if (j % 2 && i % 2) {
+                    cell.innerHTML = gemChar;
+                    cell.className = "gem";
+                    //example - move out later to follow after alarm captured
+                    cell.addEventListener('click', function (event) { //disable after clicked + how to pass row and col
+                        //this.innerHTML = "name";
+                    })
+                }
+                //Identify Alarms
+                if (j % 2 || i % 2) {
+                    cell.className = "alarm";
+                    cell.addEventListener('click', function (event) { //disable after clicked + how to pass row and col
+                        this.className = "white";
+                        captureAlarm(this);
+                        event.preventDefault();
+                    })
+                }
+                else {
+                    cell.className = "white";
+                }
             }
-            else if (j % 2 || i % 2) { //identify alarm cells
-                cell.className = "alarm";
-                cell.addEventListener('click', function(event){
-                    this.className = "white";
-                    //replay.enqueue(this);
-                })
+                row.appendChild(cell);
             }
+            table.appendChild(row);
         }
-        else {
-            cell.className = "white"
-        }
-            
-            row.appendChild(cell);
-        }
-        table.appendChild(row);
+        document.body.appendChild(table);
+
+        //display in this div
+        let divContainer = document.getElementById("game");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(table);
     }
-    document.body.appendChild(table);
 
-    //display in this div
-    let divContainer = document.getElementById("game");
-    divContainer.innerHTML = "";
-    divContainer.appendChild(table);
-}
-
+    console.log(currState);
 
     drawBoard();
 

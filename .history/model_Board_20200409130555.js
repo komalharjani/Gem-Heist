@@ -14,9 +14,6 @@ for (var i = 0; i < height; i++) {
     pieces[i] = [];
 }
 
-/**
- * Array With Current State
- */
 var currState = [];
 for (var i = 0; i < height; i++) {
     currState[i] = [];
@@ -34,52 +31,51 @@ console.log(currState);
  */
 //synchronise with model
 //if true draw alarm else draw 
-function drawBoard() {
-    //Create rows and tables according to specified height and width
-    var table = document.createElement("table");
-    for (var i = 0; i < height; i++) { //loop through height
-        var row = document.createElement('tr'); //create rows for each height
-        for (var j = 0; j < width; j++) { //loop through width
-            var cell = document.createElement('td'); //create columns for each width
-            pieces[i].push(cell);
-            cell.setAttribute("row", i);
-            cell.setAttribute("col", j);
-
-            if(currState[i][j] == true) {
-            if (j % 2 && i % 2) { //identify gem cells
-                //currentState[0].push(cell);
-                cell.innerHTML = gemChar;
-                cell.className = "gem";
-                //move event listener to turn handler function
-                cell.addEventListener('click', function(event){
-                    this.innerHTML  = "name";
-                    //replay.enqueue(this);
-                })
+    function drawBoard() {
+        //Create rows and tables according to specified height and width
+        var table = document.createElement("table");
+        for (var i = 0; i < height; i++) { //loop through height
+            var row = document.createElement('tr'); //create rows for each height
+            for (var j = 0; j < width; j++) { //loop through width
+                var cell = document.createElement('td'); //create columns for each width
+                pieces[i].push(cell);
+                cell.setAttribute("row", i);
+                cell.setAttribute("col", j);
+    
+                if(currState[i] == true) {
+                if (j % 2 && i % 2) { //identify gem cells
+                    //currentState[0].push(cell);
+                    cell.innerHTML = gemChar;
+                    cell.className = "gem";
+                    //move event listener to turn handler function
+                    cell.addEventListener('click', function(event){
+                        this.innerHTML  = "name";
+                        //replay.enqueue(this);
+                    })
+                }
+                else if (j % 2 || i % 2) { //identify alarm cells
+                    cell.className = "alarm";
+                    cell.addEventListener('click', function(event){
+                        this.className = "white";
+                        //replay.enqueue(this);
+                    })
+                }
             }
-            else if (j % 2 || i % 2) { //identify alarm cells
-                cell.className = "alarm";
-                cell.addEventListener('click', function(event){
-                    this.className = "white";
-                    //replay.enqueue(this);
-                })
+            else {
+                cell.className = "white";
             }
+                
+                row.appendChild(cell);
+            }
+            table.appendChild(row);
         }
-        else {
-            cell.className = "white"
-        }
-            
-            row.appendChild(cell);
-        }
-        table.appendChild(row);
+        document.body.appendChild(table);
+    
+        //display in this div
+        let divContainer = document.getElementById("game");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(table);
     }
-    document.body.appendChild(table);
-
-    //display in this div
-    let divContainer = document.getElementById("game");
-    divContainer.innerHTML = "";
-    divContainer.appendChild(table);
-}
-
 
     drawBoard();
 

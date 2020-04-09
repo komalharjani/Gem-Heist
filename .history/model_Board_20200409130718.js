@@ -14,9 +14,6 @@ for (var i = 0; i < height; i++) {
     pieces[i] = [];
 }
 
-/**
- * Array With Current State
- */
 var currState = [];
 for (var i = 0; i < height; i++) {
     currState[i] = [];
@@ -44,6 +41,7 @@ function drawBoard() {
             pieces[i].push(cell);
             cell.setAttribute("row", i);
             cell.setAttribute("col", j);
+            currState[0][3] = false;
 
             if(currState[i][j] == true) {
             if (j % 2 && i % 2) { //identify gem cells

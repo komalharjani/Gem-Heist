@@ -14,9 +14,6 @@ for (var i = 0; i < height; i++) {
     pieces[i] = [];
 }
 
-/**
- * Array With Current State
- */
 var currState = [];
 for (var i = 0; i < height; i++) {
     currState[i] = [];
