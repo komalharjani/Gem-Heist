@@ -61,7 +61,7 @@ const controller = {
     model.game = await api.get(1, model.player);
     view_frame.clear();
     view_game.init();
-    this.createBoard(); 
+    this.createBoard();
     controller.getTurn();
   },
 
@@ -211,8 +211,6 @@ const controller = {
       if (rightCell.className == "alarm") {
         alarmsAroundGemFound.push(rightCell);
       }
-
-      console.log(alarmsAroundGemFound);
 
       //if the array is empty after checking for surrounding cells then Capture Gem
       if (alarmsAroundGemFound.length == 0) {

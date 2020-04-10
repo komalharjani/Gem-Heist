@@ -61,7 +61,7 @@ const controller = {
     model.game = await api.get(1, model.player);
     view_frame.clear();
     view_game.init();
-    this.createBoard(); 
+    this.createBoard();
     controller.getTurn();
   },
 
