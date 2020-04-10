@@ -220,9 +220,9 @@ const controller = {
         gemsFound.className = "white"; //turn the gemFound to white == Captured
         gemsFound.innerHTML = "name"; //place the name inside
         //add move to replay
-        //model.Player.score++; //update score -- which variable?
+        //model.Player.score++; //update score
         //EMPTY ARRAY!!!!!
-        checkWinner();
+        checkWinner(); 
       }
       else {
         //Next Turn
@@ -233,12 +233,13 @@ const controller = {
 
   replay: function () {
     //queue
+
   },
 
   checkWinner: function () {
     let gemsToWin = player.length / noGems;
     if (player.score = gemsToWin) {
-      alert(player + "has won");
+      //alert
       //kill game
       //update leagueboard
     }

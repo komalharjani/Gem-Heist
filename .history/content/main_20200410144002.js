@@ -108,25 +108,22 @@ const controller = {
 
         cell.setAttribute("row", i); 
         cell.setAttribute("col", j);
-
+        
         if (model.currState[i][j] == true) {
-
-          //Gem Cells
-          if (j % 2 && i % 2) {
-
+          if (j % 2 && i % 2) { //identify gem cells
+            //currentState[0].push(cell);
             cell.innerHTML = gemChar;
             cell.className = "gem";
-
-            //Event Listener for Cell
+            //move event listener to turn handler function
             cell.addEventListener('click', function (event) {
+              this.innerHTML = "name";
               controller.disableAlarm();
             })
           }
-          //Alarm Cells
-          else if (j % 2 || i % 2) { 
+          else if (j % 2 || i % 2) { //identify alarm cells
             cell.className = "alarm";
             cell.addEventListener('click', function (event) {
-              this.className = "white"; //turn white once clicked
+              this.className = "white";
               controller.disableAlarm();
             })
           }
@@ -152,8 +149,8 @@ const controller = {
 
     let currRow = event.target.getAttribute("row"); //curr row
     let currCol = event.target.getAttribute("col"); //curr col
-    model.pieces[currRow][currCol].className = "white";
-    model.currState[currRow][currCol] = (false);
+
+    let gemsFound = [];
 
     //Temporary variables to hold surrounding cells
     let leftCell;
@@ -161,8 +158,9 @@ const controller = {
     let upCell;
     let downCell;
 
-    let gemsFound = [];
-    let alarmsAroundGemFound = [];
+    let alarmsAroundGemsFound = [];
+
+    model.currState[currRow][currCol] = (false);
 
     //Check if surrounding are gems
     if (currRow - 1 >= 0) {
@@ -199,30 +197,32 @@ const controller = {
 
       upCell = (model.pieces[gemRow - 1][gemCol]);
       if (upCell.className == "alarm") {
-        alarmsAroundGemFound.push(upCell);
+        alarmsAroundGemsFound.push(upCell);
       }
       leftCell = (model.pieces[gemRow][gemCol - 1]);
       if (leftCell.className == "alarm") {
-        alarmsAroundGemFound.push(leftCell);
+        alarmsAroundGemsFound.push(leftCell);
       }
       downCell = model.pieces[parseInt(gemRow) + 1][gemCol];
       if (downCell.className == "alarm") {
-        alarmsAroundGemFound.push(downCell);
+        alarmsAroundGemsFound.push(downCell);
       }
       rightCell = (model.pieces[gemRow][parseInt(gemCol) + 1]);
       if (rightCell.className == "alarm") {
-        alarmsAroundGemFound.push(rightCell);
+        alarmsAroundGemsFound.push(rightCell);
       }
 
-      //if the array is empty after checking for surrounding cells then Capture Gem
-      if (alarmsAroundGemFound.length == 0) {
-        model.currState[gemRow][gemCol] = (false);
-        gemsFound.className = "white"; //turn the gemFound to white == Captured
+      console.log(alarmsAroundGemsFound);
+
+      //if the array is empty after removing all surrounding gems
+      if (alarmsAroundGemsFound.length == 0) {
+        gemsFound.className = "white"; //turn the gemFound to white
         gemsFound.innerHTML = "name"; //place the name inside
         //add move to replay
-        //model.Player.score++; //update score -- which variable?
+        model.currState[gemRow][gemCol] = (false);
+        //model.Player.score++; //update score
         //EMPTY ARRAY!!!!!
-        checkWinner();
+        declareWinner();
       }
       else {
         //Next Turn
@@ -233,12 +233,13 @@ const controller = {
 
   replay: function () {
     //queue
+
   },
 
-  checkWinner: function () {
+  declareWinner: function () {
     let gemsToWin = player.length / noGems;
     if (player.score = gemsToWin) {
-      alert(player + "has won");
+      //alert
       //kill game
       //update leagueboard
     }

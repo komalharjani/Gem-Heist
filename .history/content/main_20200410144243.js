@@ -214,15 +214,17 @@ const controller = {
         alarmsAroundGemFound.push(rightCell);
       }
 
-      //if the array is empty after checking for surrounding cells then Capture Gem
+      console.log(alarmsAroundGemFound);
+
+      //if the array is empty after removing all surrounding gems
       if (alarmsAroundGemFound.length == 0) {
-        model.currState[gemRow][gemCol] = (false);
-        gemsFound.className = "white"; //turn the gemFound to white == Captured
+        gemsFound.className = "white"; //turn the gemFound to white
         gemsFound.innerHTML = "name"; //place the name inside
         //add move to replay
-        //model.Player.score++; //update score -- which variable?
+        model.currState[gemRow][gemCol] = (false);
+        //model.Player.score++; //update score
         //EMPTY ARRAY!!!!!
-        checkWinner();
+        declareWinner();
       }
       else {
         //Next Turn
@@ -233,12 +235,13 @@ const controller = {
 
   replay: function () {
     //queue
+
   },
 
-  checkWinner: function () {
+  declareWinner: function () {
     let gemsToWin = player.length / noGems;
     if (player.score = gemsToWin) {
-      alert(player + "has won");
+      //alert
       //kill game
       //update leagueboard
     }
