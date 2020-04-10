@@ -53,8 +53,8 @@ function drawBoard() {
                 else if (j % 2 || i % 2) { //identify alarm cells
                     cell.className = "alarm";
                     cell.addEventListener('click', function (event) {
-                        this.className = "white";
                         captureAlarm();
+                        this.className = "white";
                     })
                 }
             }
@@ -80,95 +80,97 @@ function captureAlarm() {
     let currRow = event.target.getAttribute("row"); //curr row
     let currCol = event.target.getAttribute("col"); //curr col
 
-    let gemsFound = [];
+    // let intRow = parseInt(currRow);
+    // intRow += 1;
+    // console.log(intRow);
 
-    //Temporary variables to hold surrounding cells
+    let alarmsAroundEvent = [];
+    let gemsFound = [];
     let leftCell;
     let rightCell;
     let upCell;
     let downCell;
-
+    let one = 1;
     let alarmsAroundGemsFound = [];
 
-    currState[currRow][currCol] = (false);
+    currState[currRow][currCol] = (false); //bind false to cell.className = "white";
+    //add move to replay
 
-    //Check if surrounding are gems
     if (currRow - 1 >= 0) {
         upCell = pieces[currRow - 1][currCol];
-        if (upCell.className == "gem") {
-            gemsFound.push(upCell);
-        }
-    }
-    if (currCol - 1 >= 0) {
+        alarmsAroundEvent.push(upCell);
+    } if (currCol - 1 >= 0) {
         leftCell = pieces[currRow][currCol - 1];
-        if (leftCell.className == "gem") {
-            gemsFound.push(leftCell);
-        }
+        alarmsAroundEvent.push(leftCell);
+    } if (currRow < height -1) {
+        downCell = pieces[currRow+1][currCol+1];
+        alarmsAroundEvent.push(downCell);
+    } 
+    if (currCol < width) {
+        rightCell = pieces[currRow][currCol+1];
+        //alarmsAroundEvent.push(rightCell);
     }
-    if (currRow < height-1) {
-        downCell = pieces[parseInt(currRow) + 1][currCol];
-        if (downCell.className == "gem") {
-            gemsFound.push(downCell);
-        }
-    }
-    if (currCol < width-1) {
-        rightCell = pieces[currRow][parseInt(currCol) + 1];
-        if (rightCell.className == "gem") {
-            gemsFound.push(rightCell);
+
+    console.log(upCell);
+    console.log(leftCell);
+    console.log(downCell);
+    console.log(rightCell);
+    console.log(alarmsAroundEvent);
+    //}
+
+    //loop 1 find gems around alarms
+    for (let i = 0; i < alarmsAroundEvent.length; i++) {
+        if (alarmsAroundEvent[i].className == "gem") {
+            gemsFound.push(alarmsAroundEvent[i]);
         }
     }
 
     //loop 2 - check for alarms around each gem to see if gem should be captured
-    //empty array or create new array for each gem
+    for (let i = 0; i < gemsFound.length; i++) {
+        let gemRow = gemsFound[i].getAttribute("row");
+        let gemCol = gemsFound[i].getAttribute("col");
 
-        for (let i = 0; i < gemsFound.length; i++) {
-            let gemRow = gemsFound[i].getAttribute("row"); //new GemRow
-            let gemCol = gemsFound[i].getAttribute("col"); //new GemCol
+        let alarmUp = (pieces[gemRow - 1][gemCol]);
+        let alarmLeft = (pieces[gemRow][gemCol - 1]);
+        //let alarmRight = (pieces[gemRow + 1][gemCol]);
+        //let alarmDown = (pieces[gemRow + 1][gemCol]);
 
-            upCell = (pieces[gemRow - 1][gemCol]); 
-            if (upCell.className == "alarm") {
-                alarmsAroundGemsFound.push(upCell);
-            }
-            leftCell = (pieces[gemRow][gemCol - 1]);
-            if (leftCell.className == "alarm") {
-                alarmsAroundGemsFound.push(leftCell);
-            }
-            downCell = pieces[parseInt(gemRow) + 1][gemCol];
-            if (downCell.className == "alarm") {
-                alarmsAroundGemsFound.push(downCell);
-            }
-            rightCell = (pieces[gemRow][parseInt(gemCol) + 1]);
-            if (rightCell.className == "alarm") {
-                alarmsAroundGemsFound.push(rightCell);
-            }
+        alarmsAroundGemsFound.push(alarmUp, alarmLeft);
 
-            console.log(alarmsAroundGemsFound);
-
-            //if the array is empty after removing all surrounding gems
-            if (alarmsAroundGemsFound.length == 0) {
-                gemsFound.className = "white"; //turn the gemFound to white
-                gemsFound.innerHTML = "name"; //place the name inside
-                //add move to replay
-                currState[gemRow][gemCol] = (false);
-                //model.Player.score++; //update score
-                //empty array
-                declareWinner();
-            }
-            else {
-                //Next Turn
+        for (let j = 0; j < alarmsAroundGemsFound.length; j++) {
+            if (alarmsAroundGemsFound[i].className == "white") {
+                alarmsAroundGemsFound.pop[i];
             }
         }
+        console.log(alarmsAroundGemsFound);
 
-    }
-
-    function declareWinner() {
-        let gemsToWin = player.length / noGems;
-        if (player.score = gemsToWin) {
-            //alert
-            //kill game
-            //update leagueboard
+        if (alarmsAroundGemsFound.length == 0) {
+            gemsFound.className = "white";
+            gemsFound.innerHTML = "name";
+            //add move to replay
+            //currState[gemRow][gemCol] = (false);
+            //model.Player.score++;
+            declareWinner();
         }
         else {
-            //next turn
+            //Next Turn
         }
+
     }
+
+}
+
+function declareWinner() {
+    let gemsToWin = player.length / noGems;
+    if (player.score = gemsToWin) {
+        //alert
+        //kill game
+        //update leagueboard
+    }
+    else {
+        //next turn
+    }
+}
+
+//2. fix the row and col
+//3. reference errors with calling other functions in main

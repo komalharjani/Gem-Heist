@@ -81,13 +81,11 @@ function captureAlarm() {
     let currCol = event.target.getAttribute("col"); //curr col
 
     let gemsFound = [];
-
-    //Temporary variables to hold surrounding cells
     let leftCell;
     let rightCell;
     let upCell;
     let downCell;
-
+    let one = 1;
     let alarmsAroundGemsFound = [];
 
     currState[currRow][currCol] = (false);
@@ -119,8 +117,6 @@ function captureAlarm() {
     }
 
     //loop 2 - check for alarms around each gem to see if gem should be captured
-    //empty array or create new array for each gem
-
         for (let i = 0; i < gemsFound.length; i++) {
             let gemRow = gemsFound[i].getAttribute("row"); //new GemRow
             let gemCol = gemsFound[i].getAttribute("col"); //new GemCol
@@ -151,12 +147,12 @@ function captureAlarm() {
                 //add move to replay
                 currState[gemRow][gemCol] = (false);
                 //model.Player.score++; //update score
-                //empty array
                 declareWinner();
             }
             else {
                 //Next Turn
             }
+
         }
 
     }
@@ -172,3 +168,5 @@ function captureAlarm() {
             //next turn
         }
     }
+
+//turn into white

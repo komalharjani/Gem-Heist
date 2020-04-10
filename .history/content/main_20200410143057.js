@@ -189,19 +189,19 @@ const controller = {
       let gemRow = gemsFound[i].getAttribute("row"); //new GemRow
       let gemCol = gemsFound[i].getAttribute("col"); //new GemCol
 
-      upCell = (model.pieces[gemRow - 1][gemCol]);
+      upCell = (pieces[gemRow - 1][gemCol]);
       if (upCell.className == "alarm") {
         alarmsAroundGemsFound.push(upCell);
       }
-      leftCell = (model.pieces[gemRow][gemCol - 1]);
+      leftCell = (pieces[gemRow][gemCol - 1]);
       if (leftCell.className == "alarm") {
         alarmsAroundGemsFound.push(leftCell);
       }
-      downCell = model.pieces[parseInt(gemRow) + 1][gemCol];
+      downCell = pieces[parseInt(gemRow) + 1][gemCol];
       if (downCell.className == "alarm") {
         alarmsAroundGemsFound.push(downCell);
       }
-      rightCell = (model.pieces[gemRow][parseInt(gemCol) + 1]);
+      rightCell = (pieces[gemRow][parseInt(gemCol) + 1]);
       if (rightCell.className == "alarm") {
         alarmsAroundGemsFound.push(rightCell);
       }
@@ -215,7 +215,7 @@ const controller = {
         //add move to replay
         model.currState[gemRow][gemCol] = (false);
         //model.Player.score++; //update score
-        //EMPTY ARRAY!!!!!
+        //empty array
         declareWinner();
       }
       else {

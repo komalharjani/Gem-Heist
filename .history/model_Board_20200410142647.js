@@ -151,11 +151,13 @@ function captureAlarm() {
                 //add move to replay
                 currState[gemRow][gemCol] = (false);
                 //model.Player.score++; //update score
-                //empty array
                 declareWinner();
             }
             else {
                 //Next Turn
+            }
+            for (let k = 0; k < alarmsAroundGemsFound.length; k++) {
+                alarmsAroundGemsFound.slice[k,1];
             }
         }
 

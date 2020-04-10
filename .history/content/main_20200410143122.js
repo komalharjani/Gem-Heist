@@ -215,7 +215,7 @@ const controller = {
         //add move to replay
         model.currState[gemRow][gemCol] = (false);
         //model.Player.score++; //update score
-        //EMPTY ARRAY!!!!!
+        //empty array
         declareWinner();
       }
       else {

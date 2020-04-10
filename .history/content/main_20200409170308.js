@@ -45,6 +45,7 @@ const api = {
 // controller object is in charge of the Gem Heist client-side and controls all the model and view updates (except the model's initial updates)
 
 const controller = {
+
   //initialies everything that's required for the game's start display
   init: async function () {
     await model.init();
@@ -77,170 +78,161 @@ const controller = {
     }
   },
 
-  fillingArrays: function () {
+  fillingArrays: function() {
+    for (var i = 0; i < height; i++) {
+      pieces[i] = [];
+  }
+
+  for (var i = 0; i < height; i++) {
+    currState[i] = [];
+    for (var j = 0; j < width; j++) {
+        currState[i].push(true); //default all true
+    }
+}
 
   },
 
   createBoard: function () {
-    let gemChar = "&#128142";
+    const width = 7;
+    var gemChar = '&#128142';
+    var noGems = 12; //Hardcoded to 9 - but change to responsive
+    //var noGems = document.getElementById("slider").value;
+    height = (2 / 3 * noGems) + 1;
 
-    for (var i = 0; i < model.height; i++) {
-      model.pieces[i] = [];
-    }
-
-    for (var i = 0; i < model.height; i++) {
-      model.currState[i] = [];
-      for (var j = 0; j < model.width; j++) {
-        model.currState[i].push(true); //default all true
-      }
-    }
-
-    var table = document.createElement("table");
-    for (var i = 0; i < model.height; i++) { //loop through height
-      var row = document.createElement('tr'); //create rows for each height
-      for (var j = 0; j < model.width; j++) { //loop through width
+var table = document.createElement("table");
+for (var i = 0; i < height; i++) { //loop through height
+    var row = document.createElement('tr'); //create rows for each height
+    for (var j = 0; j < width; j++) { //loop through width
         var cell = document.createElement('td'); //create columns for each width
         model.pieces[i].push(cell);
         cell.setAttribute("row", i);
         cell.setAttribute("col", j);
-        if (model.currState[i][j] == true) {
-          if (j % 2 && i % 2) { //identify gem cells
+        if(currState[i][j] == true) { 
+        if (j % 2 && i % 2) { //identify gem cells
             //currentState[0].push(cell);
             cell.innerHTML = gemChar;
             cell.className = "gem";
             //move event listener to turn handler function
-            cell.addEventListener('click', function (event) {
-              this.innerHTML = "name";
-              controller.disableAlarm();
+            cell.addEventListener('click', function(event){
+                this.innerHTML  = "name";
+                controller.disableAlarm();
             })
-          }
-          else if (j % 2 || i % 2) { //identify alarm cells
+        }
+        else if (j % 2 || i % 2) { //identify alarm cells
             cell.className = "alarm";
-            cell.addEventListener('click', function (event) {
+            cell.addEventListener('click', function(event){
               this.className = "white";
-              controller.disableAlarm();
+                controller.disableAlarm();
             })
-          }
         }
-        else {
-          cell.className = "white"
-        }
-        row.appendChild(cell);
-      }
-      table.appendChild(row);
-    }
-    document.body.appendChild(table);
-
-    //display in this div
-    let divContainer = document.getElementById("game");
-    divContainer.innerHTML = "";
-    divContainer.appendChild(table);
-  },
-
-  //Capture Alarm Function
-  disableAlarm: function () {
-    this.makeMove();
-
-    let currRow = event.target.getAttribute("row"); //curr row
-    let currCol = event.target.getAttribute("col"); //curr col
-
-    let gemsFound = [];
-
-    //Temporary variables to hold surrounding cells
-    let leftCell;
-    let rightCell;
-    let upCell;
-    let downCell;
-
-    let alarmsAroundGemsFound = [];
-
-    model.currState[currRow][currCol] = (false);
-
-    //Check if surrounding are gems
-    if (currRow - 1 >= 0) {
-      upCell = model.pieces[currRow - 1][currCol];
-      if (upCell.className == "gem") {
-        gemsFound.push(upCell);
-      }
-    }
-    if (currCol - 1 >= 0) {
-      leftCell = model.pieces[currRow][currCol - 1];
-      if (leftCell.className == "gem") {
-        gemsFound.push(leftCell);
-      }
-    }
-    if (currRow < model.height - 1) {
-      downCell = model.pieces[parseInt(currRow) + 1][currCol];
-      if (downCell.className == "gem") {
-        gemsFound.push(downCell);
-      }
-    }
-    if (currCol < model.width - 1) {
-      rightCell = model.pieces[currRow][parseInt(currCol) + 1];
-      if (rightCell.className == "gem") {
-        gemsFound.push(rightCell);
-      }
-    }
-
-    //loop 2 - check for alarms around each gem to see if gem should be captured
-    //empty array or create new array for each gem
-
-    for (let i = 0; i < gemsFound.length; i++) {
-      let gemRow = gemsFound[i].getAttribute("row"); //new GemRow
-      let gemCol = gemsFound[i].getAttribute("col"); //new GemCol
-
-      upCell = (model.pieces[gemRow - 1][gemCol]);
-      if (upCell.className == "alarm") {
-        alarmsAroundGemsFound.push(upCell);
-      }
-      leftCell = (model.pieces[gemRow][gemCol - 1]);
-      if (leftCell.className == "alarm") {
-        alarmsAroundGemsFound.push(leftCell);
-      }
-      downCell = model.pieces[parseInt(gemRow) + 1][gemCol];
-      if (downCell.className == "alarm") {
-        alarmsAroundGemsFound.push(downCell);
-      }
-      rightCell = (model.pieces[gemRow][parseInt(gemCol) + 1]);
-      if (rightCell.className == "alarm") {
-        alarmsAroundGemsFound.push(rightCell);
-      }
-
-      console.log(alarmsAroundGemsFound);
-
-      //if the array is empty after removing all surrounding gems
-      if (alarmsAroundGemsFound.length == 0) {
-        gemsFound.className = "white"; //turn the gemFound to white
-        gemsFound.innerHTML = "name"; //place the name inside
-        //add move to replay
-        model.currState[gemRow][gemCol] = (false);
-        //model.Player.score++; //update score
-        //EMPTY ARRAY!!!!!
-        declareWinner();
-      }
-      else {
-        //Next Turn
-      }
-    }
-
-  },
-
-  replay: function () {
-    //queue
-
-  },
-
-  declareWinner: function () {
-    let gemsToWin = player.length / noGems;
-    if (player.score = gemsToWin) {
-      //alert
-      //kill game
-      //update leagueboard
     }
     else {
-      //next turn
+        cell.className = "white"
     }
+        row.appendChild(cell);
+    }
+    table.appendChild(row);
+}
+document.body.appendChild(table);
+
+//display in this div
+let divContainer = document.getElementById("game");
+divContainer.innerHTML = "";
+divContainer.appendChild(table);
+},
+
+  //Capture Alarm Function
+  disableAlarm: function() {
+    this.makeMove();
+      let currRow = event.target.getAttribute("row"); //curr row
+      let currCol = event.target.getAttribute("col"); //curr col
+      let alarmsAroundEvent = [];
+      let gemsFound = [];
+      let leftCell;
+      let rightCell;
+      let upCell;
+      let downCell;
+      let one = 1;
+      let alarmsAroundGemsFound = [];
+
+      currState[currRow][currCol] = (false); //bind false to cell.className = "white";
+      //add move to replay
+
+      if (currRow - 1 >= 0) {
+          upCell = pieces[currRow - 1][currCol];
+          alarmsAroundEvent.push(upCell);
+      } if (currCol - 1 >= 0) {
+          leftCell = pieces[currRow][currCol - 1];
+          alarmsAroundEvent.push(leftCell);
+      } if (currRow + 1 < height) {
+          downCell = pieces[currRow + 1][currCol];
+          alarmCheck.push(downCell);
+      } if (currCol < width) {
+          //     rightCell = [currRow][currCol+1];
+          //     alarmCheck.push(rightCell);
+      }
+
+      console.log(upCell);
+      console.log(leftCell);
+      console.log(alarmsAroundEvent);
+      //}
+
+      //loop 1 find gems around alarms
+      for (let i = 0; i < alarmsAroundEvent.length; i++) {
+          if (alarmsAroundEvent[i].className == "gem") {
+              gemsFound.push(alarmsAroundEvent[i]);
+          }
+      }
+
+      //loop 2 - check for alarms around each gem to see if gem should be captured
+      for (let i = 0; i < gemsFound.length; i++) {
+          let gemRow = gemsFound[i].getAttribute("row");
+          let gemCol = gemsFound[i].getAttribute("col");
+
+          let alarmUp = (pieces[gemRow - 1][gemCol]);
+          let alarmLeft = (pieces[gemRow][gemCol - 1]);
+          //let alarmRight = (pieces[gemRow + 1][gemCol]);
+          //let alarmDown = (pieces[gemRow + 1][gemCol]);
+
+          alarmsAroundGemsFound.push(alarmUp, alarmLeft);
+
+          for (let j = 0; j < alarmsAroundGemsFound.length; j++) {
+              if (alarmsAroundGemsFound[i].className == "white") {
+                  alarmsAroundGemsFound.pop[i];
+              }
+          }
+          console.log(alarmsAroundGemsFound);
+
+          if (alarmsAroundGemsFound.length == 0) {
+              gemsFound.className = "white";
+              gemsFound.innerHTML = "name";
+              //add move to replay
+              //currState[gemRow][gemCol] = (false);
+              //model.Player.score++;
+              declareWinner();
+          }
+          else {
+              //Next Turn
+          }
+      }
   },
+
+  replay: function() {
+    //queue
+    
+  },
+
+  declareWinner: function() {
+    let gemsToWin = player.length / noGems;
+    if (player.score = gemsToWin) {
+        //alert
+        //kill game
+        //update leagueboard
+    }
+    else {
+        //next turn
+    }
+},
 
   //returns the games that are currently open to be joined
   getOpenGames: function () {
@@ -280,13 +272,6 @@ const model = {
   openGames: [],
   pieces: [],
   currState: [],
-  width: 7,
-  noGems: 12, //change from hardcoded to responsive
-  //var noGems = document.getElementById("slider").value;
-  height: (2 / 3 * 12) + 1,
-  pieces: [],
-  currState: [],
-
   /* When a new client is started, it "registers" itself through the api and gets a unique id
   it will also poll all the currently open games, so that the user can join any of them*/
   init: async function () {

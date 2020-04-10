@@ -87,7 +87,7 @@ function captureAlarm() {
     let rightCell;
     let upCell;
     let downCell;
-
+        
     let alarmsAroundGemsFound = [];
 
     currState[currRow][currCol] = (false);
@@ -151,12 +151,12 @@ function captureAlarm() {
                 //add move to replay
                 currState[gemRow][gemCol] = (false);
                 //model.Player.score++; //update score
-                //empty array
                 declareWinner();
             }
             else {
                 //Next Turn
             }
+
         }
 
     }
