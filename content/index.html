@@ -19,9 +19,8 @@
   </header>
 
   <nav id="status-and-control">
-    <span id="userName">User's name</span>
-    <!--<span id="score">0 wins, 0 loses, 0 draws</span>
-    <button id="btnLogout">Logout</button>-->
+    <span id="playerName">User's name</span>
+    <button id="nickNameBtn">Add name</button>
   </nav>
 
   <main>
@@ -31,7 +30,19 @@
     <p>Gem Heist (Copyright) 2020</p>
    
   </footer>
-
+  <div id="myModal" class="modalBackground">
+    <div class="modalBox">
+        <span class="close">&times;</span>
+        <div>
+      </div>
+      <div>
+        <label for="newNick">Your Name:</label>
+        <input type="text" id="newNick" name="newNick" value="">
+      </div>
+        <button id="cancelNick">Cancel</button>
+        <button id="submitNick">OK</button>
+    </div>
+  </div>
 </body>
 
 <script src="main.js"></script>

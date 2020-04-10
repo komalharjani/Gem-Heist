@@ -7,7 +7,8 @@ const api = {
     "/getOpenGames/",
     "/addPlayer",
     "/getTurn",
-    "/makeMove"
+    "/makeMove",
+    "/addName"
   ],
   get: async function (endpoint, params) {
     if (typeof (params) == "object") {
@@ -24,7 +25,7 @@ const api = {
   },
   post: async function (endpoint, data) {
     try {
-      const postResponse = await fetch(this.endpoints[endpoint] + parameter + endpoint + this.key, {
+      const postResponse = await fetch(this.endpoints[endpoint], {
         body: JSON.stringify(data),
         headers: {
           'Accept': 'application/json',
@@ -49,22 +50,22 @@ const controller = {
   init: async function () {
     await model.init();
     view_frame.init();
-    view_userStatus.init();
+    view_playerStatus.init();
     view_startGame.init();
     if (controller.getOpenGames().length >= 1) {
       view_startGame.listOpenGames();
     }
   },
-  //called, when a user starts a new game
-  startGame: async function () {
-    model.game = await api.get(1, model.player);
+  //called, when a player starts a new game
+  startGame: async function (numberOfPlayers) {
+    model.game = await api.get(1, ["playerid"=model.player.id,"playerno"=numberOfPlayers);
     view_frame.clear();
     view_game.init();
     this.createBoard();
     controller.getTurn();
   },
   createBoard: function () {
-    
+
     const height = Math.floor(2 / 3 * model.gems) + 1;
     console.log("create board" + height);
     const width = 7;
@@ -94,12 +95,12 @@ const controller = {
     document.getElementById("board").append(table);
 
   },
-  //called, when a user joins an existing game
+  //called, when a player joins an existing game
   joinGame: async function (gameId) {
     model.game = gameId;
     view_frame.clear();
     view_game.init();
-    if (await api.get(3, ["gameid=" + gameId, "playerid=" + model.player])) {
+    if (await api.get(3, ["gameid=" + gameId, "playerid=" + model.player.id])) {
       view_game.activate();
     }
     else {
@@ -110,14 +111,19 @@ const controller = {
   getOpenGames: function () {
     return model.openGames;
   },
-  //returns the user's id that is permanently stored in the model
-  getUser: function () {
-    return model.player;
+  //returns the player's id that is permanently stored in the model
+  getPlayer: function () {
+    if (model.player.name != "") {
+      return ["Player: " + model.player.name, true];
+    }
+    else {
+      return ["Player: " + " ..." + model.player.id.slice(-5), false];
+    }
   },
   //in order to know when it's one's turn the client has to constantly send requests to the api in order to check 
   getTurn: function () {
     let turnPolling = setInterval(async function () {
-      let myTurn = await api.get(4, ["gameid=" + model.game, "playerid=" + model.player]);
+      let myTurn = await api.get(4, ["gameid=" + model.game, "playerid=" + model.player.id]);
       if (myTurn) {
         clearInterval(turnPolling);
         view_game.activate();
@@ -127,9 +133,35 @@ const controller = {
   /* this is a preliminary method that should be called when a player makes a move.
   Any board's state could be passed through this api call*/
   makeMove: async function () {
-    await api.get(5, ["gameid=" + model.game, "playerid=" + model.player]);
+    data = {
+      gameid: model.game,
+      playerid: model.player.id,
+      move: []
+    };
+    await api.post(5, ["gameid=" + model.game, "playerid=" + model.player.id]);
     view_game.deactivate();
     controller.getTurn();
+  },
+  newPlayerName: async function (newPlayerName) {
+    const data = {
+      "playerName": newPlayerName,
+      "playerId": model.player.id
+    };
+    const json = await api.post(6, data);
+    if (json == false) {
+    
+      return false;
+    }
+    if (json == true) {
+     
+      model.player.name = newPlayerName;
+      return true;
+
+
+    }
+  },
+  leaveGame: function(){
+    
   }
 
 }
@@ -139,29 +171,74 @@ const controller = {
 // the client's model stores all the data that the client needs. This does not include information about other players ids, etc.
 
 const model = {
-  gems:3,
-  player: 0,
+  gems: 3,
+  player: {
+    id: 0,
+    name: ""
+  },
   game: 0,
   openGames: [],
   /* When a new client is started, it "registers" itself through the api and gets a unique id
-  it will also poll all the currently open games, so that the user can join any of them*/
+  it will also poll all the currently open games, so that the player can join any of them*/
   init: async function () {
-    this.player = await api.get(0, "");
+    this.player.id = await api.get(0, "");
     this.openGames = await api.get(2, "");
   }
 
 }
 
 
-//This view is in charge of displaying the game's top user status bar
-const view_userStatus = {
+//This view is in charge of displaying the game's top player status bar
+const view_playerStatus = {
   init: function () {
-    this.userElem = document.getElementById('userName');
+    this.playerElem = document.getElementById('playerName');
     //this.scoreElem = document.getElementById('score');
+    this.playerNameBtnElem = document.getElementById("nickNameBtn");
+    this.playerNameBtnElem.addEventListener('click', function () {
+      view_playerStatus.showModal();
+    });
+    this.modal = document.getElementById('myModal');
+    this.currentNick = document.getElementById('currentNick');
+    this.spanClose = document.getElementsByClassName("close")[0];
+    this.cancelNick = document.getElementById("cancelNick");
+    this.submitNick = document.getElementById("submitNick");
+    this.newNick = document.getElementById("newNick");
     this.render();
   },
   render: function () {
-    this.userElem.innerHTML = 'User: ' + controller.getUser();
+    this.playerElem.innerHTML = controller.getPlayer()[0];
+    if (controller.getPlayer()[1]) {
+      this.playerNameBtnElem.remove();
+    }
+  },
+  showModal: function (userNick) {
+    this.modal.style.display = "block";
+    this.cancelNick.onclick = closeModal;
+    /*close the modal if the player clicks on the close icon or anywhere*/
+    this.spanClose.onclick = closeModal;
+    view_playerStatus.newNick.focus();
+    this.submitNick.onclick = async function () {
+      const nickStatus = await controller.newPlayerName(view_playerStatus.newNick.value);
+      if (nickStatus == true) {
+        view_playerStatus.newNick.value="";
+        closeModal();
+        view_playerStatus.render();
+      } else if (nickStatus == false) {
+        view_playerStatus.newNick.value="";
+        alert("This Name is already taken by another player.");
+        view_playerStatus.newNick.focus();
+      }
+    }
+
+    function closeModal() {
+      view_playerStatus.modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+      if (event.target == view_playerStatus.modal) {
+        view_playerStatus.modal.style.display = "none";
+      }
+    }
+
   }
 }
 
@@ -204,7 +281,7 @@ const view_startGame = {
                   </select>
             </div>
         </div>
-        <button id="btnStart" onclick="controller.startGame()">Start Game</button>
+        <button id="btnStart" onclick="controller.startGame(noPlayers.value)">Start Game</button>
           
         </section>`;
     this.mainElem.innerHTML = this.html1;
@@ -250,9 +327,11 @@ const view_game = {
                 <section>
                 <span>Your Score: </span><span id="score">0</span>
                 <div id="notice"></div>
+                <button id="withdraw">Leave gamme</button>
                 </section>`
     this.mainElem.innerHTML = this.html;
     document.getElementById("makeMove").addEventListener('click', controller.makeMove);
+    document.getElementById("withdraw").addEventListener('click', this.confirmWithdrawal);
     this.deactivate();
   },
   //If it's another player's turn the view needs to be deactivted
@@ -261,13 +340,20 @@ const view_game = {
     //the makeMove button is preliminary only, eventually moves should be made straight through the board
     document.getElementById("makeMove").removeEventListener('click', controller.makeMove);
     document.getElementById("makeMove").disabled = true;
+    document.getElementById("withdraw").disabled = true;
   },
   //...and activated again once the turn starts
   activate: function () {
     document.getElementById("notice").innerHTML = "It's your turn now";
     document.getElementById("makeMove").addEventListener('click', controller.makeMove);
     document.getElementById("makeMove").disabled = false;
+  },
+  confirmWithdrawal: function(){
+    if (confirm("You're about to leave the game. This cannot be undone.")){
+      controller.leaveGame();
+    }
   }
+
 }
 
 controller.init();

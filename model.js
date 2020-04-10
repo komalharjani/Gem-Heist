@@ -6,9 +6,23 @@ class Session {
     let players = [];
     let games = [];
     let openGames = [];
-    this.addPlayer = function(playerId) {
-      players.push(playerId);
+    this.addPlayer = function(player) {
+      players.push(player);
     }
+    this.nameTaken = function(name,id){
+      let temp;
+      for (let i=0;i<players.length;i++){
+        if (players[i].getName()==name){
+          console.log("match");
+          return true;
+        }
+        if (players[i].getId()==id){
+          temp = i;
+        }
+      }
+      players[temp].setName(name);
+      return false;
+    },
     this.getGames = function() {
       return games;
     }
@@ -29,9 +43,9 @@ class Session {
 // The Game class is used to create games that store all necessary information about one game and provide all the relevant methods
 class Game {
   // Closure is used over the constructor so that an object's properties are only accessible by the object's methods
-  constructor() {
+  constructor(players) {
     //numberOfPlayers sets the number of players that can take part in a game, currently hard-coded to 2, could be set by the game's initiator
-    let numberOfPlayers = 2;
+    let numberOfPlayers = players;
     this.getNumberOfPlayers = function() {
       return numberOfPlayers;
     }
@@ -91,6 +105,13 @@ class Player {
     let id = uuidv4();
     this.getId = function() {
       return id;
+    }
+    let name = "";
+    this.getName = function() {
+      return name;
+    }
+    this.setName=function(newName){
+      name=newName;
     }
   }
 };
