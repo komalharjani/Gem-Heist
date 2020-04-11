@@ -62,39 +62,8 @@ const controller = {
     model.game = await api.get(1,["playerid="+model.player.id,"playerno="+numberOfPlayers]);
     view_frame.clear();
     view_game.init();
-    this.createBoard();
+    view_game.drawBoard();
     controller.getTurn();
-  },
-  createBoard: function () {
-
-    const height = Math.floor(2 / 3 * model.gems) + 1;
-    console.log("create board" + height);
-    const width = 7;
-    const gemChar = '&#128142';
-    model.board = new Array(height);
-    for (let k = 0; k < model.board.length; k++) {
-      model.board[k] = new Array(width);
-    }
-    let table = document.createElement("table");
-    for (let i = 0; i < model.board.length; i++) {
-      let row = document.createElement('tr');
-      for (let j = 0; j < model.board[i].length; j++) {
-        let col = document.createElement('td');
-        if (j % 2 && i % 2) { //identify gem cells
-          model.board[0].push(col); //HELP --> need to push into array while retaining table structure
-          col.innerHTML = gemChar;
-          col.className = "gem";
-        }
-        else if (j % 2 || i % 2) { //identify alarm cells
-          col.className = "alarm";
-          model.board.push(col);
-        }
-        row.appendChild(col);
-      }
-      table.appendChild(row);
-    }
-    document.getElementById("board").append(table);
-
   },
   //called, when a player joins an existing game
   joinGame: async function (gameId) {
@@ -135,15 +104,22 @@ const controller = {
   /* this is a preliminary method that should be called when a player makes a move.
   Any board's state could be passed through this api call*/
   makeMove: async function () {
+    let currRow = event.target.getAttribute("row"); //curr row from event listener and table
+    let currCol = event.target.getAttribute("col"); //curr col from event listener and table
+    this.makeMove(currRow,currCol)
     data = {
       gameid: model.game,
       playerid: model.player.id,
-      move:{}
+      move:{model.currState[currRow,currCol]}
     };
     await api.post(5,data);
     view_game.deactivate();
     controller.getTurn();
   },
+  checkAlarm: async function(){
+    
+    
+  }
   newPlayerName: async function (newPlayerName) {
     const data = {
       "playerName": newPlayerName,
@@ -349,6 +325,9 @@ const view_game = {
     if (confirm("You're about to leave the game. This cannot be undone.")){
       controller.leaveGame();
     }
+  }
+  drawBoard:function(){
+
   }
 
 }
