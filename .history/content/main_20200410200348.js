@@ -113,7 +113,8 @@ const controller = {
         if (model.currState[i][j] == true) {
 
           //Gem Cells
-          if (j % 2 && i % 2) { //use this
+          if (j % 2 && i % 2) {
+
             cell.innerHTML = gemChar;
             cell.className = "gem";
           }
@@ -147,7 +148,6 @@ const controller = {
     
     model.pieces[currRow][currCol].className = "white";
     model.currState[currRow][currCol] = (false);
-    //numeric value 
 
     //Temporary variables to hold surrounding cells
     let leftCell;
@@ -166,8 +166,8 @@ const controller = {
       }
     }
     if (currCol - 1 >= 0) {
-      leftCell = curr.pieces[currRow][currCol - 1];
-      if (leftCell.className == "gem") { //if (j % 2 && i % 2) - build a function
+      leftCell = model.pieces[currRow][currCol - 1];
+      if (leftCell.className == "gem") {
         gemsFound.push(leftCell);
       }
     }
@@ -217,30 +217,29 @@ const controller = {
         gemsFound.innerHTML = "name"; //place the name inside
         //add move to replay
         //model.Player.score++; //update score -- which variable?
-        console.log(alarmsAroundGemFound);
-        alarmsAroundGemFound = []; //empty array?
-        console.log(alarmsAroundGemFound);
+        alarmsAroundGemFound = [];
         checkWinner();
       }
       else {
-        makeMove();
+        //swap turn
       }
     }
+
   },
 
   replay: function () {
     //queue
   },
 
-  checkWinner: function () { //Add Draw (Intermediate)
-    let gemsToWin = noGems / players.length; //if noGems is even - draw Option?
+  checkWinner: function () {
+    let gemsToWin = player.length / noGems;
     if (player.score = gemsToWin) {
       alert(player + "has won");
       //kill game
       //update leagueboard
     }
     else {
-      makeMove();
+      
     }
   },
 

@@ -193,6 +193,7 @@ function captureAlarm() {
     
 }
 
+
 function declareWinner() {
     let gemsToWin = player.length / noGems;
     if (player.score = gemsToWin) {

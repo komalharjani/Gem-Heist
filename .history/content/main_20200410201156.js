@@ -217,9 +217,7 @@ const controller = {
         gemsFound.innerHTML = "name"; //place the name inside
         //add move to replay
         //model.Player.score++; //update score -- which variable?
-        console.log(alarmsAroundGemFound);
         alarmsAroundGemFound = []; //empty array?
-        console.log(alarmsAroundGemFound);
         checkWinner();
       }
       else {
@@ -232,15 +230,15 @@ const controller = {
     //queue
   },
 
-  checkWinner: function () { //Add Draw (Intermediate)
-    let gemsToWin = noGems / players.length; //if noGems is even - draw Option?
+  checkWinner: function () {
+    let gemsToWin = player.length / noGems;
     if (player.score = gemsToWin) {
       alert(player + "has won");
       //kill game
       //update leagueboard
     }
     else {
-      makeMove();
+      
     }
   },
 

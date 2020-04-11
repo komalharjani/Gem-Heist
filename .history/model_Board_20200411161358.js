@@ -184,6 +184,7 @@ function captureAlarm() {
             //model.Player.score++; //update score
             declareWinner();
             //EMPTY ARRAY
+            console.log(alarmsAroundGemsFound);
         }
         else {
             //Next Turn

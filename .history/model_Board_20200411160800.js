@@ -10,6 +10,10 @@ height = (2 / 3 * noGems) + 1;
 /**
  * Declare Arrays for Drawing Board...
  */
+var pieces = [];
+for (var i = 0; i < height; i++) {
+    pieces[i] = [];
+}
 
 let count = 0;
 
@@ -72,6 +76,7 @@ function drawBoard() {
         var row = document.createElement('tr'); //create rows for each height
         for (var j = 0; j < width; j++) { //loop through width
             var cell = document.createElement('td'); //create columns for each width
+            pieces[i].push(cell);
             cell.setAttribute("row", i);
             cell.setAttribute("col", j);
 
@@ -111,6 +116,7 @@ function captureAlarm() {
     let currRow = event.target.getAttribute("row"); //curr row from event listener and table
     let currCol = event.target.getAttribute("col"); //curr col from event listener and table
     let gemsFound = [];
+
     let row = currState[currRow][currCol].row;
     let col = currState[currRow][currCol].col;
 
@@ -182,16 +188,16 @@ function captureAlarm() {
             gemsFound.innerHTML = "name"; //place the name inside
             currState[gemRow][gemCol] = (false);
             //model.Player.score++; //update score
+            alarmsAroundGemsFound = [];
             declareWinner();
             //EMPTY ARRAY
         }
         else {
             //Next Turn
         }
-        alarmsAroundGemsFound = [];
     }
-    
 }
+
 
 function declareWinner() {
     let gemsToWin = player.length / noGems;

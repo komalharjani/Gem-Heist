@@ -174,8 +174,6 @@ function captureAlarm() {
                 alarmsAroundGemsFound.push(rightCell);
             }
             
-            console.log(alarmsAroundGemsFound);
-
         //if the array is empty after removing all surrounding gems
         if (alarmsAroundGemsFound.length == 0) {
             gemsFound.className = "white"; //turn the gemFound to white
@@ -184,6 +182,7 @@ function captureAlarm() {
             //model.Player.score++; //update score
             declareWinner();
             //EMPTY ARRAY
+            console.log(alarmsAroundGemsFound);
         }
         else {
             //Next Turn

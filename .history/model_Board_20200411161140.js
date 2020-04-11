@@ -185,13 +185,13 @@ function captureAlarm() {
             declareWinner();
             //EMPTY ARRAY
         }
+        alarmsAroundGemsFound = [];
         else {
             //Next Turn
         }
-        alarmsAroundGemsFound = [];
     }
-    
 }
+
 
 function declareWinner() {
     let gemsToWin = player.length / noGems;

@@ -111,6 +111,7 @@ function captureAlarm() {
     let currRow = event.target.getAttribute("row"); //curr row from event listener and table
     let currCol = event.target.getAttribute("col"); //curr col from event listener and table
     let gemsFound = [];
+
     let row = currState[currRow][currCol].row;
     let col = currState[currRow][currCol].col;
 
@@ -182,16 +183,16 @@ function captureAlarm() {
             gemsFound.innerHTML = "name"; //place the name inside
             currState[gemRow][gemCol] = (false);
             //model.Player.score++; //update score
+            alarmsAroundGemsFound = [];
             declareWinner();
             //EMPTY ARRAY
         }
         else {
             //Next Turn
         }
-        alarmsAroundGemsFound = [];
     }
-    
 }
+
 
 function declareWinner() {
     let gemsToWin = player.length / noGems;

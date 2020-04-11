@@ -184,14 +184,14 @@ function captureAlarm() {
             //model.Player.score++; //update score
             declareWinner();
             //EMPTY ARRAY
+            alarmsAroundGemsFound = [];
         }
         else {
             //Next Turn
         }
-        alarmsAroundGemsFound = [];
     }
-    
 }
+
 
 function declareWinner() {
     let gemsToWin = player.length / noGems;
