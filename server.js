@@ -15,15 +15,17 @@ let session = new model.Session()
 
 //endpoint to create a new game. It automatically adds the requesting client as a first player
 app.get('/getGame', function (req, res, next) {
-	let game = new model.Game(req.params.playerno);
+	console.log(req.query.playerno);
+	let game = new model.Game(req.query.playerno);
 	session.updateOpenGames(game.getId());
-	game.addPlayer(req.params.playerid);
+	game.addPlayer(req.query.playerid);
 	session.updateGames(game);
 	res.status(200).json(game.getId());
 });
 
 /*endpoint to add a player to an existing game. If the added player completes a game (in terms of number of players) that game is removed from the 'openGames' list */
 app.get('/addPlayer', function (req, res, next) {
+	
 	let game = session.getGame(req.query.gameid);
 	let index = game.addPlayer(req.query.playerid, session.getOpenGames())
 	if (index != -1) {
@@ -58,8 +60,8 @@ app.get('/getTurn', function (req, res, next) {
 
 //endpoint that initiates a move (provided you pass it a game id)
 app.post('/makeMove', function (req, res, next) {
-	let game = session.getGame(req.query.body.gameid);
-	game.makeMove(req.body.playerid, req.body.move);
+	let game = session.getGame(req.body.gameid);
+	game.makeMove(req.body.playerid);
 
 	res.status(200).json(true);
 });

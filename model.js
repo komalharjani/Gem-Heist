@@ -43,9 +43,10 @@ class Session {
 // The Game class is used to create games that store all necessary information about one game and provide all the relevant methods
 class Game {
   // Closure is used over the constructor so that an object's properties are only accessible by the object's methods
-  constructor(players) {
+  constructor(playerno) {
     //numberOfPlayers sets the number of players that can take part in a game, currently hard-coded to 2, could be set by the game's initiator
-    let numberOfPlayers = players;
+    let numberOfPlayers = playerno;
+    console.log(playerno)
     this.getNumberOfPlayers = function() {
       return numberOfPlayers;
     }
@@ -62,6 +63,7 @@ class Game {
     //adds a player to a game
     this.addPlayer = function(playerId, openGames) {
       players.push(playerId);
+      
       //Every time a player gets added, check if the necessary number of players has been reached so that the game can start
       //In this case the first turn is set to the player that was just added
       if (players.length == numberOfPlayers) {
@@ -83,17 +85,21 @@ class Game {
       }
     }
     this.setPlayerTurn = function(playerId) {
+      
       playerTurn = playerId
     }
     //makeMove is only setup in a preliminary way. Right now it only passes  the turn to the next player in line. It could however also be used to update the board
     this.makeMove = function(playerId){
+      
       let index = players.findIndex(player => player == playerId);
+      
       if (index==players.length-1){
         index=0;
       }
       else{
-        index++;
+        index=index+1;
       }
+      
       this.setPlayerTurn(players[index]);
     }
   }

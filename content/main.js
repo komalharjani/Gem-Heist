@@ -3,7 +3,7 @@
 const api = {
   endpoints: [
     "/getPlayer/",
-    "/getGame/",
+    "/getGame",
     "/getOpenGames/",
     "/addPlayer",
     "/getTurn",
@@ -58,7 +58,8 @@ const controller = {
   },
   //called, when a player starts a new game
   startGame: async function (numberOfPlayers) {
-    model.game = await api.get(1, ["playerid"=model.player.id,"playerno"=numberOfPlayers);
+    console.log(numberOfPlayers);
+    model.game = await api.get(1,["playerid="+model.player.id,"playerno="+numberOfPlayers]);
     view_frame.clear();
     view_game.init();
     this.createBoard();
@@ -104,6 +105,7 @@ const controller = {
       view_game.activate();
     }
     else {
+      this.getTurn();
       view_game.deactivate();
     }
   },
@@ -136,9 +138,9 @@ const controller = {
     data = {
       gameid: model.game,
       playerid: model.player.id,
-      move: []
+      move:{}
     };
-    await api.post(5, ["gameid=" + model.game, "playerid=" + model.player.id]);
+    await api.post(5,data);
     view_game.deactivate();
     controller.getTurn();
   },
@@ -156,20 +158,15 @@ const controller = {
      
       model.player.name = newPlayerName;
       return true;
-
-
     }
   },
   leaveGame: function(){
-    
   }
-
 }
 
 
 
 // the client's model stores all the data that the client needs. This does not include information about other players ids, etc.
-
 const model = {
   gems: 3,
   player: {
@@ -327,7 +324,7 @@ const view_game = {
                 <section>
                 <span>Your Score: </span><span id="score">0</span>
                 <div id="notice"></div>
-                <button id="withdraw">Leave gamme</button>
+                <button id="withdraw">Leave game</button>
                 </section>`
     this.mainElem.innerHTML = this.html;
     document.getElementById("makeMove").addEventListener('click', controller.makeMove);
