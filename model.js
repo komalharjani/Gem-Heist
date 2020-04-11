@@ -91,11 +91,11 @@ class Game {
     //makeMove is only setup in a preliminary way. Right now it only passes  the turn to the next player in line. It could however also be used to update the board
     this.makeMove = function (playerId,currRow,currCol) {
       //check if the player is authorised to make a move, meaning that it is his turn in fact
-      if(this.getPlayerTurn!=playerId){
+      if(!this.getPlayerTurn(playerId)){
         return [currState,2];
       }
       //check if the move is valid at all - i.e. that an alarm is present on the board at that specific location
-      if(currState[currRow,currCol].type!="alarm"||currState[currRow,currCol].state==false){
+      if(currState[currRow][currCol].type!=="alarm"||currState[currRow][currCol].state==false){
         return [currState,3];
       }
       let gemsFound = [];
@@ -110,7 +110,7 @@ class Game {
       let alarmsAroundGemsFound = [];
   
       //Check if surrounding are gems
-      if (row - 1 >= 0) {
+      if (currRow - 1 >= 0) {
           upCell = currState[currRow - 1][currCol];
           if (upCell.type == "gem") {
               gemsFound.push(upCell);
@@ -171,6 +171,7 @@ class Game {
               //EMPTY ARRAY
           }
           else {
+            //determines whose turn it is next
             let index = players.findIndex(player => player == playerId);
 
             if (index == players.length - 1) {
@@ -190,13 +191,15 @@ class Game {
       
 
 
-      //determines whose turn it is next
+      
      
     }
+
     let height = boardHeight;
     let width = boardWidth;
     // stores the board's state
     let currState = [];
+    //initializes board state
     for (var i = 0; i < height; i++) {
       currState[i] = [];
       for (var j = 0; j < width; j++) {
@@ -227,7 +230,9 @@ class Game {
         }
       }
     }
-
+    this.getBoard = function(){
+      return currState;
+    }
 
   }
 };

@@ -59,8 +59,10 @@ const controller = {
   //called, when a player starts a new game
   startGame: async function (numberOfPlayers,numberOfGems) {
     model.width = 7;
-    model.height = 
-    model.game = await api.get(1,["playerid="+model.player.id,"playerno="+numberOfPlayers]);
+    model.height = Math.floor(2/3*numberOfGems)+1;
+    let temp = await api.get(1,["playerid="+model.player.id,"playerno="+numberOfPlayers,"boardheight="+model.height,"boardwidth="+model.width]);
+    model.game = temp[0];
+    model.currState=temp[1];
     view_frame.clear();
     view_game.init();
     view_game.drawBoard();
@@ -69,14 +71,22 @@ const controller = {
   //called, when a player joins an existing game
   joinGame: async function (gameId) {
     model.game = gameId;
-    view_frame.clear();
-    view_game.init();
-    if (await api.get(3, ["gameid=" + gameId, "playerid=" + model.player.id])) {
+   
+    let temp = await api.get(3, ["gameid=" + gameId, "playerid=" + model.player.id]);
+    if (temp[0]) {
+      model.currState=temp[1];
+      view_frame.clear();
+      view_game.init();
+      view_game.drawBoard();
       view_game.activate();
     }
     else {
-      this.getTurn();
+      model.currState=temp[1];
+      view_frame.clear();
+      view_game.init();
+      view_game.drawBoard();
       view_game.deactivate();
+      this.getTurn();
     }
   },
   //returns the games that are currently open to be joined
@@ -96,22 +106,28 @@ const controller = {
   getTurn: function () {
     let turnPolling = setInterval(async function () {
       let myTurn = await api.get(4, ["gameid=" + model.game, "playerid=" + model.player.id]);
-      if (myTurn) {
+      model.currState = myTurn[1];
+      if (myTurn[0]) {
         clearInterval(turnPolling);
         view_game.activate();
       }
+      view_game.drawBoard();
     }, 5000);
   },
   /* this is a preliminary method that should be called when a player makes a move.
   Any board's state could be passed through this api call*/
-  makeMove: async function () {
+  makeMove: async function (event) {
     let currRow = event.target.getAttribute("row"); //curr row from event listener and table
     let currCol = event.target.getAttribute("col"); //curr col from event listener and table
-    data = {
+    console.log(event);
+    let temp = model.currState[currRow][currCol];
+    console.log(temp);
+    let data = {
       gameid: model.game,
       playerid: model.player.id,
-      move:{model.currState[currRow,currCol]}
+      move:temp
     };
+    console.log(data);
     let outcome = await api.post(5,data);
     model.currState=outcome[0];
     switch(outcome[1]){
@@ -324,6 +340,7 @@ const view_game = {
     document.getElementById("makeMove").addEventListener('click', controller.makeMove);
     document.getElementById("withdraw").addEventListener('click', this.confirmWithdrawal);
     this.deactivate();
+    this.gemChar="&#128142";
   },
   //If it's another player's turn the view needs to be deactivted
   deactivate: function () {
@@ -343,13 +360,13 @@ const view_game = {
     if (confirm("You're about to leave the game. This cannot be undone.")){
       controller.leaveGame();
     }
-  }
+  },
   drawBoard:function(){
     //Create rows and tables according to specified height and width
     var table = document.createElement("table");
-    for (var i = 0; i < model.height; i++) { //loop through height
+    for (var i = 0; i < model.currState.length; i++) { //loop through height
         var row = document.createElement('tr'); //create rows for each height
-        for (var j = 0; j < model.width; j++) { //loop through width
+        for (var j = 0; j < model.currState[0].length; j++) { //loop through width
             var cell = document.createElement('td'); //create columns for each width
             cell.setAttribute("row", i);
             cell.setAttribute("col", j);
@@ -357,14 +374,15 @@ const view_game = {
             if (model.currState[i][j].state == true) {
                 if (model.currState[i][j].type == "gem") { //identify gem cells
                     //currentState[0].push(cell);
-                    cell.innerHTML = gemChar;
+                    cell.innerHTML = this.gemChar;
                     cell.className = "gem";
                 }
                 else if (model.currState[i][j].type == "alarm") { //identify alarm cells
                     cell.className = "alarm";
                     cell.addEventListener('click', function (event) {
                         this.className = "white";
-                        captureAlarm();
+                        
+                        controller.makeMove(event);
                     })
                 }
             }
@@ -375,7 +393,7 @@ const view_game = {
         }
         table.appendChild(row);
     }
-    document.body.appendChild(table);
+    
 
     //display in this div
     let divContainer = document.getElementById("board");
