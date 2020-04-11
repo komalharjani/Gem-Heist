@@ -61,7 +61,7 @@ app.get('/getTurn', function (req, res, next) {
 //endpoint that initiates a move (provided you pass it a game id)
 app.post('/makeMove', function (req, res, next) {
 	let game = session.getGame(req.body.gameid);
-	game.makeMove(req.body.playerid);
+	game.makeMove(req.body.playerid,req.body.move.row,req.body.move.col);
 
 	res.status(200).json(true);
 });
