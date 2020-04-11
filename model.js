@@ -92,11 +92,11 @@ class Game {
     this.makeMove = function (playerId,currRow,currCol) {
       //check if the player is authorised to make a move, meaning that it is his turn in fact
       if(this.getPlayerTurn!=playerId){
-        return false;
+        return [currState,2];
       }
       //check if the move is valid at all - i.e. that an alarm is present on the board at that specific location
       if(currState[currRow,currCol].type!="alarm"||currState[currRow,currCol].state==false){
-        return false;
+        return [currState,3];
       }
       let gemsFound = [];
       currState[currRow][currCol].state = (false);
@@ -163,32 +163,35 @@ class Game {
   
           //if the array is empty after removing all surrounding gems
           if (alarmsAroundGemsFound.length == 0) {
-              gemsFound.className = "white"; //turn the gemFound to white
-              gemsFound.innerHTML = "name"; //place the name inside
-              currState[gemRow][gemCol] = (false);
-              //model.Player.score++; //update score
-              declareWinner();
+              currState[gemRow][gemCol].state = false;
+              
+              alarmsAroundGemsFound = [];
+              //declareWinner();
+              return [currState,1];
               //EMPTY ARRAY
           }
           else {
-              //Next Turn
+            let index = players.findIndex(player => player == playerId);
+
+            if (index == players.length - 1) {
+              index = 0;
+            }
+            else {
+              index = index + 1;
+            }
+            
+            this.setPlayerTurn(players[index]);
+            alarmsAroundGemsFound = [];
+            return [currState,0];
           }
-          alarmsAroundGemsFound = [];
+          
+          
       }
       
 
 
       //determines whose turn it is next
-      let index = players.findIndex(player => player == playerId);
-
-      if (index == players.length - 1) {
-        index = 0;
-      }
-      else {
-        index = index + 1;
-      }
-
-      this.setPlayerTurn(players[index]);
+     
     }
     let height = boardHeight;
     let width = boardWidth;

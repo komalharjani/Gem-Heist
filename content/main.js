@@ -57,8 +57,9 @@ const controller = {
     }
   },
   //called, when a player starts a new game
-  startGame: async function (numberOfPlayers) {
-    console.log(numberOfPlayers);
+  startGame: async function (numberOfPlayers,numberOfGems) {
+    model.width = 7;
+    model.height = 
     model.game = await api.get(1,["playerid="+model.player.id,"playerno="+numberOfPlayers]);
     view_frame.clear();
     view_game.init();
@@ -106,20 +107,34 @@ const controller = {
   makeMove: async function () {
     let currRow = event.target.getAttribute("row"); //curr row from event listener and table
     let currCol = event.target.getAttribute("col"); //curr col from event listener and table
-    this.makeMove(currRow,currCol)
     data = {
       gameid: model.game,
       playerid: model.player.id,
       move:{model.currState[currRow,currCol]}
     };
-    await api.post(5,data);
-    view_game.deactivate();
-    controller.getTurn();
+    let outcome = await api.post(5,data);
+    model.currState=outcome[0];
+    switch(outcome[1]){
+      case 0:
+        view_game.drawBoard();
+        view_game.deactivate();
+        controller.getTurn();
+        break;
+      case 1:
+        view_game.drawBoard();
+        break;
+      case 2:
+        view_game.drawBoard();
+        view_game.deactivate();
+        controller.getTurn();
+        alert("It is not your turn.");
+        break;
+      case 3:
+      view_game.drawBoard();
+        alert("This is not a valid move.");
+    } 
+    
   },
-  checkAlarm: async function(){
-    
-    
-  }
   newPlayerName: async function (newPlayerName) {
     const data = {
       "playerName": newPlayerName,
@@ -150,6 +165,9 @@ const model = {
     name: ""
   },
   game: 0,
+  currState:0,
+  height:0,
+  width:0,
   openGames: [],
   /* When a new client is started, it "registers" itself through the api and gets a unique id
   it will also poll all the currently open games, so that the player can join any of them*/
@@ -254,7 +272,7 @@ const view_startGame = {
                   </select>
             </div>
         </div>
-        <button id="btnStart" onclick="controller.startGame(noPlayers.value)">Start Game</button>
+        <button id="btnStart" onclick="controller.startGame(noPlayers.value,myRange.value)">Start Game</button>
           
         </section>`;
     this.mainElem.innerHTML = this.html1;
@@ -327,7 +345,42 @@ const view_game = {
     }
   }
   drawBoard:function(){
+    //Create rows and tables according to specified height and width
+    var table = document.createElement("table");
+    for (var i = 0; i < model.height; i++) { //loop through height
+        var row = document.createElement('tr'); //create rows for each height
+        for (var j = 0; j < model.width; j++) { //loop through width
+            var cell = document.createElement('td'); //create columns for each width
+            cell.setAttribute("row", i);
+            cell.setAttribute("col", j);
 
+            if (model.currState[i][j].state == true) {
+                if (model.currState[i][j].type == "gem") { //identify gem cells
+                    //currentState[0].push(cell);
+                    cell.innerHTML = gemChar;
+                    cell.className = "gem";
+                }
+                else if (model.currState[i][j].type == "alarm") { //identify alarm cells
+                    cell.className = "alarm";
+                    cell.addEventListener('click', function (event) {
+                        this.className = "white";
+                        captureAlarm();
+                    })
+                }
+            }
+            else {
+                cell.className = "white"
+            }
+            row.appendChild(cell);
+        }
+        table.appendChild(row);
+    }
+    document.body.appendChild(table);
+
+    //display in this div
+    let divContainer = document.getElementById("board");
+    divContainer.innerHTML = "";
+    divContainer.appendChild(table);
   }
 
 }
