@@ -88,7 +88,7 @@ class Game {
 
       playerTurn = playerId
     }
-    //makeMove is only setup in a preliminary way. Right now it only passes  the turn to the next player in line. It could however also be used to update the board
+    //makeMove is now in charge of determining what happens when a player clicks on an alarm
     this.makeMove = function (playerId,currRow,currCol) {
       //check if the player is authorised to make a move, meaning that it is his turn in fact
       if(!this.getPlayerTurn(playerId)){
@@ -162,6 +162,8 @@ class Game {
               console.log(alarmsAroundGemsFound);
   
           //if the array is empty after removing all surrounding gems
+          //this means a gem's final alarm has been disabled
+          //the player gets to make another move
           if (alarmsAroundGemsFound.length == 0) {
               currState[gemRow][gemCol].state = false;
               
@@ -170,6 +172,7 @@ class Game {
               return [currState,1];
               //EMPTY ARRAY
           }
+          //the alarm disabled was not the final one
           else {
             //determines whose turn it is next
             let index = players.findIndex(player => player == playerId);
