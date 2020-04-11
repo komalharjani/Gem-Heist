@@ -46,7 +46,7 @@ class Game {
   constructor(playerno) {
     //numberOfPlayers sets the number of players that can take part in a game, currently hard-coded to 2, could be set by the game's initiator
     let numberOfPlayers = playerno;
-    console.log(playerno)
+    
     this.getNumberOfPlayers = function() {
       return numberOfPlayers;
     }
@@ -102,6 +102,11 @@ class Game {
       
       this.setPlayerTurn(players[index]);
     }
+    // stores the board's state
+    let currState=[];
+    let height = 0;
+    let width = 0;
+    
   }
 };
 
