@@ -15,19 +15,19 @@ let session = new model.Session()
 
 //endpoint to create a new game. It automatically adds the requesting client as a first player
 app.get('/getGame', function (req, res, next) {
-	console.log(req.query.playerno);
+	let player = session.getPlayer(req.query.playerid);
 	let game = new model.Game(req.query.playerno,req.query.boardheight,req.query.boardwidth);
 	session.updateOpenGames(game.getId());
-	game.addPlayer(req.query.playerid);
+	game.addPlayer(req.query.playerid,player.getName());
 	session.updateGames(game);
 	res.status(200).json([game.getId(),game.getBoard()]);
 });
 
 /*endpoint to add a player to an existing game. If the added player completes a game (in terms of number of players) that game is removed from the 'openGames' list */
 app.get('/addPlayer', function (req, res, next) {
-	
+	let player=session.getPlayer(req.query.playerid);
 	let game = session.getGame(req.query.gameid);
-	let index = game.addPlayer(req.query.playerid, session.getOpenGames())
+	let index = game.addPlayer(req.query.playerid, player.getName(),session.getOpenGames())
 	if (index != -1) {
 		session.getOpenGames().splice(index, 1);
 		res.status(200).json([true,game.getBoard()]);
@@ -40,8 +40,6 @@ app.get('/addPlayer', function (req, res, next) {
 app.get('/getPlayer/', function (req, res, next) {
 	let player = new model.Player();
 	session.addPlayer(player);
-	console.log(player.getId());
-
 	res.status(200).json(player.getId());
 
 });
@@ -61,15 +59,14 @@ app.get('/getTurn', function (req, res, next) {
 //endpoint that initiates a move (provided you pass it a game id)
 app.post('/makeMove', function (req, res, next) {
 	let game = session.getGame(req.body.gameid);
-	console.log(req.body.move.row);
-	let outcome = game.makeMove(req.body.playerid,req.body.move.row,req.body.move.col);
+	let player=session.getPlayer(req.body.playerid);
+	let outcome = game.makeMove(req.body.playerid,player.getName(),req.body.move.row,req.body.move.col);
 	res.status(200).json(outcome);
 });
 //endpoint for a player to add name
 app.post('/addName', function (req, res, next) {
 	let name = req.body.playerName;
 	let id = req.body.playerId;
-	console.log(name);
 	if (session.nameTaken(name, id)) {
 		
 		res.status(200).json(false);

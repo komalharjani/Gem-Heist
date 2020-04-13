@@ -57,9 +57,9 @@ const controller = {
     }
   },
   //called, when a player starts a new game
-  startGame: async function (numberOfPlayers,numberOfGems) {
-    model.width = 7;
-    model.height = Math.floor(2/3*numberOfGems)+1;
+  startGame: async function (numberOfPlayers,gemsWidth,gemsHeight) {
+    model.width = (gemsHeight * 2) + 1;
+    model.height = (gemsWidth * 2) + 1;
     let temp = await api.get(1,["playerid="+model.player.id,"playerno="+numberOfPlayers,"boardheight="+model.height,"boardwidth="+model.width]);
     model.game = temp[0];
     model.currState=temp[1];
@@ -111,6 +111,10 @@ const controller = {
         clearInterval(turnPolling);
         view_game.activate();
       }
+      if(myTurn[0]!=true&&myTurn[0]!=false){
+        clearInterval(turnPolling);
+        console.log(myTurn[0]);
+      }
       view_game.drawBoard();
     }, 5000);
   },
@@ -119,7 +123,6 @@ const controller = {
   makeMove: async function (event) {
     let currRow = event.target.getAttribute("row"); //curr row from event listener and table
     let currCol = event.target.getAttribute("col"); //curr col from event listener and table
-    console.log(event);
     let temp = model.currState[currRow][currCol];
     console.log(temp);
     let data = {
@@ -148,6 +151,11 @@ const controller = {
       case 3:
       view_game.drawBoard();
         alert("This is not a valid move.");
+        break;
+      case 4:
+        view_game.drawBoard();
+        view_game.deactivate();
+        console.log(outcome[2]);
     } 
     
   },
@@ -268,35 +276,45 @@ const view_startGame = {
   init: function () {
     this.mainElem = document.getElementsByTagName('main')[0];
     this.html1 = `<section>
-          <h2>Start a new Game</h2>
-          <div class="card">
-            <h4>Options</h4>
-            <div class="box">
-            <label for="myRange">Number of Gems</label>
-            <br>
-            <input type="range" min="3" max="20" value="3" oninput="document.getElementById('demo').innerHTML=this.value;model.gems=this.value;" class="slider" id="myRange"></input>
-            <p>Value: <span id="demo">3</span></p>
-            </div>
-            <br>
-            <div class="box">
-                <label for="noPlayers">Number of Players:</label>
-                <select id="noPlayers">
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-            </div>
-        </div>
-        <button id="btnStart" onclick="controller.startGame(noPlayers.value,myRange.value)">Start Game</button>
-          
-        </section>`;
+    <br>
+    <div class="centercolumn">
+    <div class="card">
+    <h2>Start a new Game</h2>
+      <h4>Options</h4>
+      <div class="box">
+      <b><label for="widthRange">Width </label></b><br><br>
+      <input type="range" min="2" max="10" value="3" oninput="document.getElementById('widthDisplay').innerHTML=this.value;model.gems=this.value;" class="slider" id="widthRange"></input><br>
+      <p>Value: <span id="widthDisplay">3</span></p><br><br>
+      <b><label for="heightRange">Height</label></b><br><br>
+      <input type="range" min="2" max="10" value="3" oninput="document.getElementById('heightDisplay').innerHTML=this.value;model.gemsHeight=this.value;" class="slider" id="heightRange"></input>
+      <p>Value: <span id="heightDisplay">3</span><p>
+       
+      </div>
+      <br>
+      <div class="box">
+          <label for="noPlayers">Number of Players:</label>
+          <select id="noPlayers">
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+      </div><br>
+      <button id="btnStart" onclick="controller.startGame(noPlayers.value,widthRange.value,heightRange.value)">Start Game</button><br>
+  </div>
+  </div>
+    
+  </section>`;
     this.mainElem.innerHTML = this.html1;
 
     this.html2 = `<section>
+    <div class="centercolumn">
+          <div class="card">
       <h2>Join a Game</h2>
       <ul id="games">
       </ul>
+      </div>
+      </div>
     </section>`
 
   },
@@ -327,20 +345,22 @@ const view_startGame = {
 const view_game = {
   init: function () {
     this.mainElem = document.getElementsByTagName('main')[0];
-    this.html = `<section id="board">
-    
-                </section>
-                <button id="makeMove">Make move</button>
-                <section>
-                <span>Your Score: </span><span id="score">0</span>
-                <div id="notice"></div>
-                <button id="withdraw">Leave game</button>
+    this.html = `<br><section class="card">
+    <div class="card" id="board">
+    </div><br>
+    <button id="makeMove">Make move</button><br>
+                </section><br>
+                <section class="card">
+                <span><b>Your Score: </span><span id="score">0</b></span><br><br>
+                <div class="notice" id="notice"></div><br>
+                <button id="withdraw">Leave game</button><br>
+                </div>
                 </section>`
     this.mainElem.innerHTML = this.html;
     document.getElementById("makeMove").addEventListener('click', controller.makeMove);
     document.getElementById("withdraw").addEventListener('click', this.confirmWithdrawal);
     this.deactivate();
-    this.gemChar="&#128142";
+    this.gemChar = "&#128142";
   },
   //If it's another player's turn the view needs to be deactivted
   deactivate: function () {
@@ -356,44 +376,45 @@ const view_game = {
     document.getElementById("makeMove").addEventListener('click', controller.makeMove);
     document.getElementById("makeMove").disabled = false;
   },
-  confirmWithdrawal: function(){
-    if (confirm("You're about to leave the game. This cannot be undone.")){
+  confirmWithdrawal: function () {
+    if (confirm("You're about to leave the game. This cannot be undone.")) {
       controller.leaveGame();
     }
   },
-  drawBoard:function(){
+  drawBoard: function () {
     //Create rows and tables according to specified height and width
     var table = document.createElement("table");
     for (var i = 0; i < model.currState.length; i++) { //loop through height
-        var row = document.createElement('tr'); //create rows for each height
-        for (var j = 0; j < model.currState[0].length; j++) { //loop through width
-            var cell = document.createElement('td'); //create columns for each width
-            cell.setAttribute("row", i);
-            cell.setAttribute("col", j);
+      var row = document.createElement('tr'); //create rows for each height
+      for (var j = 0; j < model.currState[0].length; j++) { //loop through width
+        var cell = document.createElement('td'); //create columns for each width
+        cell.setAttribute("row", i);
+        cell.setAttribute("col", j);
 
-            if (model.currState[i][j].state == true) {
-                if (model.currState[i][j].type == "gem") { //identify gem cells
-                    //currentState[0].push(cell);
-                    cell.innerHTML = this.gemChar;
-                    cell.className = "gem";
-                }
-                else if (model.currState[i][j].type == "alarm") { //identify alarm cells
-                    cell.className = "alarm";
-                    cell.addEventListener('click', function (event) {
-                        this.className = "white";
-                        
-                        controller.makeMove(event);
-                    })
-                }
-            }
-            else {
-                cell.className = "white"
-            }
-            row.appendChild(cell);
+        if (model.currState[i][j].state == true) {
+          if (model.currState[i][j].type == "gem") { //identify gem cells
+            //currentState[0].push(cell);
+            cell.innerHTML = this.gemChar;
+            cell.className = "gem";
+          }
+          else if (model.currState[i][j].type == "alarm") { //identify alarm cells
+            cell.className = "alarm";
+            cell.addEventListener('click', function (event) {
+              this.className = "white";
+              controller.makeMove(event);
+            })
+          }
         }
-        table.appendChild(row);
+        else {
+          cell.className = "white"
+          if (model.currState[i][j].type == "gem") {
+            cell.innerHTML = model.currState[i][j].name;
+          }
+        }
+        row.appendChild(cell);
+      }
+      table.appendChild(row);
     }
-    
 
     //display in this div
     let divContainer = document.getElementById("board");
@@ -402,5 +423,7 @@ const view_game = {
   }
 
 }
+
+
 
 controller.init();
