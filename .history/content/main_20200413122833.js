@@ -57,9 +57,9 @@ const controller = {
     }
   },
   //called, when a player starts a new game
-  startGame: async function (numberOfPlayers, gemsHeight, gemsWidth) {
-    model.width = (gemsWidth*2)+1;
-    model.height = (gemsHeight*2)+1
+  startGame: async function (numberOfPlayers, numberOfGems) {
+    model.width = gemsWidth;
+    model.height = Math.floor(2 / 3 * numberOfGems) + 1;
     let temp = await api.get(1, ["playerid=" + model.player.id, "playerno=" + numberOfPlayers, "boardheight=" + model.height, "boardwidth=" + model.width]);
     model.game = temp[0];
     model.currState = temp[1];
@@ -284,12 +284,12 @@ const view_startGame = {
             <h4>Options</h4>
             <div class="box">
             <label for="widthRange">Width </label><br>
-            <input type="range" min="2" max="10" value="3" oninput="document.getElementById('widthDisplay').innerHTML=this.value;model.gems=this.value;" class="slider" id="widthRange"></input><br>
+            <input type="range" min="3" max="20" value="3" oninput="document.getElementById('widthDisplay').innerHTML=this.value;model.gems=this.value;" class="slider" id="widthRange"></input><br>
             <p>Value: <span id="widthDisplay">3</span></p>
 
             <label for="heightRange">Height</label><br>
-            <input type="range" min="2" max="10" value="3" oninput="document.getElementById('heightDisplay').innerHTML=this.value;model.gemsHeight=this.value;" class="slider" id="heightRange"></input><br>
-            <p>Value: <span id="heightDisplay">3</span><p>
+            <input type="range" min="3" max="20" value="3" oninput="document.getElementById('heightDisplay').innerHTML=this.value;model.gemsHeight=this.value;" class="slider" id="heightRange"></input><br>
+            <p>Value: <span id="height">3</span><p>
              
             </div>
             <br>

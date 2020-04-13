@@ -169,10 +169,11 @@ class Game {
           //the player gets to make another move
           if (alarmsAroundGemsFound.length == 0) {
               currState[gemRow][gemCol].state = false;
-              model.currState[gemRow][gemCol].name = players.getName();
+              model.currState[gemRow][gemCol].name = getName();
               alarmsAroundGemsFound = [];
               //declareWinner();
               return [currState,1];
+              //EMPTY ARRAY
           }
           //the alarm disabled was not the final one
           else {
@@ -191,7 +192,9 @@ class Game {
             return [currState,0];
           }
           
+          
       }
+    
     }
 
     let height = boardHeight;

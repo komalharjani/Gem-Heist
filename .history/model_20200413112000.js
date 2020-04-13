@@ -38,9 +38,6 @@ class Session {
     this.updateOpenGames = function (gameId) {
       openGames.push(gameId);
     }
-    this.getPlayer = function (playerId) {
-      return players.find(player => player.getId() == playerId)
-    }
   }
 };
 // The Game class is used to create games that store all necessary information about one game and provide all the relevant methods
@@ -169,10 +166,11 @@ class Game {
           //the player gets to make another move
           if (alarmsAroundGemsFound.length == 0) {
               currState[gemRow][gemCol].state = false;
-              model.currState[gemRow][gemCol].name = players.getName();
+              
               alarmsAroundGemsFound = [];
               //declareWinner();
               return [currState,1];
+              //EMPTY ARRAY
           }
           //the alarm disabled was not the final one
           else {
@@ -191,7 +189,13 @@ class Game {
             return [currState,0];
           }
           
+          
       }
+      
+
+
+      
+     
     }
 
     let height = boardHeight;
@@ -203,16 +207,15 @@ class Game {
       currState[i] = [];
       for (var j = 0; j < width; j++) {
         //currState[i].push(true); //default all true
-        if (i % 2 && j % 2) { //gems
+        if (i % 2 && j % 2) {
           currState[i].push({
             state: true,
             row: i,
             col: j,
-            type: "gem",
-            name: null
+            type: "gem"
           })
         }
-        else if (j % 2 || i % 2) { //alarms
+        else if (j % 2 || i % 2) {
           currState[i].push({
             state: true,
             row: i,
@@ -220,9 +223,9 @@ class Game {
             type: "alarm"
           })
         }
-        else { //empty cells
+        else {
           currState[i].push({
-            state: false,
+            state: true,
             row: i,
             col: j,
             type: "empty"

@@ -284,11 +284,11 @@ const view_startGame = {
             <h4>Options</h4>
             <div class="box">
             <label for="widthRange">Width </label><br>
-            <input type="range" min="2" max="10" value="3" oninput="document.getElementById('widthDisplay').innerHTML=this.value;model.gems=this.value;" class="slider" id="widthRange"></input><br>
+            <input type="range" min="1" max="10" value="3" oninput="document.getElementById('widthDisplay').innerHTML=this.value;model.gems=this.value;" class="slider" id="widthRange"></input><br>
             <p>Value: <span id="widthDisplay">3</span></p>
 
             <label for="heightRange">Height</label><br>
-            <input type="range" min="2" max="10" value="3" oninput="document.getElementById('heightDisplay').innerHTML=this.value;model.gemsHeight=this.value;" class="slider" id="heightRange"></input><br>
+            <input type="range" min="1" max="10" value="3" oninput="document.getElementById('heightDisplay').innerHTML=this.value;model.gemsHeight=this.value;" class="slider" id="heightRange"></input><br>
             <p>Value: <span id="heightDisplay">3</span><p>
              
             </div>

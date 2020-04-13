@@ -57,9 +57,9 @@ const controller = {
     }
   },
   //called, when a player starts a new game
-  startGame: async function (numberOfPlayers, gemsHeight, gemsWidth) {
-    model.width = (gemsWidth*2)+1;
-    model.height = (gemsHeight*2)+1
+  startGame: async function (numberOfPlayers, numberOfGems) {
+    model.width = 7;
+    model.height = Math.floor(2 / 3 * numberOfGems) + 1;
     let temp = await api.get(1, ["playerid=" + model.player.id, "playerno=" + numberOfPlayers, "boardheight=" + model.height, "boardwidth=" + model.width]);
     model.game = temp[0];
     model.currState = temp[1];
@@ -169,7 +169,7 @@ const controller = {
   },
   leaveGame: function () {
   },
-  declareWinner: function () {
+  declareWinner: async function () {
     //let gemsToWin = player.length / noGems;
     //figure out
     //if (player.score = gemsToWin) {
@@ -185,8 +185,7 @@ const controller = {
 
 // the client's model stores all the data that the client needs. This does not include information about other players ids, etc.
 const model = {
-  gemsWidth: 3, //still noGems
-  gemsHeight: 3,
+  gems: 3,
   player: {
     id: 0,
     name: ""
@@ -283,14 +282,10 @@ const view_startGame = {
           <div class="card">
             <h4>Options</h4>
             <div class="box">
-            <label for="widthRange">Width </label><br>
-            <input type="range" min="2" max="10" value="3" oninput="document.getElementById('widthDisplay').innerHTML=this.value;model.gems=this.value;" class="slider" id="widthRange"></input><br>
-            <p>Value: <span id="widthDisplay">3</span></p>
-
-            <label for="heightRange">Height</label><br>
-            <input type="range" min="2" max="10" value="3" oninput="document.getElementById('heightDisplay').innerHTML=this.value;model.gemsHeight=this.value;" class="slider" id="heightRange"></input><br>
-            <p>Value: <span id="heightDisplay">3</span><p>
-             
+            <label for="myRange">Number of Gems</label>
+            <br>
+            <input type="range" min="3" max="20" value="3" oninput="document.getElementById('demo').innerHTML=this.value;model.gems=this.value;" class="slider" id="myRange"></input>
+            <p>Value: <span id="demo">3</span></p>
             </div>
             <br>
             <div class="box">
@@ -303,7 +298,7 @@ const view_startGame = {
                   </select>
             </div>
         </div>
-        <button id="btnStart" onclick="controller.startGame(noPlayers.value,widthRange.value,heightRange.value)">Start Game</button>
+        <button id="btnStart" onclick="controller.startGame(noPlayers.value,myRange.value)">Start Game</button>
           
         </section>`;
     this.mainElem.innerHTML = this.html1;

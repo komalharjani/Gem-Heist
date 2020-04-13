@@ -57,12 +57,12 @@ const controller = {
     }
   },
   //called, when a player starts a new game
-  startGame: async function (numberOfPlayers, gemsHeight, gemsWidth) {
-    model.width = (gemsWidth*2)+1;
-    model.height = (gemsHeight*2)+1
-    let temp = await api.get(1, ["playerid=" + model.player.id, "playerno=" + numberOfPlayers, "boardheight=" + model.height, "boardwidth=" + model.width]);
+  startGame: async function (numberOfPlayers,numberOfGems) {
+    model.width = 7;
+    model.height = Math.floor(2/3*numberOfGems)+1;
+    let temp = await api.get(1,["playerid="+model.player.id,"playerno="+numberOfPlayers,"boardheight="+model.height,"boardwidth="+model.width]);
     model.game = temp[0];
-    model.currState = temp[1];
+    model.currState=temp[1];
     view_frame.clear();
     view_game.init();
     view_game.drawBoard();
@@ -71,17 +71,17 @@ const controller = {
   //called, when a player joins an existing game
   joinGame: async function (gameId) {
     model.game = gameId;
-
+   
     let temp = await api.get(3, ["gameid=" + gameId, "playerid=" + model.player.id]);
     if (temp[0]) {
-      model.currState = temp[1];
+      model.currState=temp[1];
       view_frame.clear();
       view_game.init();
       view_game.drawBoard();
       view_game.activate();
     }
     else {
-      model.currState = temp[1];
+      model.currState=temp[1];
       view_frame.clear();
       view_game.init();
       view_game.drawBoard();
@@ -125,12 +125,12 @@ const controller = {
     let data = {
       gameid: model.game,
       playerid: model.player.id,
-      move: temp
+      move:temp
     };
     console.log(data);
-    let outcome = await api.post(5, data);
-    model.currState = outcome[0];
-    switch (outcome[1]) {
+    let outcome = await api.post(5,data);
+    model.currState=outcome[0];
+    switch(outcome[1]){
       case 0:
         view_game.drawBoard();
         view_game.deactivate();
@@ -146,10 +146,10 @@ const controller = {
         alert("It is not your turn.");
         break;
       case 3:
-        view_game.drawBoard();
+      view_game.drawBoard();
         alert("This is not a valid move.");
-    }
-
+    } 
+    
   },
   newPlayerName: async function (newPlayerName) {
     const data = {
@@ -158,43 +158,32 @@ const controller = {
     };
     const json = await api.post(6, data);
     if (json == false) {
-
+    
       return false;
     }
     if (json == true) {
-
+     
       model.player.name = newPlayerName;
       return true;
     }
   },
-  leaveGame: function () {
-  },
-  declareWinner: function () {
-    //let gemsToWin = player.length / noGems;
-    //figure out
-    //if (player.score = gemsToWin) {
-      //alert
-      //kill game
-      //update leagueboard
-    }
-    //else {
-      //next turn
-
+  leaveGame: function(){
+  }
 }
+
 
 
 // the client's model stores all the data that the client needs. This does not include information about other players ids, etc.
 const model = {
-  gemsWidth: 3, //still noGems
-  gemsHeight: 3,
+  gems: 3,
   player: {
     id: 0,
     name: ""
   },
   game: 0,
-  currState: 0,
-  height: 0,
-  width: 0,
+  currState:0,
+  height:0,
+  width:0,
   openGames: [],
   /* When a new client is started, it "registers" itself through the api and gets a unique id
   it will also poll all the currently open games, so that the player can join any of them*/
@@ -238,11 +227,11 @@ const view_playerStatus = {
     this.submitNick.onclick = async function () {
       const nickStatus = await controller.newPlayerName(view_playerStatus.newNick.value);
       if (nickStatus == true) {
-        view_playerStatus.newNick.value = "";
+        view_playerStatus.newNick.value="";
         closeModal();
         view_playerStatus.render();
       } else if (nickStatus == false) {
-        view_playerStatus.newNick.value = "";
+        view_playerStatus.newNick.value="";
         alert("This Name is already taken by another player.");
         view_playerStatus.newNick.focus();
       }
@@ -283,14 +272,10 @@ const view_startGame = {
           <div class="card">
             <h4>Options</h4>
             <div class="box">
-            <label for="widthRange">Width </label><br>
-            <input type="range" min="2" max="10" value="3" oninput="document.getElementById('widthDisplay').innerHTML=this.value;model.gems=this.value;" class="slider" id="widthRange"></input><br>
-            <p>Value: <span id="widthDisplay">3</span></p>
-
-            <label for="heightRange">Height</label><br>
-            <input type="range" min="2" max="10" value="3" oninput="document.getElementById('heightDisplay').innerHTML=this.value;model.gemsHeight=this.value;" class="slider" id="heightRange"></input><br>
-            <p>Value: <span id="heightDisplay">3</span><p>
-             
+            <label for="myRange">Number of Gems</label>
+            <br>
+            <input type="range" min="3" max="20" value="3" oninput="document.getElementById('demo').innerHTML=this.value;model.gems=this.value;" class="slider" id="myRange"></input>
+            <p>Value: <span id="demo">3</span></p>
             </div>
             <br>
             <div class="box">
@@ -303,7 +288,7 @@ const view_startGame = {
                   </select>
             </div>
         </div>
-        <button id="btnStart" onclick="controller.startGame(noPlayers.value,widthRange.value,heightRange.value)">Start Game</button>
+        <button id="btnStart" onclick="controller.startGame(noPlayers.value,myRange.value)">Start Game</button>
           
         </section>`;
     this.mainElem.innerHTML = this.html1;
@@ -355,7 +340,7 @@ const view_game = {
     document.getElementById("makeMove").addEventListener('click', controller.makeMove);
     document.getElementById("withdraw").addEventListener('click', this.confirmWithdrawal);
     this.deactivate();
-    this.gemChar = "&#128142";
+    this.gemChar="&#128142";
   },
   //If it's another player's turn the view needs to be deactivted
   deactivate: function () {
@@ -371,47 +356,44 @@ const view_game = {
     document.getElementById("makeMove").addEventListener('click', controller.makeMove);
     document.getElementById("makeMove").disabled = false;
   },
-  confirmWithdrawal: function () {
-    if (confirm("You're about to leave the game. This cannot be undone.")) {
+  confirmWithdrawal: function(){
+    if (confirm("You're about to leave the game. This cannot be undone.")){
       controller.leaveGame();
     }
   },
-  drawBoard: function () {
+  drawBoard:function(){
     //Create rows and tables according to specified height and width
     var table = document.createElement("table");
     for (var i = 0; i < model.currState.length; i++) { //loop through height
-      var row = document.createElement('tr'); //create rows for each height
-      for (var j = 0; j < model.currState[0].length; j++) { //loop through width
-        var cell = document.createElement('td'); //create columns for each width
-        cell.setAttribute("row", i);
-        cell.setAttribute("col", j);
+        var row = document.createElement('tr'); //create rows for each height
+        for (var j = 0; j < model.currState[0].length; j++) { //loop through width
+            var cell = document.createElement('td'); //create columns for each width
+            cell.setAttribute("row", i);
+            cell.setAttribute("col", j);
 
-        if (model.currState[i][j].state == true) {
-          if (model.currState[i][j].type == "gem") { //identify gem cells
-            //currentState[0].push(cell);
-            cell.innerHTML = this.gemChar;
-            cell.className = "gem";
-          }
-          else if (model.currState[i][j].type == "alarm") { //identify alarm cells
-            cell.className = "alarm";
-            cell.addEventListener('click', function (event) {
-              this.className = "white";
-
-              controller.makeMove(event);
-            })
-          }
+            if (model.currState[i][j].state == true) {
+                if (model.currState[i][j].type == "gem") { //identify gem cells
+                    //currentState[0].push(cell);
+                    cell.innerHTML = this.gemChar;
+                    cell.className = "gem";
+                }
+                else if (model.currState[i][j].type == "alarm") { //identify alarm cells
+                    cell.className = "alarm";
+                    cell.addEventListener('click', function (event) {
+                        this.className = "white";
+                        
+                        controller.makeMove(event);
+                    })
+                }
+            }
+            else {
+                cell.className = "white"
+            }
+            row.appendChild(cell);
         }
-        else {
-          cell.className = "white"
-          if (model.currState[i][j].type == "gem") {
-            cell.innerHTML = model.currState[i][j].name;
-          }
-        }
-        row.appendChild(cell);
-      }
-      table.appendChild(row);
+        table.appendChild(row);
     }
-
+    
 
     //display in this div
     let divContainer = document.getElementById("board");

@@ -173,6 +173,7 @@ class Game {
               alarmsAroundGemsFound = [];
               //declareWinner();
               return [currState,1];
+              //EMPTY ARRAY
           }
           //the alarm disabled was not the final one
           else {
