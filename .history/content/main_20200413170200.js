@@ -190,7 +190,7 @@ const controller = {
           let max = players[i].getScore();
           for(let j=1; j < players.length; j++) {
             if (players[j].getScore > players[i].getScore) {
-            
+              max = 
             }
           }
           //if 2 or more players have same score - draw

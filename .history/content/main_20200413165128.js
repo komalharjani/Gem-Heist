@@ -187,12 +187,7 @@ const controller = {
       if (gemsCaptured == noGems) {
         for (let i = 0; i < players.length; i++) {
           let temp = [];
-          let max = players[i].getScore();
-          for(let j=1; j < players.length; j++) {
-            if (players[j].getScore > players[i].getScore) {
-            
-            }
-          }
+          let max = 0;
           //if 2 or more players have same score - draw
           temp.push(players[i].getScore());
           if (players[i].getScore() >= max ) {

@@ -33,10 +33,6 @@ tr:nth-child(even) {
   color: whitesmoke;
 }
 
-.notice {
-  color: red;
-}
-
 .login {
   width:300px;
   height:150px;

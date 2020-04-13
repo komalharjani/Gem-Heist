@@ -16,7 +16,7 @@ table {
 }
 
 td, th {
-  border: 1px solid #adaaa0;
+  border: 1px solid grey;
   text-align: left;
   padding: 8px;
 }
@@ -31,10 +31,6 @@ tr:nth-child(even) {
   text-align: center;
   background: grey;
   color: whitesmoke;
-}
-
-.notice {
-  color: red;
 }
 
 .login {

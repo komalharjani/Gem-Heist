@@ -58,11 +58,10 @@ const controller = {
   },
   //called, when a player starts a new game
   startGame: async function (numberOfPlayers, gemsHeight, gemsWidth) {
-    model.width = (gemsHeight * 2) + 1;
-    model.height = (gemsWidth * 2) + 1;
+    model.width = (gemsHeight*2)+1;
+    model.height = (gemsWidth*2)+1;
     let noGems = gemsHeight + gemsWidth;
     let gemsToWin;
-    let gemsCaptured;
     let gemsToDraw;
     let temp = await api.get(1, ["playerid=" + model.player.id, "playerno=" + numberOfPlayers, "boardheight=" + model.height, "boardwidth=" + model.width]);
     model.game = temp[0];
@@ -173,44 +172,97 @@ const controller = {
   },
   leaveGame: function () {
   },
-  declareWinner: function () {
-    //even players and gems
-    let gemsToWin = Math.floor(noGems / numberOfPlayers + 1);
-    let gemsToDraw = (noGems / numberOfPlayers);
-    //declare winner
-    if (this.player.getScore() == gemsToWin) {
-      alert(this.playerName + "has won.");
-    }
-    //if players have not yet reached gemsToWin (check their score)
-    else {
-      //if all gems are captured check who has drawn
-      if (gemsCaptured == noGems) {
-        for (let i = 0; i < players.length; i++) {
-          let temp = [];
-          let max = players[i].getScore();
-          for(let j=1; j < players.length; j++) {
-            if (players[j].getScore > players[i].getScore) {
-            
-            }
-          }
-          //if 2 or more players have same score - draw
-          temp.push(players[i].getScore());
-          if (players[i].getScore() >= max ) {
-            max = players[i].getScore();
-            temp.push(players[i]);
-          }
+  declareWinner: function() {
+      //even gems and even players
+      if (gemsToWin % 2 == 0 && players.length % 2 == 0) {
+        let gemsToWin = (noGems / numberOfPlayers) + 1;
+        let gemsToDraw = (noGems / numberOfPlayers);
+        if(this.player.getScore() == gemsToWin) {
+          alert(this.playerName + "has won.");
         }
+        else {
+          //if all players scores added up == noGems -- if all gems are captured
+          //then declare the one(s) with the highest scores winners
+        }
+      }
+      //odd gems and odd players
+      else if (gemsToWin % 2 != 0 && players.length % 2 != 0) {
+        let gemsToWin = noGems / 2;
+        let gemsToDraw = (noGems / numberOfPlayers);
+      }
+      //even gems and odd players
+      else if (gemsToWin % 2 == 0 && players.length % 2 != 0) {
+        let gemsToWin = noGems / 2;
+        let gemsToDraw = (noGems / numberOfPlayers);
+      }
+      else if (gemsToWin % 2 != 0 && players.length % 2 == 0) {
 
       }
-    }
+    
   }
 }
+  
+  
+      // if (this.player.getScore == gemsToWin) {
+      //   alert(this.getPlayer.name + "has won.");
+      // } 
+      // else if (this.player.getScore() < gemsToWin) {
+      //   for (let i = 0; i < players.length; i++) {
+      //     let max = gemsToWin;
+      //     temp = 
+      //     //store highest score
+      //     if (this.player.getScore() == players[i].getScore()) {
+            
+      //     }
+            
+      //     }
+      //     if (players[i].getId() == id) {
+      //       temp = i;
+      //     }
+      //   }
+      //   players[temp].setName(name);
+      //   return false;
+      // }
+      // else {
+      
+      
+        //alert
+        //kill game
+        //update leagueboard
+  
 
+    // if (this.player.getScore == gemsToWin) {
+    //   alert(this.getPlayer.name + "has won.");
+    // } 
+    // else if (this.player.getScore() < gemsToWin) {
+    //   for (let i = 0; i < players.length; i++) {
+    //     let max = gemsToWin;
+    //     temp = 
+    //     //store highest score
+    //     if (this.player.getScore() == players[i].getScore()) {
+          
+    //     }
+          
+    //     }
+    //     if (players[i].getId() == id) {
+    //       temp = i;
+    //     }
+    //   }
+    //   players[temp].setName(name);
+    //   return false;
+    // }
+    // else {
+    
+    
+      //alert
+      //kill game
+      //update leagueboard
+    
 
 
 // the client's model stores all the data that the client needs. This does not include information about other players ids, etc.
 const model = {
-  gemsWidth: 3,
+  gemsWidth: 3, //still noGems
   gemsHeight: 3,
   player: {
     id: 0,
@@ -431,6 +483,7 @@ const view_game = {
             cell.className = "alarm";
             cell.addEventListener('click', function (event) {
               this.className = "white";
+
               controller.makeMove(event);
             })
           }
@@ -445,6 +498,7 @@ const view_game = {
       }
       table.appendChild(row);
     }
+
 
     //display in this div
     let divContainer = document.getElementById("board");
