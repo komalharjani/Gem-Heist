@@ -58,8 +58,8 @@ const controller = {
   },
   //called, when a player starts a new game
   startGame: async function (numberOfPlayers, gemsHeight, gemsWidth) {
-    model.width = (gemsHeight*2)+1;
-    model.height = (gemsWidth*2)+1
+    model.width = (gemsWidth*2)+1;
+    model.height = (gemsHeight*2)+1
     let temp = await api.get(1, ["playerid=" + model.player.id, "playerno=" + numberOfPlayers, "boardheight=" + model.height, "boardwidth=" + model.width]);
     model.game = temp[0];
     model.currState = temp[1];
@@ -279,18 +279,16 @@ const view_startGame = {
   init: function () {
     this.mainElem = document.getElementsByTagName('main')[0];
     this.html1 = `<section>
-          <br>
-          <div class="centercolumn">
-          <div class="card">
           <h2>Start a new Game</h2>
+          <div class="card">
             <h4>Options</h4>
             <div class="box">
-            <b><label for="widthRange">Width </label></b><br><br>
+            <b><label for="widthRange">Width </label></b><br>
             <input type="range" min="2" max="10" value="3" oninput="document.getElementById('widthDisplay').innerHTML=this.value;model.gems=this.value;" class="slider" id="widthRange"></input><br>
-            <p>Value: <span id="widthDisplay">3</span></p><br><br>
+            <p>Value: <span id="widthDisplay">3</span></p>
 
-            <b><label for="heightRange">Height</label></b><br><br>
-            <input type="range" min="2" max="10" value="3" oninput="document.getElementById('heightDisplay').innerHTML=this.value;model.gemsHeight=this.value;" class="slider" id="heightRange"></input>
+            <label for="heightRange">Height</label><br>
+            <input type="range" min="2" max="10" value="3" oninput="document.getElementById('heightDisplay').innerHTML=this.value;model.gemsHeight=this.value;" class="slider" id="heightRange"></input><br>
             <p>Value: <span id="heightDisplay">3</span><p>
              
             </div>
@@ -303,23 +301,17 @@ const view_startGame = {
                     <option value="4">4</option>
                     <option value="5">5</option>
                   </select>
-            </div><br>
-            <button id="btnStart" onclick="controller.startGame(noPlayers.value,widthRange.value,heightRange.value)">Start Game</button><br>
-
+            </div>
         </div>
-        </div>
+        <button id="btnStart" onclick="controller.startGame(noPlayers.value,widthRange.value,heightRange.value)">Start Game</button>
           
         </section>`;
     this.mainElem.innerHTML = this.html1;
 
     this.html2 = `<section>
-    <div class="centercolumn">
-          <div class="card">
       <h2>Join a Game</h2>
       <ul id="games">
       </ul>
-      </div>
-      </div>
     </section>`
 
   },

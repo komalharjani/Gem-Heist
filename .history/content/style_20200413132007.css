@@ -112,7 +112,7 @@ tr:nth-child(even) {
 }
 
 /* Footer */
-.foot {
+.footer {
   position: fixed;
   left: 0;
   bottom: 0;

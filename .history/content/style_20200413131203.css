@@ -96,13 +96,6 @@ tr:nth-child(even) {
 .card {
    background-color: white;
    padding: 15px;
-   font-weight: 300;
-}
-
-.playerName {
-  background-color: white;
-  padding: 15px;
-  font-weight: 500;
 }
 
 .row:after {
@@ -112,14 +105,11 @@ tr:nth-child(even) {
 }
 
 /* Footer */
-.foot {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: red;
-  color: white;
+.footer {
+  padding: 20px;
   text-align: center;
+  background: #ddd;
+  margin-top: 20px;
 }
 
 /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
