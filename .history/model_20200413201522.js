@@ -58,7 +58,6 @@ class Game {
     this.getId = function () {
       return id;
     }
-    let totalGemsCaptured = 0;
     //stores a game's players
     let players = [];
     this.getPlayers = function () {
@@ -93,7 +92,7 @@ class Game {
       playerTurn = playerId
     }
     //makeMove is now in charge of determining what happens when a player clicks on an alarm
-    this.makeMove = function (playerId,playerName,currRow,currCol) {
+    this.makeMove = function (playerId,currRow,currCol) {
       //check if the player is authorised to make a move, meaning that it is his turn in fact
       if(!this.getPlayerTurn(playerId)){
         return [currState,2];
@@ -170,8 +169,8 @@ class Game {
           //the player gets to make another move
           if (alarmsAroundGemsFound.length == 0) {
               currState[gemRow][gemCol].state = false;
-              //if null -- empty
-              currState[gemRow][gemCol].name = playerName;
+              currState[gemRow][gemCol].name = getPlayer(playerId).getName();
+              //increment the score
               alarmsAroundGemsFound = [];
               //declareWinner();
               return [currState,1];

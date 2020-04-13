@@ -58,7 +58,6 @@ class Game {
     this.getId = function () {
       return id;
     }
-    let totalGemsCaptured = 0;
     //stores a game's players
     let players = [];
     this.getPlayers = function () {
@@ -170,8 +169,8 @@ class Game {
           //the player gets to make another move
           if (alarmsAroundGemsFound.length == 0) {
               currState[gemRow][gemCol].state = false;
-              //if null -- empty
               currState[gemRow][gemCol].name = playerName;
+              //increment the score
               alarmsAroundGemsFound = [];
               //declareWinner();
               return [currState,1];

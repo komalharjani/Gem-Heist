@@ -58,7 +58,6 @@ class Game {
     this.getId = function () {
       return id;
     }
-    let totalGemsCaptured = 0;
     //stores a game's players
     let players = [];
     this.getPlayers = function () {
@@ -173,7 +172,6 @@ class Game {
               //if null -- empty
               currState[gemRow][gemCol].name = playerName;
               alarmsAroundGemsFound = [];
-              //declareWinner();
               return [currState,1];
           }
           //the alarm disabled was not the final one

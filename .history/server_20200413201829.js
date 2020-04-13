@@ -63,7 +63,7 @@ app.post('/makeMove', function (req, res, next) {
 	let game = session.getGame(req.body.gameid);
 	console.log(req.body.move.row);
 	let player = session.getPlayer(req.body.playerid);
-	let outcome = game.makeMove(req.body.playerid,player.getName(),req.body.move.row,req.body.move.col);
+	let outcome = game.makeMove(req.body.playerid,req.body.move.row,req.body.move.col);
 	res.status(200).json(outcome);
 });
 //endpoint for a player to add name

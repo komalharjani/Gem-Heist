@@ -200,12 +200,11 @@ const controller = {
             if(players[j].getScore() == max) {
               temp.push[players[j].id];
               if (temp.length >= 2) {
-                for(let k=0; temp.length; k++) {
-                  alert(temp[k].name + "has drawn.")
-                }
+                alert(players[j].name + "has drawn.")
               }
               else {
-                alert(players[j].name + "has drawn.")
+                //if its one person 
+             // alert(this.playerName + "has won.");
               }
             }
         }
@@ -407,7 +406,8 @@ const view_game = {
   deactivate: function () {
     document.getElementById("notice").innerHTML = "Not your turn or not enough players yet.";
     //the makeMove button is preliminary only, eventually moves should be made straight through the board
-    document.getElementById("makeMove").removeEventListener('click', controller.makeMove);
+    //document.getElementById("makeMove").removeEventListener('click', controller.makeMove);
+    document.getElementById("board").disabled = true;
     document.getElementById("makeMove").disabled = true;
     document.getElementById("withdraw").disabled = true;
   },

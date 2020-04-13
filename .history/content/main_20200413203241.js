@@ -1,7 +1,5 @@
 // api object with endpoints and methods for various request types.
 
-const e = require("express");
-
 const api = {
   endpoints: [
     "/getPlayer/",
@@ -179,7 +177,7 @@ const controller = {
   },
   declareWinner: function () {
     //even players and gems
-    let gemsToWin = Math.floor(noGems / 2 + 1);
+    let gemsToWin = Math.floor(noGems / numberOfPlayers + 1);
     let gemsToDraw = (noGems / numberOfPlayers);
     //declare winner
     if (this.player.getScore() == gemsToWin) {
@@ -200,11 +198,6 @@ const controller = {
             if(players[j].getScore() == max) {
               temp.push[players[j].id];
               if (temp.length >= 2) {
-                for(let k=0; temp.length; k++) {
-                  alert(temp[k].name + "has drawn.")
-                }
-              }
-              else {
                 alert(players[j].name + "has drawn.")
               }
             }

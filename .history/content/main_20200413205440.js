@@ -200,13 +200,12 @@ const controller = {
             if(players[j].getScore() == max) {
               temp.push[players[j].id];
               if (temp.length >= 2) {
-                for(let k=0; temp.length; k++) {
-                  alert(temp[k].name + "has drawn.")
-                }
-              }
-              else {
                 alert(players[j].name + "has drawn.")
               }
+              else {
+                //declare one winner
+              }
+
             }
         }
         }
