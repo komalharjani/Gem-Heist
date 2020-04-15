@@ -53,6 +53,13 @@ app.get('/getOpenGames/', function (req, res, next) {
 app.get('/getTurn', function (req, res, next) {
 	let game = session.getGame(req.query.gameid);
 	let myTurn = game.getPlayerTurn(req.query.playerid);
+	if (game.getGameDone()){
+		for (i=0;i<myTurn.length;i++){
+			let player = session.getPlayer(myTurn[i].id);
+			player.updateScore(myTurn[i].outcome);
+			myTurn[i].id=myTurn[i].id.slice(-5);
+		}
+	}
 	res.status(200).json([myTurn,game.getBoard()]);
 });
 
@@ -61,6 +68,13 @@ app.post('/makeMove', function (req, res, next) {
 	let game = session.getGame(req.body.gameid);
 	let player=session.getPlayer(req.body.playerid);
 	let outcome = game.makeMove(req.body.playerid,player.getName(),req.body.move.row,req.body.move.col);
+	if (game.getGameDone()){
+		for (i=0;i<outcome[2].length;i++){
+			let player = session.getPlayer(outcome[2][i].id);
+			player.updateScore(outcome[2][i].outcome);
+			outcome[2][i].id=outcome[2][i].id.slice(-5);
+		}
+	}
 	res.status(200).json(outcome);
 });
 //endpoint for a player to add name

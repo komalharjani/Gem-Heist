@@ -63,6 +63,9 @@ class Game {
       return players;
     }
     let gameDone = false;
+    this.getGameDone = function(){
+      return gameDone;
+    }
     //adds a player to a game
     this.addPlayer = function (playerId, playerName, openGames) {
       players.push({ id: playerId, gems: 0, outcome: "loss", name: playerName });
@@ -91,7 +94,7 @@ class Game {
       else {
         let outcomes = [];
         for (i=0;i<players.length;i++) {
-          outcomes.push({ id: players[i].id.slice(-5), outcome:players[i].outcome, name: players[i].name, gems: players[i].gems });
+          outcomes.push({ id: players[i].id, outcome:players[i].outcome, name: players[i].name, gems: players[i].gems });
         }
         return outcomes;
       }
@@ -118,7 +121,6 @@ class Game {
       let rightCell;
       let upCell;
       let downCell;
-
       let alarmsAroundGemsFound = [];
 
       //Check if surrounding are gems
@@ -147,10 +149,8 @@ class Game {
         }
       }
 
-
       //loop 2 - check for alarms around each gem to see if gem should be captured
       //empty array or create new array for each gem
-
       for (let i = 0; i < gemsFound.length; i++) {
         let gemRow = gemsFound[i].row; //new GemRow
         let gemCol = gemsFound[i].col; //new GemCol
@@ -171,8 +171,6 @@ class Game {
           alarmsAroundGemsFound.push(rightCell);
         }
 
-
-
         //if the array is empty after removing all surrounding gems
         //this means a gem's final alarm has been disabled
         //the player gets to make another move
@@ -188,7 +186,7 @@ class Game {
             gameDone = true;
             let outcomes = [];
             for (i=0;i<players.length;i++) {
-              outcomes.push({ id: players[i].id.slice(-5), outcome:players[i].outcome, name: players[i].name, gems: players[i].gems });
+              outcomes.push({ id: players[i].id, outcome:players[i].outcome, name: players[i].name, gems: players[i].gems });
             }
             return [currState, 4, outcomes];
           }
@@ -201,26 +199,17 @@ class Game {
         else {
           //determines whose turn it is next
           let index = players.findIndex(player => player.id == playerId);
-
           if (index == players.length - 1) {
             index = 0;
           }
           else {
             index = index + 1;
           }
-
           this.setPlayerTurn(players[index].id);
           alarmsAroundGemsFound = [];
           return [currState, 0];
         }
-
-
       }
-
-
-
-
-
     }
 
     let height = boardHeight;
