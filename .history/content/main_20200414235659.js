@@ -164,9 +164,10 @@ const controller = {
     
   },
   leaveGame: function(){
-    view_frame.clear()
-    view_startGame.init();
-    
+    view_game.clear();
+    view_frame.init();
+    //view_game.drawBoard();
+    //view_game.activate();
   },
   newPlayerName: async function (newPlayerName) {
     const data = {

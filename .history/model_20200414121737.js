@@ -206,6 +206,7 @@ class Game {
           else {
             index = index + 1;
           }
+
           this.setPlayerTurn(players[index].id);
           alarmsAroundGemsFound = [];
           return [currState, 0];
@@ -273,6 +274,7 @@ class Game {
       //declare winner
       if (players[index].gems == gemsToWin) {
         players[index].outcome = "win";
+        alert("you have won");
         return true;
       }
       //if players have not yet reached gemsToWin (check their score)

@@ -90,8 +90,8 @@ class Game {
       }
       else {
         let outcomes = [];
-        for (i = 0; i < players.length; i++) {
-          outcomes.push({ id: players[i].id.slice(-5), outcome: players[i].outcome, name: players[i].name, gems: players[i].gems });
+        for (i=0;i<players.length;i++) {
+          outcomes.push({ id: players[i].id.slice(-5), outcome:players[i].outcome, name: players[i].name, gems: players[i].gems });
         }
         return outcomes;
       }
@@ -180,32 +180,35 @@ class Game {
           currState[gemRow][gemCol].state = false;
           currState[gemRow][gemCol].name = playerName;
           console.log(playerName);
+
           let index = players.findIndex(player => player.id == playerId);
           players[index].gems++;
           alarmsAroundGemsFound = [];
-
           if (this.checkForWin(playerId, boardHeight, boardWidth)) {
             gameDone = true;
             let outcomes = [];
-            for (i = 0; i < players.length; i++) {
-              outcomes.push({ id: players[i].id.slice(-5), outcome: players[i].outcome, name: players[i].name, gems: players[i].gems });
+            for (i=0;i<players.length;i++) {
+              outcomes.push({ id: players[i].id.slice(-5), outcome:players[i].outcome, name: players[i].name, gems: players[i].gems });
             }
-            return [currState, 4, outcomes]; //case switch 4
+            return [currState, 4, outcomes];
           }
           else {
-            return [currState, 1]; //case switch 1
+            return [currState, 1];
           }
+          //EMPTY ARRAY
         }
         //the alarm disabled was not the final one
         else {
           //determines whose turn it is next
           let index = players.findIndex(player => player.id == playerId);
+
           if (index == players.length - 1) {
             index = 0;
           }
           else {
             index = index + 1;
           }
+
           this.setPlayerTurn(players[index].id);
           alarmsAroundGemsFound = [];
           return [currState, 0];
@@ -213,6 +216,11 @@ class Game {
 
 
       }
+
+
+
+
+
     }
 
     let height = boardHeight;
@@ -254,22 +262,22 @@ class Game {
       return currState;
     }
     this.checkForWin = function (playerId, boardHeight, boardWidth) {
-
+      //even players and gems
       let noGems = (Math.floor(boardHeight / 2)) * (Math.floor(boardWidth / 2));
-      //console.log(noGems);
+      console.log(noGems);
       let gemsToWin = Math.floor((noGems / 2) + 1);
-      //console.log(gemsToWin);
+      console.log(gemsToWin);
       let gemsToDraw = (noGems / players.length);
-      //console.log(gemsToDraw);
+      console.log(gemsToDraw);
       let index = players.findIndex(player => player.id == playerId);
 
-      //figure out total number of gems captured
       let gemsCaptured = 0;
-      for (i = 0; i < players.length; i++) {
-        gemsCaptured = + players[i].gems;
+      
+      for (i=0;i<players.length;i++) {
+        gemsCaptured = gemsCaptured + players[i].gems;
       }
-      //console.log(gemsCaptured);
 
+      console.log(gemsCaptured);
       //declare winner
       if (players[index].gems == gemsToWin) {
         players[index].outcome = "win";

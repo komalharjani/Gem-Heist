@@ -206,6 +206,7 @@ class Game {
           else {
             index = index + 1;
           }
+
           this.setPlayerTurn(players[index].id);
           alarmsAroundGemsFound = [];
           return [currState, 0];

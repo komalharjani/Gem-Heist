@@ -90,8 +90,8 @@ class Game {
       }
       else {
         let outcomes = [];
-        for (i = 0; i < players.length; i++) {
-          outcomes.push({ id: players[i].id.slice(-5), outcome: players[i].outcome, name: players[i].name, gems: players[i].gems });
+        for (i=0;i<players.length;i++) {
+          outcomes.push({ id: players[i].id.slice(-5), outcome:players[i].outcome, name: players[i].name, gems: players[i].gems });
         }
         return outcomes;
       }
@@ -187,8 +187,8 @@ class Game {
           if (this.checkForWin(playerId, boardHeight, boardWidth)) {
             gameDone = true;
             let outcomes = [];
-            for (i = 0; i < players.length; i++) {
-              outcomes.push({ id: players[i].id.slice(-5), outcome: players[i].outcome, name: players[i].name, gems: players[i].gems });
+            for (i=0;i<players.length;i++) {
+              outcomes.push({ id: players[i].id.slice(-5), outcome:players[i].outcome, name: players[i].name, gems: players[i].gems });
             }
             return [currState, 4, outcomes]; //case switch 4
           }
@@ -206,6 +206,7 @@ class Game {
           else {
             index = index + 1;
           }
+
           this.setPlayerTurn(players[index].id);
           alarmsAroundGemsFound = [];
           return [currState, 0];
@@ -256,20 +257,20 @@ class Game {
     this.checkForWin = function (playerId, boardHeight, boardWidth) {
 
       let noGems = (Math.floor(boardHeight / 2)) * (Math.floor(boardWidth / 2));
-      //console.log(noGems);
+      console.log(noGems);
       let gemsToWin = Math.floor((noGems / 2) + 1);
-      //console.log(gemsToWin);
+      console.log(gemsToWin);
       let gemsToDraw = (noGems / players.length);
-      //console.log(gemsToDraw);
+      console.log(gemsToDraw);
       let index = players.findIndex(player => player.id == playerId);
 
-      //figure out total number of gems captured
       let gemsCaptured = 0;
-      for (i = 0; i < players.length; i++) {
-        gemsCaptured = + players[i].gems;
+      
+      for (i=0;i<players.length;i++) {
+        gemsCaptured = gemsCaptured + players[i].gems;
       }
-      //console.log(gemsCaptured);
 
+      console.log(gemsCaptured);
       //declare winner
       if (players[index].gems == gemsToWin) {
         players[index].outcome = "win";

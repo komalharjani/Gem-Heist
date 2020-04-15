@@ -163,11 +163,6 @@ const controller = {
     } 
     
   },
-  leaveGame: function(){
-    view_frame.clear()
-    view_startGame.init();
-    
-  },
   newPlayerName: async function (newPlayerName) {
     const data = {
       "playerName": newPlayerName,
@@ -368,7 +363,12 @@ const view_game = {
     this.deactivate();
     this.gemChar = "&#128142";
   },
-
+  leaveGame: function(){
+    view_game.clear();
+    view_frame.init();
+    //view_game.drawBoard();
+    //view_game.activate();
+  },
   confirmWithdrawal: function () {
     if (confirm("You're about to leave the game. This cannot be undone.")) {
       controller.leaveGame();
@@ -384,6 +384,7 @@ const view_game = {
   //...and activated again once the turn starts
   activate: function () {
     document.getElementById("notice").innerHTML = "It's your turn now";
+    document.getElementById("withdraw").disabled = true;
   },
  
   drawBoard: function () {

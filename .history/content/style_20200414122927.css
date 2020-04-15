@@ -91,7 +91,7 @@ tr:nth-child(even) {
   background-color: whitesmoke;
   width: 100%;
   padding: 15px;
-  border-color: rgb(47, 47, 47);
+  border-color: whitesmoke;
 }
 
 .voteFilter {

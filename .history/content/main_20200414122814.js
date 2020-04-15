@@ -89,8 +89,6 @@ const controller = {
       this.getTurn();
     }
   },
-
-
   //returns the games that are currently open to be joined
   getOpenGames: function () {
     return model.openGames;
@@ -129,13 +127,13 @@ const controller = {
     console.log(temp);
     let data = {
       gameid: model.game,
-      playerid: model.player.id, 
+      playerid: model.player.id,
       move:temp
     };
     console.log(data);
     let outcome = await api.post(5,data);
     model.currState=outcome[0];
-    switch(outcome[1]){ 
+    switch(outcome[1]){
       case 0:
         view_game.drawBoard();
         view_game.deactivate();
@@ -158,14 +156,7 @@ const controller = {
         view_game.drawBoard();
         view_game.deactivate();
         console.log(outcome[2]);
-        //alert("has won.");
-        //kill game
     } 
-    
-  },
-  leaveGame: function(){
-    view_frame.clear()
-    view_startGame.init();
     
   },
   newPlayerName: async function (newPlayerName) {
@@ -183,6 +174,8 @@ const controller = {
       model.player.name = newPlayerName;
       return true;
     }
+  },
+  leaveGame: function(){
   }
 }
 
@@ -193,7 +186,7 @@ const model = {
   gems: 3,
   player: {
     id: 0,
-    name: "",
+    name: ""
   },
   game: 0,
   currState:0,
@@ -285,7 +278,7 @@ const view_startGame = {
     this.html1 = `<section>
     <br>
     <div class="centercolumn">
-    <div class="card" style="height:500px;">
+    <div class="card">
     <h2>Start a new Game</h2>
       <h4>Options</h4>
       <div class="box">
@@ -316,7 +309,7 @@ const view_startGame = {
 
     this.html2 = `<section>
     <div class="centercolumn">
-          <div class="card" style="height:500px;">
+          <div class="card" style="height:400px;">
       <h2>Join a Game</h2>
       <ul id="games">
       </ul>
@@ -368,24 +361,23 @@ const view_game = {
     this.deactivate();
     this.gemChar = "&#128142";
   },
-
+  //If it's another player's turn the view needs to be deactivted
+  deactivate: function () {
+    document.getElementById("notice").innerHTML = "Not your turn or not enough players yet.";
+    //document.getElementById("board").disabled = true();
+    document.getElementById("withdraw").disabled = true;
+  },
+  //...and activated again once the turn starts
+  activate: function () {
+    document.getElementById("notice").innerHTML = "It's your turn now";
+    document.getElementById("makeMove").addEventListener('click', controller.makeMove);
+    document.getElementById("makeMove").disabled = false;
+  },
   confirmWithdrawal: function () {
     if (confirm("You're about to leave the game. This cannot be undone.")) {
       controller.leaveGame();
     }
   },
-
-  //If it's another player's turn the view needs to be deactivted
-  deactivate: function () {
-    document.getElementById("notice").innerHTML = "Not your turn or not enough players yet.";
-    //document.getElementById("board").disabled = true();
-    //document.getElementById("withdraw").disabled = true;
-  },
-  //...and activated again once the turn starts
-  activate: function () {
-    document.getElementById("notice").innerHTML = "It's your turn now";
-  },
- 
   drawBoard: function () {
     //Create rows and tables according to specified height and width
     var table = document.createElement("table");
