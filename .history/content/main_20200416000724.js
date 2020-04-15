@@ -125,20 +125,22 @@ const controller = {
             else {
               listResults.innerHTML = myTurn[0][i].name + " has " + myTurn[0][i].outcome;
             }
+            console.log(myTurn[0][i].id);
+            console.log(myTurn[0][i].outcome);
             thisNotice.append(listResults);
+            if(myTurn[0][i].outcome == "lost") {
+              model.player.losses++;
+              break;
+            }
+            if(myTurn[0][i].outcome == "won") {
+              model.player.wins++;
+              break;
+            }
+            if(myTurn[0][i].outcome == "drawn") {
+              model.player.draws++;
+              break;
+            }
         }
-      //   for(let j =0; j <myTurn[0].length; j++) {
-      //   if(myTurn[0][j].outcome === "lost") {
-      //     model.player.losses++;
-      //   }
-      //   else if(myTurn[0][j].outcome === "won") {
-      //     model.player.wins++;
-      //   }
-      //   else if(myTurn[0][j].outcome === "drawn") {
-      //     model.player.draws++;
-      //   }
-      //   break;
-      // }
       }
       view_game.drawBoard();
       view_playerStatus.render();
@@ -184,7 +186,7 @@ const controller = {
         view_game.deactivate();
         model.currScore++;
         alert("you have won.");
-        //this.leaveGame(); 
+        this.leaveGame(); 
     }
     
   },

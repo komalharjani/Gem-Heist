@@ -115,6 +115,10 @@ const controller = {
       }
       if(myTurn[0]!=true&&myTurn[0]!=false){
         clearInterval(turnPolling);
+        console.log(myTurn[0].outcome);
+        if (myTurn[0] == "loss") {
+          player.model.losses++;
+        }
         let thisNotice = document.getElementById("notice")
         for(let i =0; i <myTurn[0].length; i++) {
             let listResults = document.createElement('li');

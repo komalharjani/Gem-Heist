@@ -115,6 +115,9 @@ const controller = {
       }
       if(myTurn[0]!=true&&myTurn[0]!=false){
         clearInterval(turnPolling);
+        if(myTurn[0].outcome == "loss") {
+          model.player.losses++;
+        }
         let thisNotice = document.getElementById("notice")
         for(let i =0; i <myTurn[0].length; i++) {
             let listResults = document.createElement('li');
@@ -127,18 +130,18 @@ const controller = {
             }
             thisNotice.append(listResults);
         }
-      //   for(let j =0; j <myTurn[0].length; j++) {
-      //   if(myTurn[0][j].outcome === "lost") {
-      //     model.player.losses++;
-      //   }
-      //   else if(myTurn[0][j].outcome === "won") {
-      //     model.player.wins++;
-      //   }
-      //   else if(myTurn[0][j].outcome === "drawn") {
-      //     model.player.draws++;
-      //   }
-      //   break;
-      // }
+        // for(let j =0; j <myTurn[0].length; j++) {
+        // if(myTurn[0][j].outcome === "lost") {
+        //   model.player.losses++;
+        // }
+        // else if(myTurn[0][j].outcome === "won") {
+        //   model.player.wins++;
+        // }
+        // else if(myTurn[0][j].outcome === "drawn") {
+        //   model.player.draws++;
+        // }
+        // break;
+      }
       }
       view_game.drawBoard();
       view_playerStatus.render();
