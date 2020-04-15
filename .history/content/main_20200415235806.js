@@ -140,8 +140,8 @@ const controller = {
             }
         }
       }
-      view_game.drawBoard();
       view_playerStatus.render();
+      view_game.drawBoard();
     }, 5000);
   },
   /* this is a preliminary method that should be called when a player makes a move.

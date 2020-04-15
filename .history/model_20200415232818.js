@@ -171,6 +171,8 @@ class Game {
           alarmsAroundGemsFound.push(rightCell);
         }
 
+
+
         //if the array is empty after removing all surrounding gems
         //this means a gem's final alarm has been disabled
         //the player gets to make another move

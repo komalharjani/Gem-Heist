@@ -119,7 +119,7 @@ const controller = {
         for(let i =0; i <myTurn[0].length; i++) {
             let listResults = document.createElement('li');
             let clientName = myTurn[0][i].name;
-            if(clientName === '') {
+            if(clientName === 'hi') {
               listResults.innerHTML = myTurn[0][i].id + " has " + myTurn[0][i].outcome;
             }
             else {
@@ -140,8 +140,8 @@ const controller = {
             }
         }
       }
+      //document.getElementById("currStats") = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
       view_game.drawBoard();
-      view_playerStatus.render();
     }, 5000);
   },
   /* this is a preliminary method that should be called when a player makes a move.
@@ -184,7 +184,6 @@ const controller = {
         view_game.deactivate();
         model.currScore++;
         alert("you have won.");
-        console.log(model.player.wins);
         //kill game?
     } 
     
@@ -242,7 +241,7 @@ const model = {
 const view_playerStatus = {
   init: function () {
     this.playerElem = document.getElementById('playerName');
-    this.playerElem = document.getElementById('currStats');
+    //document.getElementById('currStats') = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
     this.scoreElem = document.getElementById('score');
     this.playerNameBtnElem = document.getElementById("nickNameBtn");
     this.playerNameBtnElem.addEventListener('click', function () {
@@ -258,7 +257,6 @@ const view_playerStatus = {
   },
   render: function () {
     this.playerElem.innerHTML = controller.getPlayer()[0];
-    this.playerElem.innerHTML = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
     if (controller.getPlayer()[1]) {
       this.playerNameBtnElem.remove();
     }
