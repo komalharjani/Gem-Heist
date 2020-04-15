@@ -41,9 +41,13 @@ app.get('/getPlayer/', function (req, res, next) {
 	let player = new model.Player();
 	session.addPlayer(player);
 	res.status(200).json(player.getId());
-
 });
-
+//gets a player's score (number of wins, losses...)
+app.post('/getPlayerScore', function (req, res, next) {
+	let player=session.getPlayer(req.body.playerid);
+	console.log(player.getScore());
+	res.status(200).json(player.getScore());
+});
 //endpoint that returns the games that are currently open (have not been started)
 app.get('/getOpenGames/', function (req, res, next) {
 	res.status(200).json(session.getOpenGames());
@@ -82,11 +86,9 @@ app.post('/addName', function (req, res, next) {
 	let name = req.body.playerName;
 	let id = req.body.playerId;
 	if (session.nameTaken(name, id)) {
-		
 		res.status(200).json(false);
 	}
 	else {
-		
 		res.status(200).json(true);
 	}
 });

@@ -8,7 +8,8 @@ const api = {
     "/addPlayer",
     "/getTurn",
     "/makeMove",
-    "/addName"
+    "/addName",
+    "/getPlayerScore"
   ],
   get: async function (endpoint, params) {
     if (typeof (params) == "object") {
@@ -57,12 +58,12 @@ const controller = {
     }
   },
   //called, when a player starts a new game
-  startGame: async function (numberOfPlayers,gemsWidth,gemsHeight) {
+  startGame: async function (numberOfPlayers, gemsWidth, gemsHeight) {
     model.width = (gemsHeight * 2) + 1;
     model.height = (gemsWidth * 2) + 1;
-    let temp = await api.get(1,["playerid="+model.player.id,"playerno="+numberOfPlayers,"boardheight="+model.height,"boardwidth="+model.width]);
+    let temp = await api.get(1, ["playerid=" + model.player.id, "playerno=" + numberOfPlayers, "boardheight=" + model.height, "boardwidth=" + model.width]);
     model.game = temp[0];
-    model.currState=temp[1];
+    model.currState = temp[1];
     view_frame.clear();
     view_game.init();
     view_game.drawBoard();
@@ -71,17 +72,17 @@ const controller = {
   //called, when a player joins an existing game
   joinGame: async function (gameId) {
     model.game = gameId;
-   
+
     let temp = await api.get(3, ["gameid=" + gameId, "playerid=" + model.player.id]);
     if (temp[0]) {
-      model.currState=temp[1];
+      model.currState = temp[1];
       view_frame.clear();
       view_game.init();
       view_game.drawBoard();
       view_game.activate();
     }
     else {
-      model.currState=temp[1];
+      model.currState = temp[1];
       view_frame.clear();
       view_game.init();
       view_game.drawBoard();
@@ -102,6 +103,16 @@ const controller = {
       return ["Player: " + " ..." + model.player.id.slice(-5), false];
     }
   },
+  // retrieves a player's score (number of wins)
+  getPlayerScore: async function () {
+    const data = {
+      "playerid": model.player.id
+    };
+    const json = await api.post(7, data);
+    model.player.wins = json.win;
+    model.player.draws = json.draw;
+    model.player.losses = json.loss;
+  },
   //in order to know when it's one's turn the client has to constantly send requests to the api in order to check 
   getTurn: function () {
     let turnPolling = setInterval(async function () {
@@ -111,12 +122,16 @@ const controller = {
         clearInterval(turnPolling);
         view_game.activate();
       }
-      if(myTurn[0]!=true&&myTurn[0]!=false){
+      if (myTurn[0] != true && myTurn[0] != false) {
         clearInterval(turnPolling);
-        console.log(myTurn[0]);
+        let temp = this.getPlayerScore();
+        setTimeout(function(){},1000);
+        view_playerStatus.render();
+        view_game.deactivate();
+        view_game.displayResults(myTurn[0]);
       }
       view_game.drawBoard();
-    }, 5000);
+    }, 2000);
   },
   /* this is a preliminary method that should be called when a player makes a move.
   Any board's state could be passed through this api call*/
@@ -128,18 +143,19 @@ const controller = {
     let data = {
       gameid: model.game,
       playerid: model.player.id,
-      move:temp
+      move: temp
     };
     console.log(data);
-    let outcome = await api.post(5,data);
-    model.currState=outcome[0];
-    switch(outcome[1]){
+    let outcome = await api.post(5, data);
+    model.currState = outcome[0];
+    switch (outcome[1]) {
       case 0:
         view_game.drawBoard();
         view_game.deactivate();
         controller.getTurn();
         break;
       case 1:
+        model.currScore++;
         view_game.drawBoard();
         break;
       case 2:
@@ -149,15 +165,24 @@ const controller = {
         alert("It is not your turn.");
         break;
       case 3:
-      view_game.drawBoard();
+        view_game.drawBoard();
         alert("This is not a valid move.");
         break;
       case 4:
+        model.currScore++;
+        await this.getPlayerScore();
+        view_playerStatus.render();
         view_game.drawBoard();
         view_game.deactivate();
+        view_game.displayResults(outcome[2]);
         console.log(outcome[2]);
-    } 
-    
+    }
+
+  },
+  leaveGame: function () {
+    view_frame.clear()
+    view_startGame.init();
+
   },
   newPlayerName: async function (newPlayerName) {
     const data = {
@@ -166,16 +191,16 @@ const controller = {
     };
     const json = await api.post(6, data);
     if (json == false) {
-    
+
       return false;
     }
     if (json == true) {
-     
+
       model.player.name = newPlayerName;
       return true;
     }
   },
-  leaveGame: function(){
+  leaveGame: function () {
   }
 }
 
@@ -186,12 +211,16 @@ const model = {
   gems: 3,
   player: {
     id: 0,
-    name: ""
+    name: "",
+    wins: 0,
+    losses: 0,
+    draws: 0
   },
   game: 0,
-  currState:0,
-  height:0,
-  width:0,
+  currState: 0,
+  currScore: 0,
+  height: 0,
+  width: 0,
   openGames: [],
   /* When a new client is started, it "registers" itself through the api and gets a unique id
   it will also poll all the currently open games, so that the player can join any of them*/
@@ -207,7 +236,7 @@ const model = {
 const view_playerStatus = {
   init: function () {
     this.playerElem = document.getElementById('playerName');
-    //this.scoreElem = document.getElementById('score');
+    this.scoreElem = document.getElementById('score');
     this.playerNameBtnElem = document.getElementById("nickNameBtn");
     this.playerNameBtnElem.addEventListener('click', function () {
       view_playerStatus.showModal();
@@ -223,8 +252,9 @@ const view_playerStatus = {
   render: function () {
     this.playerElem.innerHTML = controller.getPlayer()[0];
     if (controller.getPlayer()[1]) {
-      this.playerNameBtnElem.remove();
+      this.playerNameBtnElem.disabled = true;
     }
+    this.scoreElem.innerHTML = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " Draws: " + model.player.draws;
   },
   showModal: function (userNick) {
     this.modal.style.display = "block";
@@ -235,11 +265,11 @@ const view_playerStatus = {
     this.submitNick.onclick = async function () {
       const nickStatus = await controller.newPlayerName(view_playerStatus.newNick.value);
       if (nickStatus == true) {
-        view_playerStatus.newNick.value="";
+        view_playerStatus.newNick.value = "";
         closeModal();
         view_playerStatus.render();
       } else if (nickStatus == false) {
-        view_playerStatus.newNick.value="";
+        view_playerStatus.newNick.value = "";
         alert("This Name is already taken by another player.");
         view_playerStatus.newNick.focus();
       }
@@ -277,7 +307,7 @@ const view_startGame = {
     this.mainElem = document.getElementsByTagName('main')[0];
     this.html1 = `<section>
     <br>
-    <div class="centercolumn">
+    <div>
     <div class="card">
     <h2>Start a new Game</h2>
       <h4>Options</h4>
@@ -308,9 +338,10 @@ const view_startGame = {
     this.mainElem.innerHTML = this.html1;
 
     this.html2 = `<section>
-    <div class="centercolumn">
-          <div class="card">
-      <h2>Join a Game</h2>
+    <div class="card">
+    <h2>Join a Game</h2>
+          <div class="box">
+      
       <ul id="games">
       </ul>
       </div>
@@ -348,16 +379,16 @@ const view_game = {
     this.html = `<br><section class="card">
     <div class="card" id="board">
     </div><br>
-    <button id="makeMove">Make move</button><br>
+    
                 </section><br>
                 <section class="card">
-                <span><b>Your Score: </span><span id="score">0</b></span><br><br>
+                <span>Gems: </span><span id="currentScore">0</span><br><br>
                 <div class="notice" id="notice"></div><br>
                 <button id="withdraw">Leave game</button><br>
                 </div>
                 </section>`
     this.mainElem.innerHTML = this.html;
-    document.getElementById("makeMove").addEventListener('click', controller.makeMove);
+
     document.getElementById("withdraw").addEventListener('click', this.confirmWithdrawal);
     this.deactivate();
     this.gemChar = "&#128142";
@@ -366,15 +397,13 @@ const view_game = {
   deactivate: function () {
     document.getElementById("notice").innerHTML = "Not your turn or not enough players yet.";
     //the makeMove button is preliminary only, eventually moves should be made straight through the board
-    document.getElementById("makeMove").removeEventListener('click', controller.makeMove);
-    document.getElementById("makeMove").disabled = true;
+
     document.getElementById("withdraw").disabled = true;
   },
   //...and activated again once the turn starts
   activate: function () {
     document.getElementById("notice").innerHTML = "It's your turn now";
-    document.getElementById("makeMove").addEventListener('click', controller.makeMove);
-    document.getElementById("makeMove").disabled = false;
+
   },
   confirmWithdrawal: function () {
     if (confirm("You're about to leave the game. This cannot be undone.")) {
@@ -382,6 +411,8 @@ const view_game = {
     }
   },
   drawBoard: function () {
+    // displays the player's score (i.e. no of gems collected in that game)
+    document.getElementById("currentScore").innerHTML = model.currScore;
     //Create rows and tables according to specified height and width
     var table = document.createElement("table");
     for (var i = 0; i < model.currState.length; i++) { //loop through height
@@ -420,8 +451,33 @@ const view_game = {
     let divContainer = document.getElementById("board");
     divContainer.innerHTML = "";
     divContainer.appendChild(table);
-  }
+  },
+  displayResults: function (outcome) {
+    let thisNotice = document.getElementById("notice")
+    thisNotice.innerHTML = "Game completed";
+    for (let i = 0; i < outcome.length; i++) {
+      let listResults = document.createElement('li');
+      let clientName = outcome[i].name;
+      if (clientName === '') {
+        if (outcome[i].id !== model.player.id.slice(-5)) {
+          listResults.innerHTML = outcome[i].id + ": " + outcome[i].outcome;
+        }
+        else {
+          listResults.innerHTML ="You: " + outcome[i].outcome;
+        }
+      }
+      else {
+        if (outcome[i].name !== model.player.name) {
+          listResults.innerHTML = outcome[i].name + ": " + outcome[i].outcome;
+        }
+        else {
+          listResults.innerHTML ="You: " + outcome[i].outcome;
+        }
+        thisNotice.append(listResults);
+      }
+    }
 
+  }
 }
 
 

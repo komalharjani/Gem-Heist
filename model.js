@@ -110,7 +110,7 @@ class Game {
         return [currState, 2];
       }
       //check if the move is valid at all - i.e. that an alarm is present on the board at that specific location
-      if (currState[currRow][currCol].type !== "alarm" || currState[currRow][currCol].state == false) {
+      if (currState[currRow][currCol].type !== "alarm" || currState[currRow][currCol].state == false || gameDone==true) {
         return [currState, 3];
       }
       let gemsFound = [];
@@ -328,7 +328,17 @@ class Player {
       return score;
     }
     this.updateScore = function (dimension) {
-      score.dimension++;
+      switch(dimension){
+        case "win":
+          score.win++;
+          break;
+        case "draw":
+          score.draw++;
+          break;
+        case "loss":
+          score.loss++;
+      }
+      
     }
   }
 };

@@ -34,7 +34,7 @@ tr:nth-child(even) {
 }
 
 .notice {
-  color: red;
+  font-weight:bold;
 }
 
 .login {
@@ -53,6 +53,7 @@ tr:nth-child(even) {
 .gem {
   background-color: white;
   justify-content: center;
+  text-align: center;
 }
 
 .gem:hover {
@@ -65,6 +66,7 @@ tr:nth-child(even) {
 
 .white {
   background-color: white;
+  text-align: center;
 }
 
 .alarm:hover {
@@ -89,6 +91,7 @@ tr:nth-child(even) {
   background-color: whitesmoke;
   width: 100%;
   padding: 15px;
+  border-color: rgb(47, 47, 47);
 }
 
 .voteFilter {
