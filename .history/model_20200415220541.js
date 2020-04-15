@@ -273,7 +273,7 @@ class Game {
 
       //declare winner
       if (players[index].gems == gemsToWin) {
-        players[index].outcome = "won";
+        players[index].outcome = "win";
         return true;
       }
       //if players have not yet reached gemsToWin (check their score)
@@ -293,12 +293,12 @@ class Game {
               if (temp.length >= 2) {
                 for (let k = 0; temp.length; k++) {
                   let index = players.findIndex(player => player.id == temp[k]);
-                  players[index].outcome = "drawn";
+                  players[index].outcome = "draw";
                   return true;
                 }
               }
               else {
-                players[j].outcome = "won";
+                players[j].outcome = "win";
                 return true;
               }
             }

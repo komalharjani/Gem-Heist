@@ -138,7 +138,7 @@ const controller = {
             }
         }
       }
-      //document.getElementById("currStats") = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
+      document.getElementById('currStats') = "Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
       view_game.drawBoard();
     }, 5000);
   },
@@ -239,8 +239,8 @@ const model = {
 const view_playerStatus = {
   init: function () {
     this.playerElem = document.getElementById('playerName');
-    //document.getElementById('currStats') = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
-    this.scoreElem = document.getElementById('score');
+    //this.playerElem = document.getElementById('currStats');
+    //this.scoreElem = document.getElementById('score');
     this.playerNameBtnElem = document.getElementById("nickNameBtn");
     this.playerNameBtnElem.addEventListener('click', function () {
       view_playerStatus.showModal();
@@ -403,7 +403,9 @@ const view_game = {
   //If it's another player's turn the view needs to be deactivted
   deactivate: function () {
     document.getElementById("notice").innerHTML = "Not your turn or not enough players yet.";
+    //Here display message after won saying
     //document.getElementById("board").disabled = true();
+    //document.getElementById("withdraw").disabled = true;
   },
   //...and activated again once the turn starts
   activate: function () {

@@ -240,7 +240,7 @@ const view_playerStatus = {
   init: function () {
     this.playerElem = document.getElementById('playerName');
     //document.getElementById('currStats') = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
-    this.scoreElem = document.getElementById('score');
+    this.scoreElem = document.getElementById('currStats');
     this.playerNameBtnElem = document.getElementById("nickNameBtn");
     this.playerNameBtnElem.addEventListener('click', function () {
       view_playerStatus.showModal();
@@ -403,7 +403,7 @@ const view_game = {
   //If it's another player's turn the view needs to be deactivted
   deactivate: function () {
     document.getElementById("notice").innerHTML = "Not your turn or not enough players yet.";
-    //document.getElementById("board").disabled = true();
+    document.getElementById("board").disabled = true();
   },
   //...and activated again once the turn starts
   activate: function () {

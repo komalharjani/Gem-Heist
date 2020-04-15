@@ -403,6 +403,7 @@ const view_game = {
   //If it's another player's turn the view needs to be deactivted
   deactivate: function () {
     document.getElementById("notice").innerHTML = "Not your turn or not enough players yet.";
+    document.getElementById('currStats') = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
     //document.getElementById("board").disabled = true();
   },
   //...and activated again once the turn starts

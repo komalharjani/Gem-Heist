@@ -115,30 +115,33 @@ const controller = {
       }
       if(myTurn[0]!=true&&myTurn[0]!=false){
         clearInterval(turnPolling);
-        let thisNotice = document.getElementById("notice")
+        //console.log(myTurn[0]);
         for(let i =0; i <myTurn[0].length; i++) {
-            let listResults = document.createElement('li');
-            let clientName = myTurn[0][i].name;
-            if(clientName === '') {
-              listResults.innerHTML = myTurn[0][i].id + " has " + myTurn[0][i].outcome;
+          for(let j=0; j< myTurn[i].length; j++) {
+            console.log(myTurn[0][j].outcome);
+            if(myTurn[0][j].outcome == "win") {
+              let winner = myTurn[0][j].id;
+              document.getElementById("notice").innerHTML = winner + "has won.";
             }
-            else {
-              listResults.innerHTML = myTurn[0][i].name + " has " + myTurn[0][i].outcome;
-            }
-            thisNotice.append(listResults);
+            // if(myTurn[0][j].outcome == "win") {
+            //   let winner = myTurn[0][j].id;
+            // } 
+            // else if(myTurn[0][j].outcome == "loss") {
+            //   let loser = myTurn[0][j].id;
+            // }
+            // else if(myTurn[0][j].outcome == "draw") {
+            //   let draw = myTurn[0][j].id;
+            // }
+            // if(myTurn[0][j] == "win") {
+            //   alert(myTurn[0][j].id + "has won");
+            // }
 
-            if(myTurn[0][i].outcome == "lost") {
-              model.player.losses++;
-            }
-            if(myTurn[0][i].outcome == "won") {
-              model.player.wins++;
-            }
-            if(myTurn[0][i].outcome == "drawn") {
-              model.player.draws++;
-            }
+            console.log(myTurn[0][0].outcome);
+          }
         }
+       //loop through and get names and outcomes and display all in notice
+       //notice
       }
-      //document.getElementById("currStats") = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
       view_game.drawBoard();
     }, 5000);
   },
@@ -209,15 +212,14 @@ const controller = {
   }
 }
 
+
+
 // the client's model stores all the data that the client needs. This does not include information about other players ids, etc.
 const model = {
   gems: 3,
   player: {
     id: 0,
     name: "",
-    wins: 0,
-    losses: 0,
-    draws: 0
   },
   game: 0,
   currState:0,
@@ -239,8 +241,7 @@ const model = {
 const view_playerStatus = {
   init: function () {
     this.playerElem = document.getElementById('playerName');
-    //document.getElementById('currStats') = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
-    this.scoreElem = document.getElementById('score');
+    //this.scoreElem = document.getElementById('score');
     this.playerNameBtnElem = document.getElementById("nickNameBtn");
     this.playerNameBtnElem.addEventListener('click', function () {
       view_playerStatus.showModal();
@@ -403,13 +404,13 @@ const view_game = {
   //If it's another player's turn the view needs to be deactivted
   deactivate: function () {
     document.getElementById("notice").innerHTML = "Not your turn or not enough players yet.";
+    //Here display message after won saying
     //document.getElementById("board").disabled = true();
+    //document.getElementById("withdraw").disabled = true;
   },
   //...and activated again once the turn starts
   activate: function () {
     document.getElementById("notice").innerHTML = "It's your turn now";
-    //document.getElementById("board").disabled = false();
-
   },
  
   drawBoard: function () {

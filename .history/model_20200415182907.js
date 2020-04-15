@@ -65,8 +65,8 @@ class Game {
     let gameDone = false;
     //adds a player to a game
     this.addPlayer = function (playerId, playerName, openGames) {
-      players.push({ id: playerId, gems: 0, outcome: "lost", name: playerName });
-      console.log({ id: playerId, gems: 0, outcome: "lost", name: playerName });
+      players.push({ id: playerId, gems: 0, outcome: "", name: playerName });
+      console.log({ id: playerId, gems: 0, outcome: "", name: playerName });
       //Every time a player gets added, check if the necessary number of players has been reached so that the game can start
       //In this case the first turn is set to the player that was just added
       if (players.length == numberOfPlayers) {
@@ -206,7 +206,6 @@ class Game {
           else {
             index = index + 1;
           }
-
           this.setPlayerTurn(players[index].id);
           alarmsAroundGemsFound = [];
           return [currState, 0];
@@ -273,7 +272,7 @@ class Game {
 
       //declare winner
       if (players[index].gems == gemsToWin) {
-        players[index].outcome = "won";
+        players[index].outcome = "win";
         return true;
       }
       //if players have not yet reached gemsToWin (check their score)
@@ -293,12 +292,12 @@ class Game {
               if (temp.length >= 2) {
                 for (let k = 0; temp.length; k++) {
                   let index = players.findIndex(player => player.id == temp[k]);
-                  players[index].outcome = "drawn";
+                  players[index].outcome = "draw";
                   return true;
                 }
               }
               else {
-                players[j].outcome = "won";
+                players[j].outcome = "win";
                 return true;
               }
             }

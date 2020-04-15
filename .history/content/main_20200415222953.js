@@ -119,8 +119,8 @@ const controller = {
         for(let i =0; i <myTurn[0].length; i++) {
             let listResults = document.createElement('li');
             let clientName = myTurn[0][i].name;
-            if(clientName === '') {
-              listResults.innerHTML = myTurn[0][i].id + " has " + myTurn[0][i].outcome;
+            if(clientName == "") {
+              listResults.innerHTML = myTurn[0][i].name + " has " + myTurn[0][i].outcome;
             }
             else {
               listResults.innerHTML = myTurn[0][i].name + " has " + myTurn[0][i].outcome;
@@ -138,7 +138,6 @@ const controller = {
             }
         }
       }
-      //document.getElementById("currStats") = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
       view_game.drawBoard();
     }, 5000);
   },
@@ -239,8 +238,7 @@ const model = {
 const view_playerStatus = {
   init: function () {
     this.playerElem = document.getElementById('playerName');
-    //document.getElementById('currStats') = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
-    this.scoreElem = document.getElementById('score');
+    //this.scoreElem = document.getElementById('score');
     this.playerNameBtnElem = document.getElementById("nickNameBtn");
     this.playerNameBtnElem.addEventListener('click', function () {
       view_playerStatus.showModal();
@@ -403,7 +401,9 @@ const view_game = {
   //If it's another player's turn the view needs to be deactivted
   deactivate: function () {
     document.getElementById("notice").innerHTML = "Not your turn or not enough players yet.";
+    //Here display message after won saying
     //document.getElementById("board").disabled = true();
+    //document.getElementById("withdraw").disabled = true;
   },
   //...and activated again once the turn starts
   activate: function () {

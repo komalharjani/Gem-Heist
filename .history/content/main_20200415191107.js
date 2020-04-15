@@ -112,33 +112,20 @@ const controller = {
       if (myTurn[0]) {
         clearInterval(turnPolling);
         view_game.activate();
+        if(myTurn[0] == "win") {
+          alert("You have won");
+        }
+        else if(myTurn[0] == "draw") {
+          alert("you have drawn")
+        }
+        else if(myTurn[0] == "loss") {
+          alert("you have lost.");
+        }
       }
       if(myTurn[0]!=true&&myTurn[0]!=false){
         clearInterval(turnPolling);
-        let thisNotice = document.getElementById("notice")
-        for(let i =0; i <myTurn[0].length; i++) {
-            let listResults = document.createElement('li');
-            let clientName = myTurn[0][i].name;
-            if(clientName === '') {
-              listResults.innerHTML = myTurn[0][i].id + " has " + myTurn[0][i].outcome;
-            }
-            else {
-              listResults.innerHTML = myTurn[0][i].name + " has " + myTurn[0][i].outcome;
-            }
-            thisNotice.append(listResults);
-
-            if(myTurn[0][i].outcome == "lost") {
-              model.player.losses++;
-            }
-            if(myTurn[0][i].outcome == "won") {
-              model.player.wins++;
-            }
-            if(myTurn[0][i].outcome == "drawn") {
-              model.player.draws++;
-            }
-        }
+        //console.log(myTurn[0]);
       }
-      //document.getElementById("currStats") = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
       view_game.drawBoard();
     }, 5000);
   },
@@ -165,7 +152,6 @@ const controller = {
         break;
       case 1:
         view_game.drawBoard();
-        model.currScore++;
         break;
       case 2:
         view_game.drawBoard();
@@ -180,7 +166,7 @@ const controller = {
       case 4:
         view_game.drawBoard();
         view_game.deactivate();
-        model.currScore++;
+        console.log(outcome[2]);
         alert("you have won.");
         //kill game?
     } 
@@ -209,20 +195,18 @@ const controller = {
   }
 }
 
+
+
 // the client's model stores all the data that the client needs. This does not include information about other players ids, etc.
 const model = {
   gems: 3,
   player: {
     id: 0,
     name: "",
-    wins: 0,
-    losses: 0,
-    draws: 0
   },
   game: 0,
   currState:0,
   height:0,
-  currScore: 0,
   width:0,
   openGames: [],
   /* When a new client is started, it "registers" itself through the api and gets a unique id
@@ -239,8 +223,7 @@ const model = {
 const view_playerStatus = {
   init: function () {
     this.playerElem = document.getElementById('playerName');
-    //document.getElementById('currStats') = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
-    this.scoreElem = document.getElementById('score');
+    //this.scoreElem = document.getElementById('score');
     this.playerNameBtnElem = document.getElementById("nickNameBtn");
     this.playerNameBtnElem.addEventListener('click', function () {
       view_playerStatus.showModal();
@@ -316,10 +299,10 @@ const view_startGame = {
       <h4>Options</h4>
       <div class="box">
       <b><label for="widthRange">Width </label></b><br><br>
-      <input type="range" min="1" max="10" value="3" oninput="document.getElementById('widthDisplay').innerHTML=this.value;model.gems=this.value;" class="slider" id="widthRange"></input><br>
+      <input type="range" min="2" max="10" value="3" oninput="document.getElementById('widthDisplay').innerHTML=this.value;model.gems=this.value;" class="slider" id="widthRange"></input><br>
       <p>Value: <span id="widthDisplay">3</span></p><br><br>
       <b><label for="heightRange">Height</label></b><br><br>
-      <input type="range" min="1" max="10" value="3" oninput="document.getElementById('heightDisplay').innerHTML=this.value;model.gemsHeight=this.value;" class="slider" id="heightRange"></input>
+      <input type="range" min="2" max="10" value="3" oninput="document.getElementById('heightDisplay').innerHTML=this.value;model.gemsHeight=this.value;" class="slider" id="heightRange"></input>
       <p>Value: <span id="heightDisplay">3</span><p>
        
       </div>
@@ -390,6 +373,7 @@ const view_game = {
                 </section>`
     this.mainElem.innerHTML = this.html;
     document.getElementById("withdraw").addEventListener('click', this.confirmWithdrawal);
+    //document.getElementById("score").innerHTML;
     this.deactivate();
     this.gemChar = "&#128142";
   },
@@ -403,18 +387,17 @@ const view_game = {
   //If it's another player's turn the view needs to be deactivted
   deactivate: function () {
     document.getElementById("notice").innerHTML = "Not your turn or not enough players yet.";
+    //Here display message after won saying
     //document.getElementById("board").disabled = true();
+    //document.getElementById("withdraw").disabled = true;
   },
   //...and activated again once the turn starts
   activate: function () {
     document.getElementById("notice").innerHTML = "It's your turn now";
-    //document.getElementById("board").disabled = false();
-
   },
  
   drawBoard: function () {
     //Create rows and tables according to specified height and width
-    document.getElementById("score").innerHTML = model.currScore;
     var table = document.createElement("table");
     for (var i = 0; i < model.currState.length; i++) { //loop through height
       var row = document.createElement('tr'); //create rows for each height

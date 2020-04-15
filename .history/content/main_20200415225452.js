@@ -370,7 +370,6 @@ const view_startGame = {
       listElem.append(btnElem);
       this.gamesElem.append(listElem);
     }
-
   }
 }
 
@@ -403,11 +402,13 @@ const view_game = {
   //If it's another player's turn the view needs to be deactivted
   deactivate: function () {
     document.getElementById("notice").innerHTML = "Not your turn or not enough players yet.";
+    //document.getElementById('currStats') = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
     //document.getElementById("board").disabled = true();
   },
   //...and activated again once the turn starts
   activate: function () {
     document.getElementById("notice").innerHTML = "It's your turn now";
+    //document.getElementById('currStats') = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " draws: " + model.player.draws;
     //document.getElementById("board").disabled = false();
 
   },

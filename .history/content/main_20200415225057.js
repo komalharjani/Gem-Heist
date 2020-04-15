@@ -403,7 +403,7 @@ const view_game = {
   //If it's another player's turn the view needs to be deactivted
   deactivate: function () {
     document.getElementById("notice").innerHTML = "Not your turn or not enough players yet.";
-    //document.getElementById("board").disabled = true();
+    document.getElementById("board").disabled = true();
   },
   //...and activated again once the turn starts
   activate: function () {
