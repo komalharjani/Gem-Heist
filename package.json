@@ -1,14 +1,22 @@
 {
   "name": "gemheist",
   "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "description": "Gem Heist is a custom multi-player board game based around the classic Dots-and-Boxes game https://en.wikipedia.org/wiki/Dots_and_Boxes.",
+  "main": "server.js",
   "scripts": {
-    "start": "node main.js",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "names and emails go here",
+  "contributors": [
+	"name":"Max Wallraff",
+	"email":"mw270@st-andrews.ac.uk"
+	},
+	{
+	"name":"Komal Harjani",
+	"email":"kh241@st-andrews.ac.uk"
+	}
+	]
   "license": "ISC",
   "dependencies": {
     "basic-auth": "^2.0.1",
@@ -17,5 +25,14 @@
     "express-basic-auth": "^1.2.0",
     "express-session": "^1.16.1",
     "uuidv4": "^4.0.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mwallraff/p2_Gem-heist.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mwallraff/p2_Gem-heist/issues"
+  },
+  "homepage": "https://github.com/mwallraff/p2_Gem-heist#readme"
 }
