@@ -124,8 +124,10 @@ const controller = {
       }
       if (myTurn[0] != true && myTurn[0] != false) {
         clearInterval(turnPolling);
-        let temp = this.getPlayerScore();
-        setTimeout(function(){},1000);
+        // update player's games statistic
+        model.player.wins = myTurn[2].win;
+        model.player.draws = myTurn[2].draw;
+        model.player.losses = myTurn[2].loss;
         view_playerStatus.render();
         view_game.deactivate();
         view_game.displayResults(myTurn[0]);
@@ -463,7 +465,7 @@ const view_game = {
           listResults.innerHTML = outcome[i].id + ": " + outcome[i].outcome;
         }
         else {
-          listResults.innerHTML ="You: " + outcome[i].outcome;
+          listResults.innerHTML = "You: " + outcome[i].outcome;
         }
       }
       else {
@@ -471,11 +473,32 @@ const view_game = {
           listResults.innerHTML = outcome[i].name + ": " + outcome[i].outcome;
         }
         else {
+          listResults.innerHTML = "You: " + outcome[i].outcome;
+        }
+      }
+      thisNotice.append(listResults);
+    }
+    /*for (let i = 0; i < outcome.length; i++) {
+      let listResults = document.createElement('li');
+      let clientName = outcome[i].name;
+      if (clientName === '') {
+        //if (outcome[i].id !== model.player.id.slice(-5)) {
+          listResults.innerHTML = outcome[i].id + ": " + outcome[i].outcome;
+       // }
+        else {
+          listResults.innerHTML ="You: " + outcome[i].outcome;
+        }
+      }
+      else {
+        //if (outcome[i].name !== model.player.name) {
+          listResults.innerHTML = outcome[i].name + ": " + outcome[i].outcome;
+        //}
+        else {
           listResults.innerHTML ="You: " + outcome[i].outcome;
         }
         thisNotice.append(listResults);
       }
-    }
+    }*/
 
   }
 }

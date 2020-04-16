@@ -57,14 +57,14 @@ app.get('/getOpenGames/', function (req, res, next) {
 app.get('/getTurn', function (req, res, next) {
 	let game = session.getGame(req.query.gameid);
 	let myTurn = game.getPlayerTurn(req.query.playerid);
+	let player=session.getPlayer(req.query.playerid);
 	if (game.getGameDone()){
 		for (i=0;i<myTurn.length;i++){
-			let player = session.getPlayer(myTurn[i].id);
-			player.updateScore(myTurn[i].outcome);
+			
 			myTurn[i].id=myTurn[i].id.slice(-5);
 		}
 	}
-	res.status(200).json([myTurn,game.getBoard()]);
+	res.status(200).json([myTurn,game.getBoard(),player.getScore()]);
 });
 
 //endpoint that initiates a move (provided you pass it a game id)
