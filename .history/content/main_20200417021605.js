@@ -419,9 +419,13 @@ const view_game = {
         var cell = document.createElement('td'); //create columns for each width
         cell.setAttribute("row", i);
         cell.setAttribute("col", j);
+        console.log(i);
+        console.log(j);
+        console.log(cell);
 
         if (model.currState[i][j].state == true) {
           if (model.currState[i][j].type == "gem") { //identify gem cells
+            //currentState[0].push(cell);
             cell.innerHTML = this.gemChar;
             cell.className = "gem";
           }

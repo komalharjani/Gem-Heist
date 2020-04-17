@@ -116,7 +116,8 @@ class Game {
       
       currState[currRow][currCol].state = false;
       console.log(currState[currRow][currRow]);
-      //ISSUE: col is getting shifted back one here even before it proceeds
+
+      //col is getting shifted back one here even before it proceeds
 
       let gemsFound = [];
 
@@ -237,7 +238,7 @@ class Game {
             type: "gem"
           })
         }
-        else if (i % 2 || j % 2) {
+        else if (j % 2 || i % 2) {
           currState[i].push({
             state: true,
             row: i,

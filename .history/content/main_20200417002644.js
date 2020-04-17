@@ -422,12 +422,14 @@ const view_game = {
 
         if (model.currState[i][j].state == true) {
           if (model.currState[i][j].type == "gem") { //identify gem cells
+            //currentState[0].push(cell);
             cell.innerHTML = this.gemChar;
             cell.className = "gem";
           }
           else if (model.currState[i][j].type == "alarm") { //identify alarm cells
             cell.className = "alarm";
             cell.addEventListener('click', function (event) {
+              this.className = "white";
               controller.makeMove(event);
             })
           }

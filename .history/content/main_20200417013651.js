@@ -422,6 +422,7 @@ const view_game = {
 
         if (model.currState[i][j].state == true) {
           if (model.currState[i][j].type == "gem") { //identify gem cells
+            //currentState[0].push(cell);
             cell.innerHTML = this.gemChar;
             cell.className = "gem";
           }

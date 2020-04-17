@@ -237,7 +237,7 @@ class Game {
             type: "gem"
           })
         }
-        else if (i % 2 || j % 2) {
+        else if (j % 2 || i % 2) {
           currState[i].push({
             state: true,
             row: i,

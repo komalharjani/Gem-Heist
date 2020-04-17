@@ -230,7 +230,7 @@ class Game {
       for (var j = 0; j < width; j++) {
         //currState[i].push(true); //default all true
         if (i % 2 && j % 2) {
-          currState[i].push({
+          currState[i][j].push({
             state: true,
             row: i,
             col: j,
@@ -238,7 +238,7 @@ class Game {
           })
         }
         else if (i % 2 || j % 2) {
-          currState[i].push({
+          currState[i][j].push({
             state: true,
             row: i,
             col: j,
@@ -246,7 +246,7 @@ class Game {
           })
         }
         else {
-          currState[i].push({
+          currState[i][j].push({
             state: false,
             row: i,
             col: j,

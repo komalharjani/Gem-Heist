@@ -227,7 +227,7 @@ class Game {
     //initializes board state
     for (var i = 0; i < height; i++) {
       currState[i] = [];
-      for (var j = 0; j < width; j++) {
+      for (var j = 0; j < currState[i].length; j++) {
         //currState[i].push(true); //default all true
         if (i % 2 && j % 2) {
           currState[i].push({
@@ -237,7 +237,7 @@ class Game {
             type: "gem"
           })
         }
-        else if (i % 2 || j % 2) {
+        else if (j % 2 || i % 2) {
           currState[i].push({
             state: true,
             row: i,

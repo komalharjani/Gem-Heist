@@ -105,7 +105,7 @@ class Game {
 
     //makeMove is now in charge of determining what happens when a player clicks on an alarm
     this.makeMove = function (playerId, playerName, currRow, currCol) {
-      // check if the player is authorised to make a move, meaning that it is his turn in fact
+      //check if the player is authorised to make a move, meaning that it is his turn in fact
       if (!this.getPlayerTurn(playerId)) {
         return [currState, 2];
       }
@@ -113,12 +113,8 @@ class Game {
       if (currState[currRow][currCol].type !== "alarm" || currState[currRow][currCol].state == false || gameDone==true) {
         return [currState, 3];
       }
-      
-      currState[currRow][currCol].state = false;
-      console.log(currState[currRow][currRow]);
-      //ISSUE: col is getting shifted back one here even before it proceeds
-
       let gemsFound = [];
+      currState[currRow][currCol].state = (false);
 
       //Temporary variables to hold surrounding cells
       let leftCell;
@@ -158,27 +154,22 @@ class Game {
       for (let i = 0; i < gemsFound.length; i++) {
         let gemRow = gemsFound[i].row; //new GemRow
         let gemCol = gemsFound[i].col; //new GemCol
-
-        upCell = (currState[parseInt(gemRow - 1)][gemCol]);
+        upCell = (currState[gemRow - 1][gemCol]);
         if (upCell.type == "alarm" && upCell.state == true) {
           alarmsAroundGemsFound.push(upCell);
         }
-        //console.log(upCell);
-        leftCell = (currState[gemRow][parseInt(gemCol - 1)]);
+        leftCell = (currState[gemRow][gemCol - 1]);
         if (leftCell.type == "alarm" && leftCell.state == true) {
           alarmsAroundGemsFound.push(leftCell);
         }
-        //console.log(leftCell);
         downCell = currState[parseInt(gemRow) + 1][gemCol];
         if (downCell.type == "alarm" && downCell.state == true) {
           alarmsAroundGemsFound.push(downCell);
         }
-        //console.log(downCell);
         rightCell = (currState[gemRow][parseInt(gemCol) + 1]);
         if (rightCell.type == "alarm" && rightCell.state == true) {
           alarmsAroundGemsFound.push(rightCell);
         }
-        //console.log(rightCell);
 
         //if the array is empty after removing all surrounding gems
         //this means a gem's final alarm has been disabled
@@ -187,9 +178,23 @@ class Game {
           currState[gemRow][gemCol].state = false;
           currState[gemRow][gemCol].name = playerName;
           console.log(playerName);
+
           let index = players.findIndex(player => player.id == playerId);
           players[index].gems++;
-          console.log(players[index].gems);
+        }
+          //alarmsAroundGemsFound = [];
+          if (this.checkForWin(playerId, boardHeight, boardWidth)) {
+            gameDone = true;
+            let outcomes = [];
+            for (i=0;i<players.length;i++) {
+              outcomes.push({ id: players[i].id, outcome:players[i].outcome, name: players[i].name, gems: players[i].gems });
+            }
+            return [currState, 4, outcomes];
+          }
+          else {
+            return [currState, 1];
+          }
+          //EMPTY ARRAY
         }
         //the alarm disabled was not the final one
         else {
@@ -205,19 +210,6 @@ class Game {
           alarmsAroundGemsFound = [];
           return [currState, 0];
         }
-        alarmsAroundGemsFound = [];
-      }
-      if (this.checkForWin(playerId, boardHeight, boardWidth)) {
-        gameDone = true;
-        let outcomes = [];
-        for (i=0;i<players.length;i++) {
-          outcomes.push({ id: players[i].id, outcome:players[i].outcome, name: players[i].name, gems: players[i].gems });
-        }
-        return [currState, 4, outcomes];
-      }
-      else {
-        return [currState, 1];
-      }
     }
 
     let height = boardHeight;
@@ -237,7 +229,7 @@ class Game {
             type: "gem"
           })
         }
-        else if (i % 2 || j % 2) {
+        else if (j % 2 || i % 2) {
           currState[i].push({
             state: true,
             row: i,
@@ -247,7 +239,7 @@ class Game {
         }
         else {
           currState[i].push({
-            state: false,
+            state: true,
             row: i,
             col: j,
             type: "empty"
@@ -255,7 +247,6 @@ class Game {
         }
       }
     }
-    console.log(currState);
     this.getBoard = function () {
       return currState;
     }

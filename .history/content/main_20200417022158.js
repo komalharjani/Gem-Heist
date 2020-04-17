@@ -415,7 +415,7 @@ const view_game = {
     var table = document.createElement("table");
     for (var i = 0; i < model.currState.length; i++) { //loop through height
       var row = document.createElement('tr'); //create rows for each height
-      for (var j = 0; j < model.currState[0].length; j++) { //loop through width
+      for (var j = 1; j < model.currState[0].length; j++) { //loop through width
         var cell = document.createElement('td'); //create columns for each width
         cell.setAttribute("row", i);
         cell.setAttribute("col", j);

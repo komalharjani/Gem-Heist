@@ -105,18 +105,17 @@ class Game {
 
     //makeMove is now in charge of determining what happens when a player clicks on an alarm
     this.makeMove = function (playerId, playerName, currRow, currCol) {
-      // check if the player is authorised to make a move, meaning that it is his turn in fact
-      if (!this.getPlayerTurn(playerId)) {
-        return [currState, 2];
-      }
-      //check if the move is valid at all - i.e. that an alarm is present on the board at that specific location
-      if (currState[currRow][currCol].type !== "alarm" || currState[currRow][currCol].state == false || gameDone==true) {
-        return [currState, 3];
-      }
+      //check if the player is authorised to make a move, meaning that it is his turn in fact
+      // if (!this.getPlayerTurn(playerId)) {
+      //   return [currState, 2];
+      // }
+      // //check if the move is valid at all - i.e. that an alarm is present on the board at that specific location
+      // if (currState[currRow][currCol].type !== "alarm" || currState[currRow][currCol].state == false || gameDone==true) {
+      //   return [currState, 3];
+      // }
       
       currState[currRow][currCol].state = false;
       console.log(currState[currRow][currRow]);
-      //ISSUE: col is getting shifted back one here even before it proceeds
 
       let gemsFound = [];
 
@@ -237,7 +236,7 @@ class Game {
             type: "gem"
           })
         }
-        else if (i % 2 || j % 2) {
+        else if (j % 2 || i % 2) {
           currState[i].push({
             state: true,
             row: i,
@@ -250,12 +249,10 @@ class Game {
             state: false,
             row: i,
             col: j,
-            type: "empty"
           })
         }
       }
     }
-    console.log(currState);
     this.getBoard = function () {
       return currState;
     }
