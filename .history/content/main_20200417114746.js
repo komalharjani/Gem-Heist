@@ -431,20 +431,20 @@ const view_game = {
   },
   //If it's another player's turn the view needs to be deactivted
   deactivate: function () {
-    //Disable pointerEvents
-    document.getElementById("board").style.pointerEvents = "none";
     document.getElementById("notice").innerHTML = "Not your turn or not enough players yet.";
     document.getElementById("withdraw").disabled = true;
-    //Add Opacity
-    document.getElementById("board").style.opacity = "0.5";
+    this.disableDiv();
   },
   //...and activated again once the turn starts
   activate: function () {
-    //Enable pointerEvents
-    document.getElementById("board").style.pointerEvents = "auto";
     document.getElementById("notice").innerHTML = "It's your turn now";
-    //Remove Opacity
-    document.getElementById("board").style.removeProperty('opacity');
+    this.enableDiv();
+  },
+  disableDiv: function() {
+    $('#board').children().addClass("disabled");
+  },
+  enableDiv: function() {
+    $('#board').children().removeClass("disabled");
   },
   confirmWithdrawal: function () {
     if (confirm("You're about to leave the game. This cannot be undone.")) {
