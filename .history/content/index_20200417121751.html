@@ -2,6 +2,17 @@
 <html>
 
 <head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      auto_refresh();
+    });
+    function auto_refresh() {
+      var randomnumber = Math.floor(Math.random() * 100);
+      $('#JoinGame');
+    }
+    var refreshId = setInterval(auto_refresh, 1000);
+  </script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Gem Heist</title>
