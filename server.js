@@ -93,10 +93,11 @@ app.post('/makeMove', function (req, res, next) {
 
 	}
 	}
+	// special generation of outcomes if one player has chosen to leave the game
 	else {
 		outcome = game.leaveGame(req.body.playerid);
 		player.updateScore("loss");
-		// if the game is done iterate through the player's and update their score according to the game's outcome
+		
 		
 			for (i = 0; i < outcome[2].length; i++) {
 				outcome[2][i].id = outcome[2][i].id.slice(-5);

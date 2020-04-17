@@ -155,6 +155,7 @@ const controller = {
    */
   makeMove: async function (event) {
     let data;
+    // special case if player has chosen to leave the game
     if (event == "leave") {
       data = {
         gameid: model.game,

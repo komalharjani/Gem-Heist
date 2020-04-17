@@ -345,6 +345,8 @@ class Game {
         }
       }
     }
+    // if a player decides to leave the game before its end, this method takes care of producing the right outcomes
+    // the player is removed from the game, the total number of gems is updated if necessary and the turn is given to the next player (if more than 2 players)
     this.leaveGame = function (playerId) {
       let index = players.findIndex(player => player.id == playerId);
       let outcomes = [];
