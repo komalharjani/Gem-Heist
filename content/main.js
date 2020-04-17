@@ -204,9 +204,14 @@ const controller = {
         console.log(outcome[2]);
     }
   },
-  leaveGame: function () {
-    view_frame.clear()
+  leaveGame: async function () {
+    await model.resetGame();
+    view_frame.clear();
+    view_playerStatus.render();
     view_startGame.init();
+    if (controller.getOpenGames().length >= 1) {
+      view_startGame.listOpenGames();
+    }
   },
   
   /**
@@ -251,11 +256,13 @@ const model = {
     this.openGames = await api.get(2, "");
   },
   //method to reset all the information about a game, so that a new one can be started
-  resetGame: function(){
+  resetGame: async function(){
+    this.openGames = [];
     this.game=0;
     this.currState=0;
     this.height=0;
     this.width=0;
+    this.openGames = await api.get(2, "");
   }
 
 }
@@ -284,13 +291,15 @@ const view_playerStatus = {
     if (controller.getPlayer()[1]||model.game!==0) {
       this.playerNameBtnElem.disabled = true;
     }
+    else{
+      this.playerNameBtnElem.disabled = false;
+    }
     //updates the current player's stats
     this.scoreElem.innerHTML = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " Draws: " + model.player.draws;
   },
   
   /**
    * displays modal that prompts for name input
-   * @param {*} userNick 
    */
   showModal: function (userNick) {
     this.modal.style.display = "block";
@@ -524,9 +533,14 @@ const view_game = {
       }
       thisNotice.append(listResults);
     }
-    
+    //repurpose the withdraw button to allow for a restart of the game
+    document.getElementById("withdraw").removeEventListener('click', this.confirmWithdrawal);
+    document.getElementById("withdraw").addEventListener('click', controller.leaveGame);
+    document.getElementById("withdraw").innerHTML = "Start or join new game";
+    document.getElementById("withdraw").disabled = false;
 
   }
+
 }
 
 

@@ -88,6 +88,7 @@ app.post('/makeMove', function (req, res, next) {
 			player.updateScore(outcome[2][i].outcome);
 			outcome[2][i].id=outcome[2][i].id.slice(-5);
 		}
+		
 	}
 	//return everything
 	res.status(200).json(outcome);

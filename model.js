@@ -52,7 +52,9 @@ class Session {
     // adds a new game to the array of the games that have not been started
     this.updateOpenGames = function (gameId) {
       openGames.push(gameId);
+      console.log("new game added"+openGames);
     }
+    
   }
 };
 /**
