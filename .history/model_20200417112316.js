@@ -166,7 +166,7 @@ class Game {
 
     /**
      * makeMove is in charge of determining what happens when a player clicks on an alarm
-     * and determines whether to capture a gem
+     * This method contains the game logic
      */
     this.makeMove = function (playerId, playerName, currRow, currCol) {
       let index = players.findIndex(player => player.id == playerId);
@@ -189,7 +189,7 @@ class Game {
       let downCell;
       let alarmsAroundGemsFound = [];
 
-      //Check if surrounding are gems - if yes push into the GemsFound array
+      //Check if surrounding are gems
       if (currRow - 1 >= 0) {
         upCell = currState[parseInt(currRow) - 1][currCol];
         if (upCell.type == "gem") {
@@ -215,15 +215,11 @@ class Game {
         }
       }
       let gemCollected = false;
-
-      //check for alarms around each gem to see if gem found to determine if it should be captured
-      // 
+      //loop 2 - check for alarms around each gem to see if gem should be captured
+      //empty array or create new array for each gem
       for (let i = 0; i < gemsFound.length; i++) {
-        //assigns the row and column of gemFounds[i]
-        let gemRow = gemsFound[i].row; 
-        let gemCol = gemsFound[i].col; 
-
-        //Finds alarms around the gem and checks whether they are true
+        let gemRow = gemsFound[i].row; //new GemRow
+        let gemCol = gemsFound[i].col; //new GemCol
         upCell = (currState[parseInt(gemRow) - 1][gemCol]);
         if (upCell.type == "alarm" && upCell.state == true) {
           alarmsAroundGemsFound.push(upCell);
@@ -248,8 +244,8 @@ class Game {
           //set the state of the gem found to false, insert the player's name (if present)
           currState[gemRow][gemCol].state = false;
           currState[gemRow][gemCol].name = playerName;
-         
-          //increase that player's gem count 
+          //increase that player's gem count
+          
           players[index].gems++;
           gemCollected = true;
         }
@@ -334,7 +330,6 @@ class Game {
               return true;
             }
           }
-          //Else declare a single winner when the game has finished
           else {
             players[j].outcome = "win";
             return true;
