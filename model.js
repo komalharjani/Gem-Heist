@@ -52,9 +52,9 @@ class Session {
     // adds a new game to the array of the games that have not been started
     this.updateOpenGames = function (gameId) {
       openGames.push(gameId);
-      console.log("new game added"+openGames);
+      console.log("new game added" + openGames);
     }
-    
+
   }
 };
 /**
@@ -66,6 +66,8 @@ class Game {
     // store dimensions of board
     let height = boardHeight;
     let width = boardWidth;
+    //Number of Gems in Total
+    let noGems = (Math.floor(boardHeight / 2)) * (Math.floor(boardWidth / 2));
     // stores the board's state
     let currState = [];
     // returns the current state of the board
@@ -222,8 +224,8 @@ class Game {
       // 
       for (let i = 0; i < gemsFound.length; i++) {
         //assigns the row and column of gemFounds[i]
-        let gemRow = gemsFound[i].row; 
-        let gemCol = gemsFound[i].col; 
+        let gemRow = gemsFound[i].row;
+        let gemCol = gemsFound[i].col;
 
         //Finds alarms around the gem and checks whether they are true
         upCell = (currState[parseInt(gemRow) - 1][gemCol]);
@@ -250,7 +252,7 @@ class Game {
           //set the state of the gem found to false, insert the player's name (if present)
           currState[gemRow][gemCol].state = false;
           currState[gemRow][gemCol].name = playerName;
-         
+
           //increase that player's gem count 
           players[index].gems++;
           gemCollected = true;
@@ -258,7 +260,7 @@ class Game {
         alarmsAroundGemsFound = [];
       }
       //the alarm disabled was not the final one
-      
+
       if (!gemCollected) {
         //determines whose turn it is next
         if (index == players.length - 1) {
@@ -279,10 +281,10 @@ class Game {
           for (i = 0; i < players.length; i++) {
             outcomes.push({ id: players[i].id, outcome: players[i].outcome, name: players[i].name, gems: players[i].gems });
           }
-          return [currState, 4, outcomes,players[index].gems];
+          return [currState, 4, outcomes, players[index].gems];
         }
         else {
-          return [currState, 1,players[index].gems];
+          return [currState, 1, players[index].gems];
         }
       }
     }
@@ -291,8 +293,7 @@ class Game {
       */
     this.checkForWin = function (playerId, boardHeight, boardWidth) {
 
-      //Number of Gems in Total
-      let noGems = (Math.floor(boardHeight / 2)) * (Math.floor(boardWidth / 2));
+      
       //Number of gems required to win
       let gemsToWin = Math.floor((noGems / 2) + 1);
       //Function to find each player's count of gems
@@ -342,6 +343,38 @@ class Game {
             return true;
           }
         }
+      }
+    }
+    this.leaveGame = function (playerId) {
+      let index = players.findIndex(player => player.id == playerId);
+      let outcomes = [];
+      if (numberOfPlayers == 2) {
+        gameDone = true;
+        index = +!index;
+        players[index].outcome = "win";
+        
+        for (i = 0; i < players.length; i++) {
+          outcomes.push({ id: players[i].id, outcome: players[i].outcome, name: players[i].name, gems: players[i].gems });
+        }
+        return [currState, 4, outcomes, players[index].gems];
+      }
+      else {
+        let newIndex;
+        //determines whose turn it is next
+        if (index == players.length - 1) {
+          newIndex = 0;
+        }
+        else {
+          newIndex = index + 1;
+        }
+        this.setPlayerTurn(players[newIndex].id);
+        noGems=noGems-players[index].gems;
+        outcomes.push({ id: players[index].id, outcome:players[index].outcome, name: players[index].name, gems: players[index].gems });
+        players.splice(index, 1);
+        for (i = 0; i < players.length; i++) {
+          outcomes.push({ id: players[i].id, outcome:"Still playing", name: players[i].name, gems: players[i].gems });
+        }
+        return [currState, 4,outcomes,outcomes[0].gems];
       }
     }
   }

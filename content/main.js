@@ -71,7 +71,7 @@ const controller = {
     view_game.drawBoard();
     controller.getTurn();
   },
-  
+
   /**
    * called, when a player joins an existing game
    * @param {*} gameId 
@@ -151,21 +151,32 @@ const controller = {
   /**
    * this is called when a player makes a move, i.e. disables an alarm
    * the coordinates of the alarm as well as the game's and player's id are being passed to the server
-   * @param {*} event 
+   
    */
   makeMove: async function (event) {
-    let currRow = event.target.getAttribute("row"); //curr row from event listener and table
-    let currCol = event.target.getAttribute("col"); //curr col from event listener and table
-    let temp = model.currState[currRow][currCol];
-    
-    let data = {
-      gameid: model.game,
-      playerid: model.player.id,
-      move: temp
-    };
+    let data;
+    if (event == "leave") {
+      data = {
+        gameid: model.game,
+        playerid: model.player.id,
+        move: "leave"
+      };
+    }
+    else {
+      let currRow = event.target.getAttribute("row"); //curr row from event listener and table
+      let currCol = event.target.getAttribute("col"); //curr col from event listener and table
+      let temp = model.currState[currRow][currCol];
+
+      data = {
+        gameid: model.game,
+        playerid: model.player.id,
+        move: temp
+      };
+      
+    }
     console.log(data);
-    //send the game id, player id and the alarm's coordinates to the makeMove endpoint
-    let outcome = await api.post(5, data);
+      //send the game id, player id and the alarm's coordinates to the makeMove endpoint
+      let outcome = await api.post(5, data);
     //update the mode with the new board state
     model.currState = outcome[0];
     //evaluate the makeMove flag which tells the client what the result of the disabled alarm is
@@ -177,25 +188,25 @@ const controller = {
         controller.getTurn();
         break;
       //1 or 2 gem collected
-        case 1:
-        model.currScore=outcome[2];
+      case 1:
+        model.currScore = outcome[2];
         view_game.drawBoard();
         break;
       // wrong turn
-        case 2:
+      case 2:
         view_game.drawBoard();
         view_game.deactivate();
         controller.getTurn();
         alert("It is not your turn.");
         break;
-        //invalid move
+      //invalid move
       case 3:
         view_game.drawBoard();
         alert("This is not a valid move.");
         break;
-        // 1 or 2 gem collected and game completed
+      // 1 or 2 gem collected and game completed
       case 4:
-        model.currScore=outcome[3];
+        model.currScore = outcome[3];
         await this.getPlayerScore();
         view_playerStatus.render();
         view_game.drawBoard();
@@ -204,7 +215,10 @@ const controller = {
         console.log(outcome[2]);
     }
   },
-  leaveGame: async function () {
+  leaveGame: function () {
+    this.makeMove("leave");
+  },
+  restart: async function () {
     await model.resetGame();
     view_frame.clear();
     view_playerStatus.render();
@@ -213,7 +227,7 @@ const controller = {
       view_startGame.listOpenGames();
     }
   },
-  
+
   /**
    * sets a player's name, returns false if the name is already taken by a different user
    * @param {*} newPlayerName 
@@ -256,12 +270,12 @@ const model = {
     this.openGames = await api.get(2, "");
   },
   //method to reset all the information about a game, so that a new one can be started
-  resetGame: async function(){
+  resetGame: async function () {
     this.openGames = [];
-    this.game=0;
-    this.currState=0;
-    this.height=0;
-    this.width=0;
+    this.game = 0;
+    this.currState = 0;
+    this.height = 0;
+    this.width = 0;
     this.openGames = await api.get(2, "");
   }
 
@@ -288,16 +302,16 @@ const view_playerStatus = {
   //disables the add name button if the name is set already or if the game has already started
   render: function () {
     this.playerElem.innerHTML = controller.getPlayer()[0];
-    if (controller.getPlayer()[1]||model.game!==0) {
+    if (controller.getPlayer()[1] || model.game !== 0) {
       this.playerNameBtnElem.disabled = true;
     }
-    else{
+    else {
       this.playerNameBtnElem.disabled = false;
     }
     //updates the current player's stats
     this.scoreElem.innerHTML = "Your Stats: Wins: " + model.player.wins + " Losses: " + model.player.losses + " Draws: " + model.player.draws;
   },
-  
+
   /**
    * displays modal that prompts for name input
    */
@@ -454,6 +468,7 @@ const view_game = {
     document.getElementById("notice").innerHTML = "It's your turn now";
     //Remove Opacity
     document.getElementById("board").style.removeProperty('opacity');
+    document.getElementById("withdraw").disabled = false;
   },
   confirmWithdrawal: function () {
     if (confirm("You're about to leave the game. This cannot be undone.")) {
@@ -470,7 +485,7 @@ const view_game = {
     var table = document.createElement("table");
     for (var i = 0; i < model.currState.length; i++) {
       var row = document.createElement('tr'); //create rows for each height
-      for (var j = 0; j < model.currState[0].length; j++) { 
+      for (var j = 0; j < model.currState[0].length; j++) {
         var cell = document.createElement('td'); //create columns for each width within each row
         cell.setAttribute("row", i); //set row attribute
         cell.setAttribute("col", j); //set col attribute
@@ -478,12 +493,12 @@ const view_game = {
         //Identify all cells set to true and give them CSS properties
         if (model.currState[i][j].state == true) {
           //gem cells
-          if (model.currState[i][j].type == "gem") { 
+          if (model.currState[i][j].type == "gem") {
             cell.innerHTML = this.gemChar;
             cell.className = "gem";
           }
           //alarm cells
-          else if (model.currState[i][j].type == "alarm") { 
+          else if (model.currState[i][j].type == "alarm") {
             cell.className = "alarm";
             cell.addEventListener('click', function (event) {
               this.className = "white";
@@ -535,7 +550,7 @@ const view_game = {
     }
     //repurpose the withdraw button to allow for a restart of the game
     document.getElementById("withdraw").removeEventListener('click', this.confirmWithdrawal);
-    document.getElementById("withdraw").addEventListener('click', controller.leaveGame);
+    document.getElementById("withdraw").addEventListener('click', controller.restart);
     document.getElementById("withdraw").innerHTML = "Start or join new game";
     document.getElementById("withdraw").disabled = false;
 
